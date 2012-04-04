@@ -1,0 +1,647 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.0//EN" "http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US"><head><title>Word Sorting Task</title>
+<script type="text/javascript">
+var inputXML = '' +
+'<Init>' + 
+'    <Blocks>' +
+
+// Block 1
+'        <Block>' + 
+'            <Instructions>' +
+		'The two categories you must distinguish are:\n\n' +
+		'UNPLEASANT vs. PLEASANT  words.\n\n' +
+		'Press the \'a\' key if the stimulus is an UNPLEASANT word.\n' +
+		'Press the \'k\' key if the stimulus is a PLEASANT word.\n\n' +
+		'Please place your hands on the keyboard now, so that you can ' +
+		'press the \'a\' key with your left hand, and the \'k\' key with your right hand.\n\n' +
+		'Make sure that your hands are positioned correctly because only \'a\' and \'k\' ' +
+		'will be recognized by the program.\n' +
+'            </Instructions>' + 
+'            <LeftWord>unpleasant</LeftWord>' + 
+'            <RightWord>pleasant</RightWord>' + 
+'            <Delay>300</Delay>' + 
+'            <TargetWords>' + 
+'                <Word Correct="R">party</Word>' + 
+'                <Word Correct="L">disease</Word>' + 
+'                <Word Correct="R">smile</Word>' + 
+'                <Word Correct="R">friend</Word>' + 
+'                <Word Correct="R">joy</Word>' + 
+'                <Word Correct="R">happy</Word>' + 
+'                <Word Correct="L">cockroach</Word>' + 
+'                <Word Correct="R">sunshine</Word>' + 
+'                <Word Correct="L">garbage</Word>' + 
+'                <Word Correct="L">death</Word>' + 
+'                <Word Correct="R">love</Word>' + 
+'                <Word Correct="L">agony</Word>' + 
+'                <Word Correct="L">pain</Word>' + 
+'                <Word Correct="L">evil</Word>' + 
+'                <Word Correct="R">gift</Word>' + 
+'                <Word Correct="R">holiday</Word>' + 
+'                <Word Correct="R">warmth</Word>' + 
+'                <Word Correct="L">vomit</Word>' + 
+'                <Word Correct="L">disaster</Word>' + 
+'                <Word Correct="L">stink</Word>' + 
+'            </TargetWords>' + 
+'        </Block>' + 
+// Block 2
+'        <Block>' + 
+'            <Instructions>' + 
+		'The next two categories that you are to distinguish are:\n\n' +
+		'SELF vs. OBJECT words.\n\n' +
+		'Press the \'a\' key if the stimulus is a SELF word.\n' +
+		'Press the \'k\' key if the stimulus is an OBJECT word.\n\n' +
+		'Please place your hands on the keyboard now, so that you can ' +
+		'press the \'a\' key with your left hand, and the \'k\' key with your right hand.\n\n' +
+'            </Instructions>' + 
+'            <LeftWord>self</LeftWord>' + 
+'            <RightWord>object</RightWord>' + 
+'            <Delay>300</Delay>' + 
+'            <TargetWords>' + 
+'                <Word Correct="L" Count="4">me</Word>' + 
+'                <Word Correct="L" Count="4">myself</Word>' + 
+'                <Word Correct="R" Count="4">it</Word>' + 
+'                <Word Correct="R" Count="4">that</Word>' + 
+'            </TargetWords>' + 
+'        </Block>' + 
+
+// Block 3
+'        <Block>' + 
+'            <Instructions>' +
+		'The four categories that you are to distinguish are:\n\n' +
+		'UNPLEASANT vs. PLEASANT words.\n' +
+		'OR\n' +
+		'SELF vs. OBJECT words.\n\n' +
+		'Press the \'a\' key if the stimulus is an UNPLEASANT word OR a SELF word.\n' +
+		'Press the \'k\' key if the stimulus is a PLEASANT word OR an OBJECT word.\n\n' +
+		'Please place your hands on the keyboard now, so that you can ' +
+		'press the \'a\' key with your left hand, and the \'k\' key with your right hand.\n\n' +
+'            </Instructions>' + 
+'            <LeftWord>unpleasant\nor self</LeftWord>' + 
+'            <RightWord>pleasant\nor object</RightWord>' + 
+'            <Delay>300</Delay>' + 
+'            <TargetWords>' + 
+'                <Word Correct="R">party</Word>' + 
+'                <Word Correct="L">disease</Word>' + 
+'                <Word Correct="R">smile</Word>' + 
+'                <Word Correct="R">friend</Word>' + 
+'                <Word Correct="R">joy</Word>' + 
+'                <Word Correct="R">happy</Word>' + 
+'                <Word Correct="L">cockroach</Word>' + 
+'                <Word Correct="R">sunshine</Word>' + 
+'                <Word Correct="L">garbage</Word>' + 
+'                <Word Correct="L">death</Word>' + 
+'                <Word Correct="R">love</Word>' + 
+'                <Word Correct="L">agony</Word>' + 
+'                <Word Correct="L">pain</Word>' + 
+'                <Word Correct="L">evil</Word>' + 
+'                <Word Correct="R">gift</Word>' + 
+'                <Word Correct="R">holiday</Word>' + 
+'                <Word Correct="R">warmth</Word>' + 
+'                <Word Correct="L">vomit</Word>' + 
+'                <Word Correct="L">disaster</Word>' + 
+'                <Word Correct="L">stink</Word>' + 
+'                <Word Correct="L" Count="4">me</Word>' + 
+'                <Word Correct="L" Count="4">myself</Word>' + 
+'                <Word Correct="R" Count="4">it</Word>' + 
+'                <Word Correct="R" Count="4">that</Word>' + 
+'            </TargetWords>' + 
+'        </Block>' + 
+
+// Block 4
+'        <Block>' + 
+'            <Instructions>' + 
+		'The next two categories that you are to distinguish are:\n\n' +
+		'OBJECT vs. SELF words.\n\n' +
+		'Press the \'a\' key if the stimulus is an OBJECT word.\n' +
+		'Press the \'k\' key if the stimulus is a SELF word.\n\n' +
+		'Please place your hands on the keyboard now, so that you can ' +
+		'press the \'a\' key with your left hand, and the \'k\' key with your right hand.\n\n' +
+'            </Instructions>' + 
+'            <LeftWord>object</LeftWord>' + 
+'            <RightWord>self</RightWord>' + 
+'            <Delay>300</Delay>' + 
+'            <TargetWords>' + 
+'                <Word Correct="R" Count="4">me</Word>' + 
+'                <Word Correct="R" Count="4">myself</Word>' + 
+'                <Word Correct="L" Count="4">it</Word>' + 
+'                <Word Correct="L" Count="4">that</Word>' + 
+'            </TargetWords>' + 
+'        </Block>' + 
+
+// Block 5
+'        <Block>' + 
+'            <Instructions>' +
+		'The four categories that you are to distinguish are:\n\n' +
+		'UNPLEASANT vs. PLEASANT words.\n' +
+		'OR\n' +
+		'OBJECT vs. SELF words.\n\n' +
+		'Press the \'a\' key if the stimulus is an UNPLEASANT word OR an OBJECT word.\n' +
+		'Press the \'k\' key if the stimulus is a PLEASANT word OR an SELF word.\n\n' +
+		'Please place your hands on the keyboard now, so that you can ' +
+		'press the \'a\' key with your left hand, and the \'k\' key with your right hand.\n\n' +
+'            </Instructions>' + 
+'            <LeftWord>unpleasant\nor object</LeftWord>' + 
+'            <RightWord>pleasant\nor self</RightWord>' + 
+'            <Delay>300</Delay>' + 
+'            <TargetWords>' + 
+'                <Word Correct="R">party</Word>' + 
+'                <Word Correct="L">disease</Word>' + 
+'                <Word Correct="R">smile</Word>' + 
+'                <Word Correct="R">friend</Word>' + 
+'                <Word Correct="R">joy</Word>' + 
+'                <Word Correct="R">happy</Word>' + 
+'                <Word Correct="L">cockroach</Word>' + 
+'                <Word Correct="R">sunshine</Word>' + 
+'                <Word Correct="L">garbage</Word>' + 
+'                <Word Correct="L">death</Word>' + 
+'                <Word Correct="R">love</Word>' + 
+'                <Word Correct="L">agony</Word>' + 
+'                <Word Correct="L">pain</Word>' + 
+'                <Word Correct="L">evil</Word>' + 
+'                <Word Correct="R">gift</Word>' + 
+'                <Word Correct="R">holiday</Word>' + 
+'                <Word Correct="R">warmth</Word>' + 
+'                <Word Correct="L">vomit</Word>' + 
+'                <Word Correct="L">disaster</Word>' + 
+'                <Word Correct="L">stink</Word>' + 
+'                <Word Correct="R" Count="4">me</Word>' + 
+'                <Word Correct="R" Count="4">myself</Word>' + 
+'                <Word Correct="L" Count="4">it</Word>' + 
+'                <Word Correct="L" Count="4">that</Word>' + 
+'            </TargetWords>' + 
+'        </Block>' + 
+
+'    </Blocks>' + 
+'</Init>';
+
+function getKeyCode(event)
+{
+    if(event.keyCode) { 
+        return event.keyCode;
+    }
+    else {
+        return event.which;
+    }
+};
+
+function keyPressed(event)
+{
+    if(read) {
+        return;
+    }
+    
+    var now = new Date().getTime();
+    var block = blockList[activeIndex];
+    var keyCode = getKeyCode(event);
+
+    if(instructions == 2 || instructions == 4) {
+        if(keyCode == 32) {
+            if(instructions == 2) {
+                instructions = 0;
+            }
+            else {
+                instructions = 1;
+            }
+
+            setLabels();
+            read = false;
+        }        
+    }
+    else if(instructions != 3) {
+        if(keyCode == 97  || keyCode == 65 || 
+           keyCode == 107 || keyCode == 75) {
+            var leftSelected = (keyCode == 97 || keyCode == 65);
+            var leftCorrect = block.isCurrectCorrectLeft();
+            var selected = ( (leftSelected && leftCorrect) ||
+                             (!leftSelected && !leftCorrect) ) ? 'correct' : 'incorrect';
+
+            var result = 'Block_' + (activeIndex + 1) + '(' + 
+                         block.getCurrentWord() + ' - ' +
+                         '[' + ( (leftSelected) ? block.getLeft() : block.getRight() ) +
+                         ';' + selected + ';' + (now - start) + '])';
+            addToResult(result);
+            domElements.center.innerHTML = '';
+            read = true;
+            setTimeout(setLabels, block.getDelay());
+        }
+    }
+};
+
+function zeroPad(number, digits)
+{
+    var ret = '';
+    var i;
+    var max = 1;
+
+    for(i = 1; i < digits; i++) {
+        max = max * 10;
+    }
+    
+    while(number < max) {
+        ret = ret + '0';
+        max = max / 10;
+    }
+
+    ret = ret + '' + number;
+
+    return ret;
+};
+
+function addToResult(value)
+{
+    var count = lastVarNode.value;
+    count++;
+
+    var node = document.createElement('input');
+    node.type = 'hidden';
+    node.name = "vv" + zeroPad(count, 4);
+    node.value = value;
+
+    formNode.appendChild(node);
+    lastVarNode.value = count;
+
+    resultString += '|' + value;
+};
+
+function setLabels()
+{
+    var block;
+    var word;
+    var left;
+    var right;
+    
+    read = false;
+    if(instructions == 1) {
+        activeIndex++;
+        if(activeIndex < blockList.length) {
+            block = blockList[activeIndex];
+            left = '';
+            right = '';
+            domElements.instructions.innerHTML = block.getInstructions();
+            instructions = 2;
+                
+            domElements.left.innerHTML = '';
+            domElements.right.innerHTML = '';
+            domElements.center.innerHTML = 'Press space to continue';
+
+            var blockId = 'Block_' + (activeIndex + 1) + '{' + block.getLeft() + ':' + block.getRight() + '}';
+
+            addToResult(blockId);
+        }
+        else {
+            instructions = 3;
+
+            domElements.left.innerHTML = '';
+            domElements.right.innerHTML = '';
+            domElements.center.innerHTML = '         ';
+	
+	    var node = document.createElement('input');
+	    node.type = 'hidden';
+	    node.name = "briat";
+	    node.value = resultString;
+
+	    formNode.appendChild(node);
+
+            document.getElementById('SubmitButton').style.visibility = '';
+        }
+    }
+    else {
+        block = blockList[activeIndex];
+
+        domElements.left.innerHTML = block.getLeftHtml();
+        domElements.right.innerHTML = block.getRightHtml();
+        domElements.center.innerHTML = block.getWord();
+        domElements.instructions.innerHTML = '';
+        
+        instructions = (block.isEmpty()) ? 1 : 0;
+    }
+
+    start = new Date().getTime();
+};
+
+var domElements = {
+    left:null,
+    right:null,
+    center:null,
+    instructions:null
+};
+
+var blockList = [];
+var activeIndex = -1;
+var instructions = 1;
+var read = false;
+var start;
+var lastVarNode = null;
+var formNode = null;
+var sid = '<ml.subject>';
+var studyname = '';
+var condition = '';
+var resultString = 'regf609|' + sid + '|date|time';
+
+function WordSet(word, leftIsCorrect)
+{
+    this.word = word;
+    this.leftIsCorrect = leftIsCorrect;
+};
+
+WordSet.prototype = {
+    constructor: WordSet,
+
+    getWord: function() {
+        return this.word;
+    },
+    
+    isLeftCorrect: function() {
+        return this.leftIsCorrect;
+    }
+};
+
+function Block ()
+{
+    this.left = '';
+    this.right = '';
+    this.currentWordSet = '';
+    this.instructions = '';
+    this.delay = 300;
+    this.wordList = [];
+    this.completeList = [];
+};
+
+function addBr(str) {
+    return str.replace(/\r?\n/g, '<br>');
+};
+
+function removeLineFeeds(str) {
+    return str.replace(/\r?\n/g, ' ');
+};
+
+Block.prototype = {
+    constructor: Block,
+
+    getInstructions: function() {
+        return this.instructions;
+    },
+    
+    setInstructions: function(ins) {
+        this.instructions = addBr(ins) + '<br>';
+    },
+
+    getDelay: function() {
+        return this.delay;
+    },
+    
+    setDelay: function(delay) {
+        this.delay = delay;
+    },
+    
+    getLeft: function() {
+        return removeLineFeeds(this.left);
+    },
+
+    getLeftHtml: function() {
+        return addBr(this.left);
+    },
+
+    setLeft: function(left) {
+        this.left = left;
+    },
+
+    getRight: function() {
+        return removeLineFeeds(this.right);
+    },
+
+    getRightHtml: function() {
+        return addBr(this.right);
+    },
+
+    setRight: function(right) {
+        this.right = right;
+    },
+
+    getCurrentWord: function() {
+        return this.currentWordSet.getWord();
+    },
+
+    isCurrectCorrectLeft: function() {
+        return this.currentWordSet.isLeftCorrect();
+    },
+
+    getWord: function() {
+        var wordSet;
+
+        if(this.wordList.length > 0) {
+            var num = Math.floor(Math.random() * this.wordList.length);
+            wordSet = this.wordList[num];
+
+            this.completeList.push(wordSet);
+            if(num == 0) {
+                this.wordList.shift();
+            }
+            else if(num == this.wordList.length) {
+                this.wordList.pop();
+            }
+            else {
+                this.wordList = this.wordList.slice(0, num).concat(
+                                this.wordList.slice(num + 1));
+            }
+        }
+        else {
+            word = new WordSet('',false);
+        }
+
+        this.currentWordSet = wordSet;
+
+        return this.getCurrentWord();
+    },
+    
+    isEmpty: function() {
+        return this.wordList.length == 0;
+    },
+
+    getWordList: function() {
+        return this.wordList.concat(this.completeList);
+    },
+    
+    setWordList: function(wordList) {
+        this.wordList = wordList;
+        this.completeList = [];
+    },
+
+    appendWordList: function(word, count, leftIsCorrect) {
+        for(var i = 0; i < count; i++) {
+            this.wordList.push(new WordSet(word, leftIsCorrect));   
+        }
+        this.completeList = [];
+    },
+    
+    toString: function() {
+        return "{" + this.left + " : " + this.right + "} -- " + this.wordList;
+    }
+};
+
+function parseXml(xml) {
+    if(xml.nodeName == 'Init') {
+        for(var i = 0; i < xml.childNodes.length; i++)
+        {
+            var blocksXml = xml.childNodes[i];
+            if(blocksXml.nodeName == 'Blocks')
+            {
+                for(var j = 0; j < blocksXml.childNodes.length; j++) {
+
+                    var blockXml = blocksXml.childNodes[j];
+                    if(blockXml.nodeName == 'Block') {
+                        var block = new Block();
+                        for(var k = 0; k < blockXml.childNodes.length; k++)
+                        {
+                            var node = blockXml.childNodes[k];
+                    
+                            if(node.nodeName == 'LeftWord')
+                            {
+                                block.setLeft(node.childNodes[0].data);
+                            }
+                            else if(node.nodeName == 'RightWord')
+                            {
+                                block.setRight(node.childNodes[0].data);
+                            }
+                            else if(node.nodeName == 'Delay')
+                            {
+                                block.setDelay(node.childNodes[0].data);
+                            }
+                            else if(node.nodeName == 'Instructions')
+                            {
+                                var ins = '';
+                                for(var x = 0; x < node.childNodes.length; x++) {
+                                    ins += '' + node.childNodes[x].data;
+                                }
+                                ins = ins.replace(/\r?\n[ ]*/g, '\n');
+                                block.setInstructions(ins);
+                            }
+                            else if(node.nodeName == 'TargetWords')
+                            {
+                                for(var x = 0; x < node.childNodes.length; x++) {
+                                    var word = node.childNodes[x];
+                                    
+                                    if(word.nodeName == 'Word') {
+                                        var count = word.getAttribute("Count") || 1;
+                                        var correct = word.getAttribute("Correct");
+                                        var leftIsCorrect = (correct == 'L' || correct == 'l');
+
+                                        block.appendWordList(word.childNodes[0].data, 
+                                                             count, leftIsCorrect);
+                                    }
+                                } // x loop
+                            }
+                        } // k loop
+                        
+                        blockList.push(block);
+                    } // if Block
+                } // j loop
+            } // if Blocks
+        } // i loop
+    }
+};
+
+function init()
+{
+    domElements.left   = document.getElementById('left');
+    domElements.right  = document.getElementById('right');
+    domElements.center = document.getElementById('center');
+    domElements.instructions = document.getElementById('instructions');
+
+    lastVarNode = document.getElementsByName('lastvv')[0];
+    formNode = document.getElementsByTagName('form')[0];
+
+    lastVarNode.value = 0;
+
+    try
+    {
+	
+        var doc = null;
+        if(window.ActiveXObject) {
+            var xmlDoc = new ActiveXObject("Microsoft.XMLDOM")
+            xmlDoc.async="false"
+            xmlDoc.loadXML(inputXML)
+            doc = xmlDoc.documentElement;
+        }
+        else {
+            var parser = new DOMParser();
+            doc = parser.parseFromString(inputXML, 'text/xml').documentElement;
+        }
+        parseXml(doc);
+    }
+    catch(excp)
+    {
+        domElements.center.innerHTML = '';
+        domElements.instructions.innerHTML = 'The browser you are using is not supported for this task. ' +
+                                             'Please click the button below to proceed to next survey';
+        addToResult("Unsupported Browser");
+        document.getElementById('SubmitButton').style.visibility = '';
+    };
+    
+    instructions = 4;
+};
+</script>
+
+<style>
+td
+{
+    text-align:center;
+}
+div.center
+{
+    text-align:center;
+}
+div.labels
+{
+    font-size:30px;
+}
+
+div.instructions
+{
+    text-align:left;
+}
+</style>
+</head>
+
+<body onload="init()" onkeypress="keyPressed(event)">
+
+<br>
+<table width="100%">
+    <tbody>
+	<tr>
+		<td width="20%"><div id="left" class="labels"></div></td>
+	        <td width="60%"></td>
+	        <td width="20%"><div id="right" class="labels"></div></td>
+	</tr>
+	<tr>
+		<td colspan="3" height="100">
+	            <div id="instructions" class="instructions">
+			This measure is a reaction time task.  Since this task is timed, once you begin, you must finish
+			the whole task before taking a break.
+			<br><br>
+			Please do not begin this task unless you are sure you have 5 minutes to complete the whole thing.
+			<br><br>
+	            </div>
+	        </td>
+	</tr>
+	<tr>
+	        <td width="15%"></td>
+	        <td width="50%"><div id="center" class="labels"></div></td>
+	        <td width="15%"></td>
+	</tr>
+	<tr>
+	        <td width="15%"></td>
+	        <td width="50%"><div class="labels"><a href="#" onclick="instructions=1; setLabels(); read=false; document.getElementById('begin').innerHTML='';return false;" id="begin">Click here to Continue.</a></div></td>
+	        <td width="15%"></td>
+	</tr>
+    </tbody>
+</table>
+<br>
+<form method="post">
+	<input type="hidden" name="lastvv" value="1">
+	<!-- <input type="hidden" name="vv####" value=""> -->
+	<div class="center">
+	<input style="visibility: hidden;" id="SubmitButton" value="Click to Continue" type="submit">
+	</div>
+</form>
+</body></html>
