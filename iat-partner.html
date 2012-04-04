@@ -328,7 +328,12 @@ var domElements = {
 
 var blockList = [];
 var activeIndex = -1;
+
+// Starts at 1. Initial "Click here to continue" link click also sets is to 1.
+// body.onload(init()) sets it to 4.
+// Rest of references are in keyPressed() and setLabels()
 var instructions = 1;
+
 var read = false;
 var start;
 var lastVarNode = null;
