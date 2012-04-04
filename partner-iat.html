@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<style>
+td {
+    text-align:center;
+}
+div.center {
+    text-align:center;
+}
+div.labels {
+    font-size:30px;
+}
+div.instructions {
+    text-align:left;
+}
+</style>
+
+</head>
+<body>
+  <table width="100%">
+    <tbody>
+	  <tr>
+		<td width="20%"><div id="left" class="labels"></div></td>
+	    <td width="60%"></td>
+	    <td width="20%"><div id="right" class="labels"></div></td>
+	  </tr>
+	  <tr>
+		<td colspan="3" height="100">
+          <div id="instructions" class="instructions">
+			This measure is a reaction time task.  Since this task is timed,
+            once you begin, you must finish the whole task before taking a
+            break.<br><br>Please do not begin this task unless you are sure
+            you have 5 minutes to complete the whole thing.<br><br>
+	      </div>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td width="15%"></td>
+	    <td width="50%"><div id="center" class="labels"></div></td>
+	    <td width="15%"></td>
+	  </tr>
+	  <tr>
+	    <td width="15%"></td>
+	    <td width="50%"><div class="labels"><a href="#" onclick="this.innerHTML='';return false;">Click here to Continue.</a></div></td>
+	    <td width="15%"></td>
+	  </tr>
+    </tbody>
+  </table>
+</body>
+</html>
