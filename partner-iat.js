@@ -150,6 +150,11 @@
 
     // Extend jQuery with utility methods.
     $.extend({
+        getNextItem: function (item, array) {
+            var index = $.inArray(item, array);
+            var nextIndex = index + 1;
+            return nextIndex < array.length ? array[nextIndex] : null;
+        },
         // Is the item last element in array?
         isLastItem: function (item, array) {
             var index = $.inArray(item, array);
@@ -170,30 +175,22 @@
         return isLastBlock(block) && isLastTrialInBlock(block, trial);
     };
     var advanceTest = (function () {
-        var advanceNextBlock = function (block) {
-            var index = $.inArray(block, BLOCKS);
-            var nextIndex = index + 1;
-            if (nextIndex >= BLOCKS.length) {
-                throw new Error("cannot advance to next block");
-            } else {
-                return BLOCKS[nextIndex];
-            }
+        var getNextBlock = function (block) {
+            var next = $.getNextItem(block, BLOCKS);
+            if (!next) {throw new Error("no next block");}
+            return next;
         };
-        var advanceNextTrial = function (block, trial) {
-            var index = $.inArray(trial, block.trials);
-            var nextIndex = index + 1;
-            if (nextIndex >= block.trials.length) {
-                throw new Error("cannot advance to next trial");
-            } else {
-                return block.trials[nextIndex];
-            }
+        var getNextTrial = function (block, trial) {
+            var next = $.getNextItem(trial, block.trials);
+            if (!next) {throw new Error("no next trial");}
+            return next;
         };
         return function () {
             if (!block || isLastTrialInBlock(block, trial)) {
-                block = advanceNextBlock(block);
+                block = getNextBlock(block);
                 trial = null;
             } else {
-                trial = advanceNextTrial(block, trial);
+                trial = getNextTrial(block, trial);
             }
 
             var leftWords = $.isArray(block.leftWord) ?
