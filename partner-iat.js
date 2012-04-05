@@ -1,155 +1,310 @@
 ;(function ($) {
-    var blocks = [{
+    var BLOCKS = [{
         // Block 1
-        delay: 300,
         instructions: [
-            "The two categories you must distinguish are:\n\n",
-            "UNPLEASANT vs. PLEASANT  words.\n\n",
-            "Press the \"a\" key if the stimulus is an UNPLEASANT word.\n",
-            "Press the \"k\" key if the stimulus is a PLEASANT word.\n\n",
+            "The two categories you must distinguish are:<br/><br/>",
+            "UNPLEASANT vs. PLEASANT  words.<br/><br/>",
+            "Press the \"a\" key if the stimulus is an UNPLEASANT word.<br/>",
+            "Press the \"k\" key if the stimulus is a PLEASANT word.<br/><br/>",
             "Please place your hands on the keyboard now, so that you can ",
-            "press the \"a\" key with your left hand,",
-            "and the \"k\" key with your right hand.\n\n",
+            "press the \"a\" key with your left hand, ",
+            "and the \"k\" key with your right hand.<br/><br/>",
             "Make sure that your hands are positioned correctly because only \"a\" and",
-            " \"k\" will be recognized by the program.\n"].join(""),
+            " \"k\" will be recognized by the program.<br/>"].join(""),
         leftWord: "unpleasant",
-        rightWord: "plesant",
-        targetWords: [
-            {word: "party", correct: "R"},
-            {word: "disease", correct: "L"},
-            {word: "smile",  correct: "R"},
-            {word: "friend", correct: "R"},
-            {word: "joy", correct: "R"},
-            {word: "happy", correct: "R"},
-            {word: "cockroach", correct: "L"},
-            {word: "sunshine", correct: "R"},
-            {word: "garbage", correct: "L"},
-            {word: "death", correct: "L"},
-            {word: "love", correct: "R"},
-            {word: "agony", correct: "L"},
-            {word: "pain", correct: "L"},
-            {word: "evil", correct: "L"},
-            {word: "gift", correct: "R"},
-            {word: "holiday", correct: "R"},
-            {word: "warmth", correct: "R"},
-            {word: "vomit", correct: "L"},
-            {word: "disaster", correct: "L"},
-            {word: "stink", correct: "L"}]
+        rightWord: "pleasant",
+        trials: [
+            {word: "party", category: "pleasant"},
+            {word: "disease", category: "unpleasant"},
+            {word: "smile",  category: "pleasant"},
+            {word: "friend", category: "pleasant"},
+            {word: "joy", category: "pleasant"},
+            {word: "happy", category: "pleasant"},
+            {word: "cockroach", category: "unpleasant"},
+            {word: "sunshine", category: "pleasant"},
+            {word: "garbage", category: "unpleasant"},
+            {word: "death", category: "unpleasant"},
+            {word: "love", category: "pleasant"},
+            {word: "agony", category: "unpleasant"},
+            {word: "pain", category: "unpleasant"},
+            {word: "evil", category: "unpleasant"},
+            {word: "gift", category: "pleasant"},
+            {word: "holiday", category: "pleasant"},
+            {word: "warmth", category: "pleasant"},
+            {word: "vomit", category: "unpleasant"},
+            {word: "disaster", category: "unpleasant"},
+            {word: "stink", category: "unpleasant"}]
     }, {
         // Block 2
-        delay: 300,
         instructions: [
-		    "The next two categories that you are to distinguish are:\n\n",
-		    "SELF vs. OBJECT words.\n\n",
-		    "Press the \"a\" key if the stimulus is a SELF word.\n",
-		    "Press the \"k\" key if the stimulus is an OBJECT word.\n\n",
+		    "The next two categories that you are to distinguish are:<br/><br/>",
+		    "SELF vs. OBJECT words.<br/><br/>",
+		    "Press the \"a\" key if the stimulus is a SELF word.<br/>",
+		    "Press the \"k\" key if the stimulus is an OBJECT word.<br/><br/>",
 		    "Please place your hands on the keyboard now, so that you can ",
-		    "press the \"a\" key with your left hand,",
-            "and the \"k\" key with your right hand.\n\n"].join(""),
+		    "press the \"a\" key with your left hand, ",
+            "and the \"k\" key with your right hand.<br/><br/>"].join(""),
         leftWord: "self",
         rightWord: "object",
-        targetWords: [
-            {word: "me", correct: "L", count: "4"},
-            {word: "myself", correct: "L", count: "4"},
-            {word: "it", correct: "R", count: "4"},
-            {word: "that", correct: "R", count: "4"}]
+        trials: [
+            {word: "me", category: "self", count: "4"},
+            {word: "myself", category: "self", count: "4"},
+            {word: "it", category: "object", count: "4"},
+            {word: "that", category: "object", count: "4"}]
     }, {
         // Block 3
-        delay: 300,
         instructions: [
-		    "The four categories that you are to distinguish are:\n\n",
-		    "UNPLEASANT vs. PLEASANT words.\n",
-		    "OR\n",
-		    "SELF vs. OBJECT words.\n\n",
-		    "Press the \"a\" key if the stimulus is an UNPLEASANT word OR a SELF word.\n",
-		    "Press the \"k\" key if the stimulus is a PLEASANT word OR an OBJECT word.\n\n",
+		    "The four categories that you are to distinguish are:<br/><br/>",
+		    "UNPLEASANT vs. PLEASANT words.<br/>",
+		    "OR<br/>",
+		    "SELF vs. OBJECT words.<br/><br/>",
+		    "Press the \"a\" key if the stimulus is an UNPLEASANT word OR a SELF word.<br/>",
+		    "Press the \"k\" key if the stimulus is a PLEASANT word OR an OBJECT word.<br/><br/>",
 		    "Please place your hands on the keyboard now, so that you can ",
-		    "press the \"a\" key with your left hand,",
-            "and the \"k\" key with your right hand.\n\n"].join(""),
-        leftWord: "unpleasant\nor self",
-        rightWord: "pleasant\nor object",
-        targetWords: [
-            {word: "party", correct: "R"},
-            {word: "disease", correct: "L"},
-            {word: "smile", correct: "R"},
-            {word: "friend", correct: "R"},
-            {word: "joy", correct: "R"},
-            {word: "happy", correct: "R"},
-            {word: "cockroach", correct: "L"},
-            {word: "sunshine", correct: "R"},
-            {word: "garbage", correct: "L"},
-            {word: "death", correct: "L"},
-            {word: "love", correct: "R"},
-            {word: "agony", correct: "L"},
-            {word: "pain", correct: "L"},
-            {word: "evil", correct: "L"},
-            {word: "gift", correct: "R"},
-            {word: "holiday", correct: "R"},
-            {word: "warmth", correct: "R"},
-            {word: "vomit", correct: "L"},
-            {word: "disaster", correct: "L"},
-            {word: "stink", correct: "L"},
-            {word: "me", correct: "L", count: "4"},
-            {word: "myself", correct: "L", count: "4"},
-            {word: "it", correct: "R", count: "4"},
-            {word: "that", correct: "R", count: "4"}]
+		    "press the \"a\" key with your left hand, ",
+            "and the \"k\" key with your right hand.<br/><br/>"].join(""),
+        leftWord: ["unpleasant", "self"],
+        rightWord: ["pleasant", "object"],
+        trials: [
+            {word: "party", category: "pleasant"},
+            {word: "disease", category: "unpleasant"},
+            {word: "smile", category: "pleasant"},
+            {word: "friend", category: "pleasant"},
+            {word: "joy", category: "pleasant"},
+            {word: "happy", category: "pleasant"},
+            {word: "cockroach", category: "unpleasant"},
+            {word: "sunshine", category: "pleasant"},
+            {word: "garbage", category: "unpleasant"},
+            {word: "death", category: "unpleasant"},
+            {word: "love", category: "pleasant"},
+            {word: "agony", category: "unpleasant"},
+            {word: "pain", category: "unpleasant"},
+            {word: "evil", category: "unpleasant"},
+            {word: "gift", category: "pleasant"},
+            {word: "holiday", category: "pleasant"},
+            {word: "warmth", category: "pleasant"},
+            {word: "vomit", category: "unpleasant"},
+            {word: "disaster", category: "unpleasant"},
+            {word: "stink", category: "unpleasant"},
+            {word: "me", category: "self", count: "4"},
+            {word: "myself", category: "self", count: "4"},
+            {word: "it", category: "object", count: "4"},
+            {word: "that", category: "object", count: "4"}]
     }, {
         // Block 4
-        delay: 300,
         instructions: [
-		    "The next two categories that you are to distinguish are:\n\n",
-		    "OBJECT vs. SELF words.\n\n",
-		    "Press the \"a\" key if the stimulus is an OBJECT word.\n",
-		    "Press the \"k\" key if the stimulus is a SELF word.\n\n",
+		    "The next two categories that you are to distinguish are:<br/><br/>",
+		    "OBJECT vs. SELF words.<br/><br/>",
+		    "Press the \"a\" key if the stimulus is an OBJECT word.<br/>",
+		    "Press the \"k\" key if the stimulus is a SELF word.<br/><br/>",
 		    "Please place your hands on the keyboard now, so that you can ",
-		    "press the \"a\" key with your left hand,",
-            "and the \"k\" key with your right hand.\n\n"].join(""),
+		    "press the \"a\" key with your left hand, ",
+            "and the \"k\" key with your right hand.<br/><br/>"].join(""),
         leftWord: "object",
         rightWord: "self",
-        targetWords: [
-            {word: "me", correct: "R", count:"4"},
-            {word: "myself", correct: "R", count:"4"},
-            {word: "it", correct: "L", count:"4"},
-            {word: "that", correct: "L", count:"4"}]
+        trials: [
+            {word: "me", category: "self", count:"4"},
+            {word: "myself", category: "self", count:"4"},
+            {word: "it", category: "object", count:"4"},
+            {word: "that", category: "object", count:"4"}]
     }, {
         // Block 5
-        delay: 300,
         instructions: [
-		    "The four categories that you are to distinguish are:\n\n",
-		    "UNPLEASANT vs. PLEASANT words.\n",
-		    "OR\n",
-		    "OBJECT vs. SELF words.\n\n",
-		    "Press the \"a\" key if the stimulus is an UNPLEASANT word OR an OBJECT word.\n",
-		    "Press the \"k\" key if the stimulus is a PLEASANT word OR an SELF word.\n\n",
+		    "The four categories that you are to distinguish are:<br/><br/>",
+		    "UNPLEASANT vs. PLEASANT words.<br/>",
+		    "OR<br/>",
+		    "OBJECT vs. SELF words.<br/><br/>",
+		    "Press the \"a\" key if the stimulus is an UNPLEASANT word OR an OBJECT word.<br/>",
+		    "Press the \"k\" key if the stimulus is a PLEASANT word OR an SELF word.<br/><br/>",
 		    "Please place your hands on the keyboard now, so that you can ",
-		    "press the \"a\" key with your left hand,",
-            "and the \"k\" key with your right hand.\n\n"].join(""),
-        leftWord: "unpleasant\nor object",
-        rightWord: "pleasant\nor self",
-        targetWords: [
-            {word: "party", correct: "R"},
-            {word: "disease", correct: "L"},
-            {word: "smile", correct: "R"},
-            {word: "friend", correct: "R"},
-            {word: "joy", correct: "R"},
-            {word: "happy", correct: "R"},
-            {word: "cockroach", correct: "L"},
-            {word: "sunshine", correct: "R"},
-            {word: "garbage", correct: "L"},
-            {word: "death", correct: "L"},
-            {word: "love", correct: "R"},
-            {word: "agony", correct: "L"},
-            {word: "pain", correct: "L"},
-            {word: "evil", correct: "L"},
-            {word: "gift", correct: "R"},
-            {word: "holiday", correct: "R"},
-            {word: "warmth", correct: "R"},
-            {word: "vomit", correct: "L"},
-            {word: "disaster", correct: "L"},
-            {word: "stink", correct: "L"},
-            {word: "me", correct: "R", count: "4"},
-            {word: "myself", correct: "R", count: "4"},
-            {word: "it", correct: "L", count: "4"},
-            {word: "that", correct: "L", count: "4"}]
+		    "press the \"a\" key with your left hand, ",
+            "and the \"k\" key with your right hand.<br/><br/>"].join(""),
+        leftWord: ["unpleasant", "object"],
+        rightWord: ["pleasant", "self"],
+        trials: [
+            {word: "party", category: "pleasant"},
+            {word: "disease", category: "unpleasant"},
+            {word: "smile", category: "pleasant"},
+            {word: "friend", category: "pleasant"},
+            {word: "joy", category: "pleasant"},
+            {word: "happy", category: "pleasant"},
+            {word: "cockroach", category: "unpleasant"},
+            {word: "sunshine", category: "pleasant"},
+            {word: "garbage", category: "unpleasant"},
+            {word: "death", category: "unpleasant"},
+            {word: "love", category: "pleasant"},
+            {word: "agony", category: "unpleasant"},
+            {word: "pain", category: "unpleasant"},
+            {word: "evil", category: "unpleasant"},
+            {word: "gift", category: "pleasant"},
+            {word: "holiday", category: "pleasant"},
+            {word: "warmth", category: "pleasant"},
+            {word: "vomit", category: "unpleasant"},
+            {word: "disaster", category: "unpleasant"},
+            {word: "stink", category: "unpleasant"},
+            {word: "me", category: "self", count: "4"},
+            {word: "myself", category: "self", count: "4"},
+            {word: "it", category: "object", count: "4"},
+            {word: "that", category: "object", count: "4"}]
     }];
-}(window.jquery));
+
+    // Extend jQuery with utility methods.
+    $.extend({
+        // Is the item last element in array?
+        isLastItem: function (item, array) {
+            var index = $.inArray(item, array);
+            return index == (array.length - 1);
+        }
+    });
+
+    var block = null;
+    var trial = null;
+
+    var isLastTrialInBlock = function (block, trial) {
+        return $.isLastItem(trial, block.trials);
+    };
+    var isLastBlock = function (block) {
+        return $.isLastItem(block, BLOCKS);
+    };
+    var isEnd = function (block, trial) {
+        return isLastBlock(block) && isLastTrialInBlock(block, trial);
+    };
+    var advanceTest = (function () {
+        var advanceNextBlock = function (block) {
+            var index = $.inArray(block, BLOCKS);
+            var nextIndex = index + 1;
+            if (nextIndex >= BLOCKS.length) {
+                throw new Error("cannot advance to next block");
+            } else {
+                return BLOCKS[nextIndex];
+            }
+        };
+        var advanceNextTrial = function (block, trial) {
+            var index = $.inArray(trial, block.trials);
+            var nextIndex = index + 1;
+            if (nextIndex >= block.trials.length) {
+                throw new Error("cannot advance to next trial");
+            } else {
+                return block.trials[nextIndex];
+            }
+        };
+        return function () {
+            if (!block || isLastTrialInBlock(block, trial)) {
+                block = advanceNextBlock(block);
+                trial = null;
+            } else {
+                trial = advanceNextTrial(block, trial);
+            }
+
+            var leftWords = $.isArray(block.leftWord) ?
+                block.leftWord.join("<br/>") :
+                block.leftWord;
+            var rightWords = $.isArray(block.rightWord) ?
+                block.rightWord.join("<br/>") :
+                block.rightWord;
+
+            $("#instructions").html(trial ? "" : block.instructions);
+            $("#left").html(trial ?  leftWords : "");
+            $("#right").html(trial ? rightWords : "");
+            $("#center").html(trial ? trial.word : "Press space to continue");
+        };
+    }());
+
+    var getKey = function (event) {
+        var code = event.keyCode;
+        var key = null;
+        if (code == 32) {
+            key = "SPACE";
+        } else if (code == 97 || code == 65) {
+            key = "LEFT";
+        } else if (code == 107 || code == 75) {
+            key = "RIGHT";
+        }
+        return key;
+    };
+    var correctKey = function (block, trial, key) {
+        if (block && trial) {
+            if (key == "LEFT") {
+                var left = block ? block.leftWord : null;
+                return $.isArray(left) ?
+                    $.inArray(trial.category, left) !== -1 :
+                    left == trial.category;
+            } else if (key == "RIGHT") {
+                var right = block ? block.rightWord : null;
+                return $.isArray(right) ?
+                    $.inArray(trial.category, right) !== -1 :
+                    right == trial.category;
+            }
+            return false;
+        }
+        return key == "SPACE";
+    };
+
+    $(document).ready(function () {
+
+        var error = (function () {
+            var intervalId;
+            var show = function () {
+                clearTimeout(intervalId);
+                $("#instructions").text("X").css({
+                    color: "red",
+                    fontSize: "2em",
+                    fontFamily: "sans-serif"
+                });
+                intervalId = setTimeout(hide, 500);
+            };
+            var hide = function () {
+                clearTimeout(intervalId);
+                $("#instructions").text("").css({
+                    color: "black",
+                    fontSize: "1em",
+                    fontFamily: "serif"
+                });
+            };
+            return {
+                show: show,
+                hide: hide
+            }
+        }());
+
+        var handleKeyPress = (function () {
+            var inReadMode = true;
+            return function (e) {
+                var time = new Date().getTime();
+
+                if (!inReadMode) {
+                    return;
+                }
+
+                var key = getKey(e);
+                if (correctKey(block, trial, key)) {
+                    inReadMode = false;
+                    error.hide();
+                    $("#center").text("");
+                    if (isEnd(block, trial)) {
+                        // If user just finished last step, display
+                        // a message of completion and leave test
+                        // with inReadMode set to false so no more
+                        // input is allowed.
+                        $("#left, #right, #center").text("");
+                        $("#instructions").text("Test Finished. Thank you!");
+                    } else {
+                        var doAdvanceTest = function () {
+                            inReadMode = true;
+                            advanceTest();
+                        };
+                        if (key == "SPACE") {
+                            doAdvanceTest();
+                        } else {
+                            setTimeout(doAdvanceTest, 300);
+                        }
+                    }
+                } else if (trial && (key == "LEFT" || key == "RIGHT")) {
+                    error.show();
+                }
+            }
+        }());
+
+        $("body").keypress(handleKeyPress);
+    });
+}(window.jQuery));
