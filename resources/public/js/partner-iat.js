@@ -1,5 +1,13 @@
 ;(function ($) {
     var BLOCKS = [{
+        // Block 0
+        instructions: [
+            "This measure is a reaction time task.  Since this task is timed, ",
+            "once you begin, you must finish the whole task before taking a ",
+            "break.<br><br>Please do not begin this task unless you are sure",
+            "you have 5 minutes to complete the whole thing.<br><br>"].join(""),
+        trials: []
+    }, {
         // Block 1
         instructions: [
             "The two categories you must distinguish are:<br/><br/>",
@@ -315,5 +323,6 @@
         }());
 
         $("body").keypress(handleKeyPress);
+        advanceTest();
     });
 }(window.jQuery));
