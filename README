@@ -4,7 +4,18 @@ A partner IAT for the "Transitioning and Adjusting to Parenthood" study.
 
 ## Usage
 
-FIXME: write
+### Dependencies
+
+Install leiningen
+Install heroku-toolbelt
+
+### Local Development
+
+    foreman start
+
+### Deploy to Heroku
+
+    git push heroku dev-branch:master
 
 ## License
 
