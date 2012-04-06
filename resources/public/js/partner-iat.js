@@ -10,15 +10,15 @@
     }, {
         // Block 1
         instructions: [
-            "The two categories you must distinguish are:<br/><br/>",
-            "UNPLEASANT vs. PLEASANT  words.<br/><br/>",
-            "Press the \"a\" key if the stimulus is an UNPLEASANT word.<br/>",
-            "Press the \"k\" key if the stimulus is a PLEASANT word.<br/><br/>",
+            "The two categories you must distinguish are:<br><br>",
+            "UNPLEASANT vs. PLEASANT  words.<br><br>",
+            "Press the \"a\" key if the stimulus is an UNPLEASANT word.<br>",
+            "Press the \"k\" key if the stimulus is a PLEASANT word.<br><br>",
             "Please place your hands on the keyboard now, so that you can ",
             "press the \"a\" key with your left hand, ",
-            "and the \"k\" key with your right hand.<br/><br/>",
+            "and the \"k\" key with your right hand.<br><br>",
             "Make sure that your hands are positioned correctly because only \"a\" and",
-            " \"k\" will be recognized by the program.<br/>"].join(""),
+            " \"k\" will be recognized by the program.<br>"].join(""),
         leftWord: "unpleasant",
         rightWord: "pleasant",
         trials: [
@@ -45,13 +45,13 @@
     }, {
         // Block 2
         instructions: [
-		    "The next two categories that you are to distinguish are:<br/><br/>",
-		    "SELF vs. OBJECT words.<br/><br/>",
-		    "Press the \"a\" key if the stimulus is a SELF word.<br/>",
-		    "Press the \"k\" key if the stimulus is an OBJECT word.<br/><br/>",
+		    "The next two categories that you are to distinguish are:<br><br>",
+		    "SELF vs. OBJECT words.<br><br>",
+		    "Press the \"a\" key if the stimulus is a SELF word.<br>",
+		    "Press the \"k\" key if the stimulus is an OBJECT word.<br><br>",
 		    "Please place your hands on the keyboard now, so that you can ",
 		    "press the \"a\" key with your left hand, ",
-            "and the \"k\" key with your right hand.<br/><br/>"].join(""),
+            "and the \"k\" key with your right hand.<br><br>"].join(""),
         leftWord: "self",
         rightWord: "object",
         trials: [
@@ -62,15 +62,15 @@
     }, {
         // Block 3
         instructions: [
-		    "The four categories that you are to distinguish are:<br/><br/>",
-		    "UNPLEASANT vs. PLEASANT words.<br/>",
-		    "OR<br/>",
-		    "SELF vs. OBJECT words.<br/><br/>",
-		    "Press the \"a\" key if the stimulus is an UNPLEASANT word OR a SELF word.<br/>",
-		    "Press the \"k\" key if the stimulus is a PLEASANT word OR an OBJECT word.<br/><br/>",
+		    "The four categories that you are to distinguish are:<br><br>",
+		    "UNPLEASANT vs. PLEASANT words.<br>",
+		    "OR<br>",
+		    "SELF vs. OBJECT words.<br><br>",
+		    "Press the \"a\" key if the stimulus is an UNPLEASANT word OR a SELF word.<br>",
+		    "Press the \"k\" key if the stimulus is a PLEASANT word OR an OBJECT word.<br><br>",
 		    "Please place your hands on the keyboard now, so that you can ",
 		    "press the \"a\" key with your left hand, ",
-            "and the \"k\" key with your right hand.<br/><br/>"].join(""),
+            "and the \"k\" key with your right hand.<br><br>"].join(""),
         leftWord: ["unpleasant", "self"],
         rightWord: ["pleasant", "object"],
         trials: [
@@ -101,13 +101,13 @@
     }, {
         // Block 4
         instructions: [
-		    "The next two categories that you are to distinguish are:<br/><br/>",
-		    "OBJECT vs. SELF words.<br/><br/>",
-		    "Press the \"a\" key if the stimulus is an OBJECT word.<br/>",
-		    "Press the \"k\" key if the stimulus is a SELF word.<br/><br/>",
+		    "The next two categories that you are to distinguish are:<br><br>",
+		    "OBJECT vs. SELF words.<br><br>",
+		    "Press the \"a\" key if the stimulus is an OBJECT word.<br>",
+		    "Press the \"k\" key if the stimulus is a SELF word.<br><br>",
 		    "Please place your hands on the keyboard now, so that you can ",
 		    "press the \"a\" key with your left hand, ",
-            "and the \"k\" key with your right hand.<br/><br/>"].join(""),
+            "and the \"k\" key with your right hand.<br><br>"].join(""),
         leftWord: "object",
         rightWord: "self",
         trials: [
@@ -118,15 +118,15 @@
     }, {
         // Block 5
         instructions: [
-		    "The four categories that you are to distinguish are:<br/><br/>",
-		    "UNPLEASANT vs. PLEASANT words.<br/>",
-		    "OR<br/>",
-		    "OBJECT vs. SELF words.<br/><br/>",
-		    "Press the \"a\" key if the stimulus is an UNPLEASANT word OR an OBJECT word.<br/>",
-		    "Press the \"k\" key if the stimulus is a PLEASANT word OR an SELF word.<br/><br/>",
+		    "The four categories that you are to distinguish are:<br><br>",
+		    "UNPLEASANT vs. PLEASANT words.<br>",
+		    "OR<br>",
+		    "OBJECT vs. SELF words.<br><br>",
+		    "Press the \"a\" key if the stimulus is an UNPLEASANT word OR an OBJECT word.<br>",
+		    "Press the \"k\" key if the stimulus is a PLEASANT word OR an SELF word.<br><br>",
 		    "Please place your hands on the keyboard now, so that you can ",
 		    "press the \"a\" key with your left hand, ",
-            "and the \"k\" key with your right hand.<br/><br/>"].join(""),
+            "and the \"k\" key with your right hand.<br><br>"].join(""),
         leftWord: ["unpleasant", "object"],
         rightWord: ["pleasant", "self"],
         trials: [
@@ -214,10 +214,10 @@
             }
 
             var leftWords = $.isArray(block.leftWord) ?
-                block.leftWord.join("<br/>") :
+                block.leftWord.join("<br>") :
                 block.leftWord;
             var rightWords = $.isArray(block.rightWord) ?
-                block.rightWord.join("<br/>") :
+                block.rightWord.join("<br>") :
                 block.rightWord;
 
             $("#instructions").html(trial ? "" : block.instructions);
