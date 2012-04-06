@@ -1,5 +1,5 @@
 ;(function ($) {
-    var BLOCKS = [{
+    window.BLOCKS = [{
         // Block 0
         instructions: [
             "This measure is a reaction time task.  Since this task is timed, ",
@@ -324,7 +324,7 @@
         $("body").keypress(handleKeyPress);
 
         var createTable = function () {
-            $("body").append($(['<table width="100%">',
+            $("body").append($(['<table id="iatTable" width="100%">',
                                 '<tbody>',
                                 '<tr>',
                                 '<td width="20%"><div id="left" class="labels"></div></td>',
