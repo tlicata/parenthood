@@ -321,8 +321,38 @@
                 }
             }
         }());
-
         $("body").keypress(handleKeyPress);
+
+        var createTable = function () {
+            $("body").append($(['<table width="100%">',
+                                '<tbody>',
+                                '<tr>',
+                                '<td width="20%"><div id="left" class="labels"></div></td>',
+                                '<td width="60%"></td>',
+                                '<td width="20%"><div id="right" class="labels"></div></td>',
+                                '</tr>',
+                                '<tr>',
+                                '<td colspan="3" height="100">',
+                                '<div id="instructions" class="instructions">',
+                                '</div>',
+                                '</td>',
+                                '</tr>',
+                                '<tr>',
+                                '<td width="15%"></td>',
+                                '<td width="50%"><div id="center" class="labels"></div></td>',
+                                '<td width="15%"></td>',
+                                '</tr>',
+                                '<tr>',
+                                '<td width="15%"></td>',
+                                '<td width="50%"><div class="labels"></div></td>',
+                                '<td width="15%"></td>',
+                                '</tr>',
+                                '</tbody>',
+                                '</table>'].join("")));
+        };
+
+        // initialize
+        createTable();
         advanceTest();
     });
 }(window.jQuery));
