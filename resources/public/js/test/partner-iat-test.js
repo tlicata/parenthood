@@ -5,6 +5,9 @@
         e.keyCode = 32;
         $("body").trigger(e);
     };
+    var getBlock = function (idx) {
+        return window.parenthood.getBlock(idx);
+    };
     var getTable = function () {
         return $("table#iatTable");
     };
@@ -16,15 +19,19 @@
         desc: "Make sure first block is shown automatically",
         func: function () {
             var table = getTable();
+            var instr = getInstructions();
             return table.length == 1 &&
                 table.find("tr").length == 4 &&
-                getInstructions() == BLOCKS[0].instructions;
+                instr == getBlock().instructions &&
+                instr == getBlock(0).instructions;
         }
     }, {
         desc: "Fake a space button press to advance passed the first screen.",
         func: function () {
             fakeSpacePress();
-            return getInstructions() == BLOCKS[1].instructions;
+            var instr = getInstructions();
+            return instr == getBlock().instructions &&
+                instr == getBlock(1).instructions;
         }
     }];
 

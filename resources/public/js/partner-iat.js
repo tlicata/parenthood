@@ -1,5 +1,5 @@
-;(function ($) {
-    window.BLOCKS = [{
+window.parenthood = (function ($) {
+    var BLOCKS = [{
         // Block 0
         instructions: [
             "This measure is a reaction time task.  Since this task is timed, ",
@@ -355,4 +355,14 @@
         createTable();
         advanceTest();
     });
+
+    // Expose some methods. Mainly for testing.
+    return {
+        getBlock: function (idx) {
+            return isNaN(idx) ? block : BLOCKS[idx];
+        },
+        getCurrentTrial: function () {
+            return trial;
+        }
+    }
 }(window.jQuery));
