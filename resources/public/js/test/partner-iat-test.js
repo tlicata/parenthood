@@ -1,5 +1,23 @@
 ;(function () {
 
+    var qunitTest = window.test;
+    var test = (function () {
+        var results = "";
+        var startTime = new Date().getTime();
+        return function (msg, func, isLast) {
+            var timer1 = new Date().getTime();
+            qunitTest(msg, func);
+            var timer2 = new Date().getTime();
+            results += (timer2 - timer1) + " ms: " + msg + "<br>";
+            if (isLast) {
+                results += "total: " + (timer2 - startTime) + " ms";
+                setTimeout(function () {
+                    $("body").append($("<div/>").html(results));
+                }, 1000);
+            }
+        };
+    }());
+
     var fakeSpacePress = function () {
         var e = $.Event("keypress");
         e.keyCode = 32;
@@ -29,5 +47,5 @@
         var instr = getInstructions();
         ok(instr == getBlock().instructions &&
            instr == getBlock(1).instructions);
-    });
+    }, true);
 }());
