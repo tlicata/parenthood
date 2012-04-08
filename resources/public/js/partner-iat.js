@@ -193,6 +193,9 @@ window.parenthood = (function ($) {
     var isEnd = function (block, trial) {
         return isLastBlock(block) && isLastTrialInBlock(block, trial);
     };
+    var makeLabel = function (category) {
+        return $.isArray(category) ? category.join("<br>") : category;
+    };
     var advanceTest = (function () {
         var getNextBlock = function (block) {
             var next = $.getNextItem(block, BLOCKS);
@@ -213,16 +216,9 @@ window.parenthood = (function ($) {
                 trial = getNextTrial(block, trial);
             }
 
-            var leftWords = $.isArray(block.leftWord) ?
-                block.leftWord.join("<br>") :
-                block.leftWord;
-            var rightWords = $.isArray(block.rightWord) ?
-                block.rightWord.join("<br>") :
-                block.rightWord;
-
             $("#instructions").html(trial ? "" : block.instructions);
-            $("#left").html(trial ?  leftWords : "");
-            $("#right").html(trial ? rightWords : "");
+            $("#left").html(trial ?  makeLabel(block.leftWord) : "");
+            $("#right").html(trial ? makeLabel(block.rightWord) : "");
             $("#center").html(trial ? trial.word : "Press space to continue");
         };
     }());
@@ -358,11 +354,16 @@ window.parenthood = (function ($) {
 
     // Expose some methods. Mainly for testing.
     return {
+        correctKey: correctKey,
         getBlock: function (idx) {
             return isNaN(idx) ? block : BLOCKS[idx];
         },
         getCurrentTrial: function () {
             return trial;
-        }
+        },
+        getNumBlocks: function () {
+            return BLOCKS.length;
+        },
+        makeLabel: makeLabel
     }
 }(window.jQuery));
