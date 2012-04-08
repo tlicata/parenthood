@@ -5,27 +5,6 @@
     // through of the whole IAT, so ordering was important.
     QUnit.config.reorder = false;
 
-    // Shadow QUnit's test() method and gather some timing data
-    // for each test.  This is printed out at the bottom of the
-    // page after the tests run.
-    var qunitTest = window.test;
-    var test = (function () {
-        var results = "";
-        var startTime = new Date().getTime();
-        return function (msg, func, isLast) {
-            var timer1 = new Date().getTime();
-            qunitTest(msg, func);
-            var timer2 = new Date().getTime();
-            results += (timer2 - timer1) + " ms: " + msg + "<br>";
-            if (isLast) {
-                results += "total: " + (timer2 - startTime) + " ms";
-                setTimeout(function () {
-                    $("body").append($("<div/>").html(results));
-                }, 1000);
-            }
-        };
-    }());
-
     // Our tests will mimic a user typing on a keyboard.  Accept
     // upper and lowercase keys to account for caps lock.
     var fakePress = function (keyCode) {
@@ -80,7 +59,14 @@
         // in successfully advancing to the next trial and
         // that the improper key shows an "X" and waits for
         // the correct response.
-        for (var i = 0, n = block.trials.length; i < n; i++) {
+        var i = 0, n = block.trials.length;
+        var doTrial = function () {
+
+            if (i == n) {
+                start();
+                return;
+            }
+
             var trial = getTrial();
             equal(block.trials[i], trial, trial.word);
             equal($("#center").html(), trial.word, trial.word + " html");
@@ -91,7 +77,11 @@
             } else {
                 throw new Error("trial should fall into LEFT or RIGHT category");
             }
+
+            i++;
+            setTimeout(doTrial, 500);
         }
+        doTrial();
     };
 
     // Tests
@@ -110,8 +100,9 @@
     for (var i = 1, n = getNumBlocks(); i < n; i++) {
         (function (index) {
             test("Run through block no. " + index, function () {
+                stop();
                 workout(index);
-            }, index == n - 1);
+            });
         }(i));
     };
 }());
