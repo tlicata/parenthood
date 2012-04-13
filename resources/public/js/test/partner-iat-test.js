@@ -24,6 +24,7 @@
 
     // Some methods to pull the current state out of the IAT.
     var getBlock = window.parenthood.getBlock;
+    var getDelay = window.parenthood.getDelay;
     var getNumBlocks = window.parenthood.getNumBlocks;
     var getTrial = window.parenthood.getCurrentTrial;
     var isCorrectKey = window.parenthood.correctKey;
@@ -79,7 +80,7 @@
             }
 
             i++;
-            setTimeout(doTrial, 500);
+            setTimeout(doTrial, getDelay() + 100);
         }
         doTrial();
     };

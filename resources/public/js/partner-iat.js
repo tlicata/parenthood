@@ -156,6 +156,10 @@ window.parenthood = (function ($) {
             {word: "that", category: "object", count: "4"}]
     }];
 
+    // After answering a trial, how many milliseconds until
+    // the next trial is displayed (and input is accepted).
+    var DELAY = 300;
+
     // Extend jQuery with utility methods.
     $.extend({
         getNextItem: function (item, array) {
@@ -309,7 +313,7 @@ window.parenthood = (function ($) {
                         if (key == "SPACE") {
                             doAdvanceTest();
                         } else {
-                            setTimeout(doAdvanceTest, 300);
+                            setTimeout(doAdvanceTest, DELAY);
                         }
                     }
                 } else if (trial && (key == "LEFT" || key == "RIGHT")) {
@@ -360,6 +364,9 @@ window.parenthood = (function ($) {
         },
         getCurrentTrial: function () {
             return trial;
+        },
+        getDelay: function () {
+            return DELAY;
         },
         getNumBlocks: function () {
             return BLOCKS.length;
