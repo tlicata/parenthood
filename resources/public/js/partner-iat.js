@@ -171,17 +171,6 @@ window.parenthood = (function ($) {
         isLastItem: function (item, array) {
             var index = $.inArray(item, array);
             return index == (array.length - 1);
-        },
-        // Randomize order of array in place.
-        shuffle: function (array) {
-            var tmp, current, top = array.length;
-            if (top) while(--top) {
-                current = Math.floor(Math.random() * (top + 1));
-                tmp = array[current];
-                array[current] = array[top];
-                array[top] = tmp;
-            }
-            return array;
         }
     });
 
@@ -214,7 +203,7 @@ window.parenthood = (function ($) {
         return function () {
             if (!block || isLastTrialInBlock(block, trial)) {
                 block = getNextBlock(block);
-                $.shuffle(block.trials);
+                block.trials = _.shuffle(block.trials);
                 trial = null;
             } else {
                 trial = getNextTrial(block, trial);
