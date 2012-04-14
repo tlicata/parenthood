@@ -87,6 +87,9 @@
 
     // Tests
     test("Make sure first block is shown automatically.", function () {
+        // Insert IAT into DOM.
+        window.parenthood.init();
+
         var table = getTable();
         var instr = getInstructions();
         ok(table.length == 1 &&
