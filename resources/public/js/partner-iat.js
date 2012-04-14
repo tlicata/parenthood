@@ -246,7 +246,7 @@ window.parenthood = (function ($) {
         return key == "SPACE";
     };
 
-    $(document).ready(function () {
+    var init = function () {
 
         var error = (function () {
             var intervalId;
@@ -343,7 +343,7 @@ window.parenthood = (function ($) {
         // initialize
         createTable();
         advanceTest();
-    });
+    };
 
     // Expose some methods. Mainly for testing.
     return {
@@ -360,6 +360,7 @@ window.parenthood = (function ($) {
         getNumBlocks: function () {
             return BLOCKS.length;
         },
+        init: init,
         makeLabel: makeLabel
     }
 }(window.jQuery));
