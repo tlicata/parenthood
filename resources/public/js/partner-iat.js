@@ -162,6 +162,11 @@ window.parenthood = (function ($) {
 
     // Extend jQuery with utility methods.
     $.extend({
+        deepCopy: function (obj) {
+            return $.isArray(obj) ?
+                $.extend(true, [], obj) :
+                $.extend(true, {}, obj);
+        },
         getNextItem: function (item, array) {
             var index = $.inArray(item, array);
             var nextIndex = index + 1;
