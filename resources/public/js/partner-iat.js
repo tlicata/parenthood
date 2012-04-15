@@ -280,6 +280,16 @@ window.parenthood = (function ($) {
 
         var handleKeyPress = (function () {
             var inReadMode = true;
+
+            var clearDisplay = function () {
+                error.hide();
+                $("#center").text("");
+            };
+            var showEndMessage = function () {
+                $("#left, #right, #center").text("");
+                $("#instructions").text("Test Finished. Thank you!");
+            };
+
             return function (e) {
                 var time = new Date().getTime();
 
@@ -290,15 +300,13 @@ window.parenthood = (function ($) {
                 var key = getKey(e);
                 if (correctKey(block, trial, key)) {
                     inReadMode = false;
-                    error.hide();
-                    $("#center").text("");
+                    clearDisplay();
                     if (isEnd(block, trial)) {
                         // If user just finished last step, display
                         // a message of completion and leave test
                         // with inReadMode set to false so no more
                         // input is allowed.
-                        $("#left, #right, #center").text("");
-                        $("#instructions").text("Test Finished. Thank you!");
+                        showEndMessage();
                     } else {
                         var doAdvanceTest = function () {
                             inReadMode = true;
