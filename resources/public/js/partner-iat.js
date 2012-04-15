@@ -305,8 +305,10 @@ window.parenthood = (function ($) {
                         // If user just finished last step, display
                         // a message of completion and leave test
                         // with inReadMode set to false so no more
-                        // input is allowed.
+                        // input is allowed. Remove key press handler
+                        // to further shut things down.
                         showEndMessage();
+                        $("body").off("keypress", handleKeyPress);
                     } else {
                         var doAdvanceTest = function () {
                             inReadMode = true;
@@ -323,7 +325,7 @@ window.parenthood = (function ($) {
                 }
             }
         }());
-        $("body").keypress(handleKeyPress);
+        $("body").on("keypress", handleKeyPress);
 
         var createTable = function () {
             $("body").append($(['<table id="iatTable" width="100%">',
