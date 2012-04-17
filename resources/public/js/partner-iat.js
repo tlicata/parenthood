@@ -267,7 +267,7 @@ window.parenthood = (function ($) {
         return key == "SPACE";
     };
 
-    var init = function () {
+    var init = _.once(function () {
 
         var error = (function () {
             var intervalId;
@@ -374,7 +374,7 @@ window.parenthood = (function ($) {
         // initialize
         createTable();
         advanceTest();
-    };
+    });
 
     // Expose some methods. Mainly for testing.
     return {
