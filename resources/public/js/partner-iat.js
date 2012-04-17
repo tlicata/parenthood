@@ -194,6 +194,21 @@ window.parenthood = (function ($) {
     var makeLabel = function (category) {
         return $.isArray(category) ? category.join("<br>") : category;
     };
+	// If a trial is specified with count property of n, then
+	// replace that trial with n copies of the trial (with the
+	// count properties removed).
+	var expand = function (trials) {
+		return _.flatten(_.map(trials, function (trial) {
+			var count = parseInt(trial.count);
+			var keys = _.reject(_.keys(trial), function (val) {
+				return val == "count";
+			});
+			return _.isFinite(count) ?
+				_.map(_.range(0, count), function () {
+					return _.pick(trial, keys);
+				}) : trial;
+		}));
+	};
     var advanceTest = (function () {
         var getNextBlock = function (block) {
             var next = $.getNextItem(block, BLOCKS);
@@ -208,6 +223,7 @@ window.parenthood = (function ($) {
         return function () {
             if (!block || isLastTrialInBlock(block, trial)) {
                 block = getNextBlock(block);
+                block.trials = expand(block.trials);
                 block.trials = _.shuffle(block.trials);
                 trial = null;
             } else {
@@ -363,6 +379,7 @@ window.parenthood = (function ($) {
     // Expose some methods. Mainly for testing.
     return {
         correctKey: correctKey,
+		expand: expand,
         getBlock: function (idx) {
             return isNaN(idx) ? block : BLOCKS[idx];
         },
