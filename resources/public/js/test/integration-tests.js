@@ -53,8 +53,14 @@
 
         // Make sure proper categories appear in the top
         // left and right corners of the screen.
-        equal($("#left").html(), makeLabel(block.leftWord), "left categor(y|ies)");
-        equal($("#right").html(), makeLabel(block.rightWord), "right categor(y|ies)");
+        if (block.leftWord && block.rightWord) {
+            equal($("#left").html(), makeLabel(block.leftWord), "left categor(y|ies)");
+            equal($("#right").html(), makeLabel(block.rightWord), "right categor(y|ies)");
+        } else if (block.inputs) {
+            alert("has inputs");
+        } else if (!block.trials) {
+            ok(false, "blocks with trials must have categories specified");
+        }
 
         // For each trial, make sure the proper key results
         // in successfully advancing to the next trial and
@@ -86,24 +92,14 @@
     };
 
     // Tests
-    test("Make sure first block is shown automatically.", function () {
-        // Insert IAT into DOM.
-        window.parenthood.init();
-
-        var table = getTable();
-        var instr = getInstructions();
-        ok(table.length == 1 &&
-           table.find("tr").length == 4 &&
-           instr == getBlock().instructions &&
-           instr == getBlock(0).instructions);
-
-        // Advance passed welcome screen.
-        fakeSpacePress();
-    });
-
-    for (var i = 1, n = getNumBlocks(); i < n; i++) {
+    for (var i = 0, n = getNumBlocks(); i < n; i++) {
         (function (index) {
             test("Run through block no. " + index, function () {
+                // Insert IAT into DOM. Have to do this after
+                // $.onReady() but before tests run.
+                if (index == 0) {
+                    window.parenthood.init();
+                }
                 stop();
                 workout(index);
             });

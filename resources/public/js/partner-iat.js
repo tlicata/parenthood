@@ -1,5 +1,13 @@
 window.parenthood = (function ($) {
     var BLOCKS = [{
+        instructions: "Tell us a little about yourself",
+        inputs: [
+            {id: "name", prompt: "your first name"},
+            {id: "pname", prompt: "your partner's first name"},
+            {id: "food", prompt: "your favorite food"},
+            {id: "pfood", prompt: "your partner's favorite food"}
+        ]
+    }, {
         // Block 0
         instructions: [
             "This measure is a reaction time task.  Since this task is timed, ",
