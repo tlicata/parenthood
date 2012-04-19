@@ -8,7 +8,6 @@ window.parenthood = (function ($) {
             {id: "pfood", prompt: "your partner's favorite food"}
         ]
     }, {
-        // Block 0
         instructions: [
             "This measure is a reaction time task.  Since this task is timed, ",
             "once you begin, you must finish the whole task before taking a ",
@@ -16,7 +15,6 @@ window.parenthood = (function ($) {
             "you have 5 minutes to complete the whole thing.<br><br>"].join(""),
         trials: []
     }, {
-        // Block 1
         instructions: [
             "The two categories you must distinguish are:<br><br>",
             "UNPLEASANT vs. PLEASANT  words.<br><br>",
@@ -51,7 +49,6 @@ window.parenthood = (function ($) {
             {word: "disaster", category: "unpleasant"},
             {word: "stink", category: "unpleasant"}]
     }, {
-        // Block 2
         instructions: [
 		    "The next two categories that you are to distinguish are:<br><br>",
 		    "SELF vs. OBJECT words.<br><br>",
@@ -68,7 +65,6 @@ window.parenthood = (function ($) {
             {word: "it", category: "object", count: "4"},
             {word: "that", category: "object", count: "4"}]
     }, {
-        // Block 3
         instructions: [
 		    "The four categories that you are to distinguish are:<br><br>",
 		    "UNPLEASANT vs. PLEASANT words.<br>",
@@ -107,7 +103,6 @@ window.parenthood = (function ($) {
             {word: "it", category: "object", count: "4"},
             {word: "that", category: "object", count: "4"}]
     }, {
-        // Block 4
         instructions: [
 		    "The next two categories that you are to distinguish are:<br><br>",
 		    "OBJECT vs. SELF words.<br><br>",
@@ -124,7 +119,6 @@ window.parenthood = (function ($) {
             {word: "it", category: "object", count:"4"},
             {word: "that", category: "object", count:"4"}]
     }, {
-        // Block 5
         instructions: [
 		    "The four categories that you are to distinguish are:<br><br>",
 		    "UNPLEASANT vs. PLEASANT words.<br>",
