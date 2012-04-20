@@ -1,7 +1,7 @@
 window.parenthood = (function ($) {
     var BLOCKS = [{
         instructions: "Tell us a little about yourself",
-        inputs: [
+        trials: [
             {id: "name", prompt: "your first name"},
             {id: "pname", prompt: "your partner's first name"},
             {id: "food", prompt: "your favorite food"},

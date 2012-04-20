@@ -56,8 +56,6 @@
         if (block.leftWord && block.rightWord) {
             equal($("#left").html(), makeLabel(block.leftWord), "left categor(y|ies)");
             equal($("#right").html(), makeLabel(block.rightWord), "right categor(y|ies)");
-        } else if (block.inputs) {
-            alert("has inputs");
         } else if (!block.trials) {
             ok(false, "blocks with trials must have categories specified");
         }
