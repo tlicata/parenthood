@@ -183,7 +183,11 @@ window.parenthood = (function ($) {
 
     var block = null;
     var trial = null;
+    var input = {};
 
+    var isInput = function (trial) {
+        return trial && trial.prompt ? true : false;
+    };
     var isLastTrialInBlock = function (block, trial) {
         return $.isLastItem(trial, block.trials);
     };
@@ -211,7 +215,33 @@ window.parenthood = (function ($) {
 				}) : trial;
 		}));
 	};
+    // If a trial word contains ${}, replace it with
+    // user input. Put the id of the input you want
+    // between the brackets.
+    var substitute = (function () {
+        var regex = /\${(.*)}/;
+        var sub = function (t) {
+            var word = t.word;
+            if (_.isString(word)) {
+                var match = word.match(regex);
+                if (match) {
+                    t.word = word.replace(regex, input[match[1]]);
+                }
+            }
+            return t;
+        };
+        return function (trials) {
+            return _.map(trials, sub);
+        };
+    }());
     var advanceTest = (function () {
+        var addInput = function (id, answer) {
+            if (input.id) {
+                throw new Error("duplicate ids");
+            } else {
+                input[id] = answer;
+            }
+        };
         var getNextBlock = function (block) {
             var next = $.getNextItem(block, BLOCKS);
             if (!next) {throw new Error("no next block");}
@@ -226,16 +256,38 @@ window.parenthood = (function ($) {
             if (!block || isLastTrialInBlock(block, trial)) {
                 block = getNextBlock(block);
                 block.trials = expand(block.trials);
-                block.trials = _.shuffle(block.trials);
+                block.trials = substitute(block.trials);
+                // Shuffle trials, but not input blocks.
+                if (!_.any(block.trials, isInput)) {
+                    block.trials = _.shuffle(block.trials);
+                }
                 trial = null;
             } else {
                 trial = getNextTrial(block, trial);
             }
 
             $("#instructions").html(trial ? "" : block.instructions);
-            $("#left").html(trial ?  makeLabel(block.leftWord) : "");
-            $("#right").html(trial ? makeLabel(block.rightWord) : "");
-            $("#center").html(trial ? trial.word : "Press space to continue");
+            if (isInput(trial)) {
+                var inputLabel = $("<label/>").attr({
+                    "for": trial.id
+                }).html(trial.prompt);
+                var textInput = $("<input/>").attr({
+                    "autofocus": true,
+                    "name": trial.id
+                });
+                var form = $("<form/>")
+                    .append(inputLabel, textInput)
+                    .submit(function () {
+                        addInput(trial.id, textInput.val())
+                        advanceTest();
+                        return false;
+                    });
+                $("#center").html(form);
+            } else {
+                $("#left").html(trial ?  makeLabel(block.leftWord) : "");
+                $("#right").html(trial ? makeLabel(block.rightWord) : "");
+                $("#center").html(trial ? trial.word : "Press space to continue");
+            }
         };
     }());
 
@@ -252,6 +304,9 @@ window.parenthood = (function ($) {
         return key;
     };
     var correctKey = function (block, trial, key) {
+        if (isInput(trial)) {
+            return false;
+        }
         if (block && trial) {
             if (key == "LEFT") {
                 var left = block ? block.leftWord : null;
@@ -311,7 +366,7 @@ window.parenthood = (function ($) {
             return function (e) {
                 var time = new Date().getTime();
 
-                if (!inReadMode) {
+                if (!inReadMode || isInput(trial)) {
                     return;
                 }
 
