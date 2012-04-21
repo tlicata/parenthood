@@ -450,6 +450,7 @@ window.parenthood = (function ($) {
             return BLOCKS.length;
         },
         init: init,
+        isInput: isInput,
         makeLabel: makeLabel
     }
 }(window.jQuery));

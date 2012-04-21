@@ -28,6 +28,7 @@
     var getNumBlocks = window.parenthood.getNumBlocks;
     var getTrial = window.parenthood.getCurrentTrial;
     var isCorrectKey = window.parenthood.correctKey;
+    var isInput = window.parenthood.isInput;
     var makeLabel = window.parenthood.makeLabel;
     var getTable = function () {
         return $("table#iatTable");
@@ -65,6 +66,9 @@
         // that the improper key shows an "X" and waits for
         // the correct response.
         var i = 0, n = block.trials.length;
+        var afterDelay = function () {
+            setTimeout(doTrial, getDelay() + 100);
+        };
         var doTrial = function () {
 
             if (i == n) {
@@ -73,20 +77,24 @@
             }
 
             var trial = getTrial();
-            equal(block.trials[i], trial, trial.word);
-            equal($("#center").html(), trial.word, trial.word + " html");
-            if (isCorrectKey(block, trial, "LEFT")) {
-                fakeLeftPress();
-            } else if (isCorrectKey(block, trial, "RIGHT")) {
-                fakeRightPress();
+            if (isInput(trial)) {
+                $(document.activeElement).trigger("submit");
             } else {
-                throw new Error("trial should fall into LEFT or RIGHT category");
+                equal(block.trials[i], trial, trial.word);
+                equal($("#center").html(), trial.word, trial.word + " html");
+                if (isCorrectKey(block, trial, "LEFT")) {
+                    fakeLeftPress();
+                } else if (isCorrectKey(block, trial, "RIGHT")) {
+                    fakeRightPress();
+                } else {
+                    throw new Error("trial should fall into LEFT or RIGHT category");
+                }
             }
 
             i++;
-            setTimeout(doTrial, getDelay() + 100);
+            afterDelay();
         }
-        doTrial();
+        afterDelay();
     };
 
     // Tests
