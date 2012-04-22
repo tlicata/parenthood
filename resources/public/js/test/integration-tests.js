@@ -45,12 +45,14 @@
         var block = getBlock();
         equal(block, getBlock(index), "block");
 
-        // Block starts with an instruction screen. Make sure
-        // the right instructions appear in the html.
-        equal(block.instructions, getInstructions(), "instructions");
+        if (block.instructions) {
+            // Block starts with an instruction screen. Make sure
+            // the right instructions appear in the html.
+            equal(block.instructions, getInstructions(), "instructions");
 
-        // Advance passed this block's instructions.
-        fakeSpacePress();
+            // Advance passed this block's instructions.
+            fakeSpacePress();
+        }
 
         // Make sure proper categories appear in the top
         // left and right corners of the screen.

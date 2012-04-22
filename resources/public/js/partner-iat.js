@@ -1,6 +1,5 @@
 window.parenthood = (function ($) {
     var BLOCKS = [{
-        instructions: "Tell us a little about yourself",
         trials: [
             {id: "name", prompt: "your first name"},
             {id: "pname", prompt: "your partner's first name"},
@@ -261,7 +260,14 @@ window.parenthood = (function ($) {
                 if (!_.any(block.trials, isInput)) {
                     block.trials = _.shuffle(block.trials);
                 }
-                trial = null;
+
+                // Show instructions if exist, otherwise
+                // jump right to the trials.
+                if (block.instructions) {
+                    trial = null;
+                } else {
+                    trial = getNextTrial(block, null);
+                }
             } else {
                 trial = getNextTrial(block, trial);
             }
