@@ -28,6 +28,7 @@
     var getNumBlocks = window.parenthood.getNumBlocks;
     var getTrial = window.parenthood.getCurrentTrial;
     var isCorrectKey = window.parenthood.correctKey;
+    var isInput = window.parenthood.isInput;
     var makeLabel = window.parenthood.makeLabel;
     var getTable = function () {
         return $("table#iatTable");
@@ -44,23 +45,32 @@
         var block = getBlock();
         equal(block, getBlock(index), "block");
 
-        // Block starts with an instruction screen. Make sure
-        // the right instructions appear in the html.
-        equal(block.instructions, getInstructions(), "instructions");
+        if (block.instructions) {
+            // Block starts with an instruction screen. Make sure
+            // the right instructions appear in the html.
+            equal(block.instructions, getInstructions(), "instructions");
 
-        // Advance passed this block's instructions.
-        fakeSpacePress();
+            // Advance passed this block's instructions.
+            fakeSpacePress();
+        }
 
         // Make sure proper categories appear in the top
         // left and right corners of the screen.
-        equal($("#left").html(), makeLabel(block.leftWord), "left categor(y|ies)");
-        equal($("#right").html(), makeLabel(block.rightWord), "right categor(y|ies)");
+        if (block.leftWord && block.rightWord) {
+            equal($("#left").html(), makeLabel(block.leftWord), "left categor(y|ies)");
+            equal($("#right").html(), makeLabel(block.rightWord), "right categor(y|ies)");
+        } else if (!block.trials) {
+            ok(false, "blocks with trials must have categories specified");
+        }
 
         // For each trial, make sure the proper key results
         // in successfully advancing to the next trial and
         // that the improper key shows an "X" and waits for
         // the correct response.
         var i = 0, n = block.trials.length;
+        var afterDelay = function () {
+            setTimeout(doTrial, getDelay() + 100);
+        };
         var doTrial = function () {
 
             if (i == n) {
@@ -69,41 +79,35 @@
             }
 
             var trial = getTrial();
-            equal(block.trials[i], trial, trial.word);
-            equal($("#center").html(), trial.word, trial.word + " html");
-            if (isCorrectKey(block, trial, "LEFT")) {
-                fakeLeftPress();
-            } else if (isCorrectKey(block, trial, "RIGHT")) {
-                fakeRightPress();
+            if (isInput(trial)) {
+                $(document.activeElement).trigger("submit");
             } else {
-                throw new Error("trial should fall into LEFT or RIGHT category");
+                equal(block.trials[i], trial, trial.word);
+                equal($("#center").html(), trial.word, trial.word + " html");
+                if (isCorrectKey(block, trial, "LEFT")) {
+                    fakeLeftPress();
+                } else if (isCorrectKey(block, trial, "RIGHT")) {
+                    fakeRightPress();
+                } else {
+                    throw new Error("trial should fall into LEFT or RIGHT category");
+                }
             }
 
             i++;
-            setTimeout(doTrial, getDelay() + 100);
+            afterDelay();
         }
-        doTrial();
+        afterDelay();
     };
 
     // Tests
-    test("Make sure first block is shown automatically.", function () {
-        // Insert IAT into DOM.
-        window.parenthood.init();
-
-        var table = getTable();
-        var instr = getInstructions();
-        ok(table.length == 1 &&
-           table.find("tr").length == 4 &&
-           instr == getBlock().instructions &&
-           instr == getBlock(0).instructions);
-
-        // Advance passed welcome screen.
-        fakeSpacePress();
-    });
-
-    for (var i = 1, n = getNumBlocks(); i < n; i++) {
+    for (var i = 0, n = getNumBlocks(); i < n; i++) {
         (function (index) {
             test("Run through block no. " + index, function () {
+                // Insert IAT into DOM. Have to do this after
+                // $.onReady() but before tests run.
+                if (index == 0) {
+                    window.parenthood.init();
+                }
                 stop();
                 workout(index);
             });
