@@ -59,10 +59,10 @@ window.parenthood = (function ($) {
         leftWord: "self",
         rightWord: "object",
         trials: [
-            {word: "me", category: "self", count: "4"},
-            {word: "myself", category: "self", count: "4"},
-            {word: "it", category: "object", count: "4"},
-            {word: "that", category: "object", count: "4"}]
+            {word: "${name}", category: "self", count: "4"},
+            {word: "${food}", category: "self", count: "4"},
+            {word: "${pname}", category: "object", count: "4"},
+            {word: "${pfood}", category: "object", count: "4"}]
     }, {
         instructions: [
 		    "The four categories that you are to distinguish are:<br><br>",
