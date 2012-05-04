@@ -219,18 +219,20 @@ window.parenthood = (function ($) {
     // between the brackets.
     var substitute = (function () {
         var regex = /\${(.*)}/;
-        var sub = function (t) {
+        var sub = function (t, inputs) {
             var word = t.word;
             if (_.isString(word)) {
                 var match = word.match(regex);
                 if (match) {
-                    t.word = word.replace(regex, input[match[1]]);
+                    t.word = word.replace(regex, inputs[match[1]]);
                 }
             }
             return t;
         };
-        return function (trials) {
-            return _.map(trials, sub);
+        return function (trials, inputs) {
+            return _.map(trials, function (t) {
+                return sub(t, inputs);
+            });
         };
     }());
     var advanceTest = (function () {
@@ -255,7 +257,7 @@ window.parenthood = (function ($) {
             if (!block || isLastTrialInBlock(block, trial)) {
                 block = getNextBlock(block);
                 block.trials = expand(block.trials);
-                block.trials = substitute(block.trials);
+                block.trials = substitute(block.trials, input);
                 // Shuffle trials, but not input blocks.
                 if (!_.any(block.trials, isInput)) {
                     block.trials = _.shuffle(block.trials);
@@ -462,6 +464,7 @@ window.parenthood = (function ($) {
         },
         init: init,
         isInput: isInput,
-        makeLabel: makeLabel
+        makeLabel: makeLabel,
+        substitute: substitute
     }
 }(window.jQuery));

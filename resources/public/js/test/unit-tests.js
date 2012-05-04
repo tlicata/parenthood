@@ -30,4 +30,17 @@
 			return trial.word;
 		}).length);
 	});
+
+    test("Replace placeholders with input", function () {
+        var trials = [{word:"to"},
+                      {word:"the"},
+                      {word:"${bird}"}];
+        var inputs = {bird: "chimp"};
+
+        var subs = parenthood.substitute(trials, inputs);
+
+        equal(subs[0].word, "to");
+        equal(subs[1].word, "the");
+        equal(subs[2].word, "chimp");
+    });
 }());
