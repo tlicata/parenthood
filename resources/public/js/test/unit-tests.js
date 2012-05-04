@@ -14,11 +14,11 @@
     });
 
 	test("Expand counts in trials", function () {
-		var trials = [{word: "test", category: "easter"}, // stays the same after expansion
-					  {word: "wonk", category: "awesome", count: -1}, // removed during expansion
-					  {word: "work", category: "egg", count: 0}, // removed during expansion
-					  {word: "unit", category: "hunt", count: 1}, // kept as is during expansion
-					  {word: "yes", category: "please", count: "5"}]; // 5 copies after expansion
+		var trials = [{word: "test", category: "easter"}, // stays the same
+					  {word: "wonk", category: "awesome", count: -1}, // removed
+					  {word: "work", category: "egg", count: 0}, // removed
+					  {word: "unit", category: "hunt", count: 1}, // stay the same
+					  {word: "yes", category: "please", count: "5"}]; // 5 copies
 		var expanded = parenthood.expand(trials);
 
 		equal(5, trials.length); // original array is not modified
