@@ -30,11 +30,28 @@
     var isCorrectKey = window.parenthood.correctKey;
     var isInput = window.parenthood.isInput;
     var makeLabel = window.parenthood.makeLabel;
+    var substitute = window.parenthood.substitute;
     var getTable = function () {
         return $("table#iatTable");
     };
     var getInstructions = function () {
         return getTable().find("#instructions").html();
+    };
+
+    // Grab a copy of the original BLOCKS datastructure so
+    // we can test that several transformations happen.
+    var ORIG_BLOCKS = (function () {
+        var arr = [];
+        for (var i = 0, n = getNumBlocks(); i < n; i++) {
+            arr.push($.deepCopy(getBlock(i)));
+        }
+        return arr;
+    }());
+    var INPUTS = {
+        name: "boy",
+        pname: "girl",
+        food: "pizza",
+        pfood: "tacos"
     };
 
     // Put a block through its exercises.
@@ -59,15 +76,34 @@
         if (block.leftWord && block.rightWord) {
             equal($("#left").html(), makeLabel(block.leftWord), "left categor(y|ies)");
             equal($("#right").html(), makeLabel(block.rightWord), "right categor(y|ies)");
-        } else if (!block.trials) {
-            ok(false, "blocks with trials must have categories specified");
+        }
+
+        var i = 0, n = block.trials.length;
+
+        // Make sure the trials have been shuffled and substituted. So their
+        // order is random (unless it's an input block), and their words with
+        // placeholders have been swapped for input.
+        if (n > 0) {
+            (function () {
+                var getUniqueId = function (trial) {
+                    return isInput(trial) ? trial.id : trial.word;
+                };
+                var nowWords = _.map(substitute(block.trials, INPUTS), getUniqueId);
+                var origWords = _.map(substitute(ORIG_BLOCKS[index].trials, INPUTS), getUniqueId);
+                var uniqNow = _.uniq(nowWords);
+                var uniqOrig = _.uniq(origWords);
+                if (_.any(block.trials, isInput)) {
+                    deepEqual(uniqNow, uniqOrig, "input order should not be shuffled");
+                } else {
+                    notDeepEqual(uniqNow, uniqOrig, "trial order should be shuffled");
+                }
+            }());
         }
 
         // For each trial, make sure the proper key results
         // in successfully advancing to the next trial and
         // that the improper key shows an "X" and waits for
         // the correct response.
-        var i = 0, n = block.trials.length;
         var afterDelay = function () {
             setTimeout(doTrial, getDelay() + 100);
         };
