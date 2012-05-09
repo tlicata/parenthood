@@ -1,6 +1,7 @@
 (ns parenthood.db
   (:require [clj-redis.client :as redis]
-            [clojure.data.json :as json]))
+            [clojure.data.json :as json]
+            [clojure.string :as string]))
 
 (def db-url (System/getenv "REDISTOGO_URL"))
 (def db (redis/init {:url (if (nil? db-url)
@@ -15,12 +16,14 @@
 
 ;; studies
 (def study-prefix "study:")
+(defn study-fix [key]
+  (second (string/split key #"study:")))
 (defn add-study [id tree]
   (redis/set db (str study-prefix id) (json/json-str tree)))
 (defn get-study [id]
   (json/read-json (redis/get db (str study-prefix id))))
 (defn all-studies []
-  (get-keys (str study-prefix "*")))
+  (map study-fix (get-keys (str study-prefix "*"))))
 
 ;; users
 (defn user-key [id] (str "user:" id))
