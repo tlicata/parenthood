@@ -168,6 +168,13 @@ window.parenthood = (function ($) {
                 $.extend(true, [], obj) :
                 $.extend(true, {}, obj);
         },
+        deparam: function (str) {
+            return _.reduce(str.split("&"), function (memo, pair) {
+                var arr = pair.split("=");
+                memo[arr[0]] = arr[1];
+                return memo;
+            }, {});
+        },
         getNextItem: function (item, array) {
             var index = $.inArray(item, array);
             var nextIndex = index + 1;
