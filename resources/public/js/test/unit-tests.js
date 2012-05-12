@@ -13,6 +13,15 @@
         notDeepEqual(obj, objCopy);
     });
 
+    test("Check if object is last element in array", function () {
+        var obj = {foo: "bar"};
+        var arr = [1, 2, 3];
+        var arrObj = [1, 2, obj];
+        ok($.isLastItem(3, arr), "can find number at last array index");
+        ok($.isLastItem(obj, arrObj), "can find object at last array index");
+        ok($.isLastItem(null, []), "special case we require for trials");
+    });
+
     test("Expand counts in trials", function () {
         var trials = [{word: "test", category: "easter"}, // stays the same
                       {word: "wonk", category: "awesome", count: -1}, // removed
