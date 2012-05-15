@@ -187,7 +187,7 @@ window.parenthood = (function ($) {
         }
     });
 
-    var block = null;
+    var blockGlobal = null;
     var trial = null;
     var input = {};
 
@@ -261,27 +261,27 @@ window.parenthood = (function ($) {
             return next;
         };
         return function () {
-            if (!block || isLastTrialInBlock(block, trial)) {
-                block = getNextBlock(block);
-                block.trials = expand(block.trials);
-                block.trials = substitute(block.trials, input);
+            if (!blockGlobal || isLastTrialInBlock(blockGlobal, trial)) {
+                blockGlobal = getNextBlock(blockGlobal);
+                blockGlobal.trials = expand(blockGlobal.trials);
+                blockGlobal.trials = substitute(blockGlobal.trials, input);
                 // Shuffle trials, but not input blocks.
-                if (!_.any(block.trials, isInput)) {
-                    block.trials = _.shuffle(block.trials);
+                if (!_.any(blockGlobal.trials, isInput)) {
+                    blockGlobal.trials = _.shuffle(blockGlobal.trials);
                 }
 
                 // Show instructions if exist, otherwise
                 // jump right to the trials.
-                if (block.instructions) {
+                if (blockGlobal.instructions) {
                     trial = null;
                 } else {
-                    trial = getNextTrial(block, null);
+                    trial = getNextTrial(blockGlobal, null);
                 }
             } else {
-                trial = getNextTrial(block, trial);
+                trial = getNextTrial(blockGlobal, trial);
             }
 
-            $("#instructions").html(trial ? "" : block.instructions);
+            $("#instructions").html(trial ? "" : blockGlobal.instructions);
             if (isInput(trial)) {
                 var inputLabel = $("<label/>").attr({
                     "for": trial.id
@@ -299,8 +299,8 @@ window.parenthood = (function ($) {
                     });
                 $("#center").html(form);
             } else {
-                $("#left").html(trial ?  makeLabel(block.leftWord) : "");
-                $("#right").html(trial ? makeLabel(block.rightWord) : "");
+                $("#left").html(trial ?  makeLabel(blockGlobal.leftWord) : "");
+                $("#right").html(trial ? makeLabel(blockGlobal.rightWord) : "");
                 $("#center").html(trial ? trial.word : "Press space to continue");
             }
         };
@@ -386,10 +386,10 @@ window.parenthood = (function ($) {
                 }
 
                 var key = getKey(e);
-                if (correctKey(block, trial, key)) {
+                if (correctKey(blockGlobal, trial, key)) {
                     inReadMode = false;
                     clearDisplay();
-                    if (isEnd(block, trial)) {
+                    if (isEnd(blockGlobal, trial)) {
                         // If user just finished last step, display
                         // a message of completion and leave test
                         // with inReadMode set to false so no more
@@ -458,7 +458,7 @@ window.parenthood = (function ($) {
         correctKey: correctKey,
 		expand: expand,
         getBlock: function (idx) {
-            return isNaN(idx) ? block : BLOCKS[idx];
+            return isNaN(idx) ? blockGlobal : BLOCKS[idx];
         },
         getCurrentTrial: function () {
             return trial;
