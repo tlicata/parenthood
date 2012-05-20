@@ -460,6 +460,13 @@ window.parenthood = (function ($) {
         getBlock: function (idx) {
             return isNaN(idx) ? blockGlobal : BLOCKS[idx];
         },
+        getBlocks: function () {
+            var arr = [];
+            for (var i = 0, n = this.getNumBlocks(); i < n; i++) {
+                arr.push($.deepCopy(this.getBlock(i)));
+            }
+            return arr;
+        },
         getCurrentTrial: function () {
             return trial;
         },

@@ -40,13 +40,7 @@
 
     // Grab a copy of the original BLOCKS datastructure so
     // we can test that several transformations happen.
-    var ORIG_BLOCKS = (function () {
-        var arr = [];
-        for (var i = 0, n = getNumBlocks(); i < n; i++) {
-            arr.push($.deepCopy(getBlock(i)));
-        }
-        return arr;
-    }());
+    var ORIG_BLOCKS = window.parenthood.getBlocks();
     var INPUTS = {
         name: "boy",
         pname: "girl",
