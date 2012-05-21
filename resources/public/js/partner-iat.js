@@ -187,6 +187,26 @@ window.parenthood = (function ($) {
         }
     });
 
+    var treeIntoScreens = function (tree) {
+        return _.reduce(tree, function (screens, block) {
+            if (block.instructions) {
+                screens.push({instructions: block.instructions});
+            }
+            var n = block.trials ? block.trials.length : 0;
+            for (var i = 0; i < n; i++) {
+                var trial = $.deepCopy(block.trials[i]);
+                if (trial.word) {
+                    _.extend(trial, {
+                        left: block.leftWord,
+                        right: block.rightWord
+                    });
+                }
+                screens.push(trial);
+            }
+            return screens;
+        }, []);
+    };
+
     var blockGlobal = null;
     var trial = null;
     var input = {};
@@ -479,6 +499,7 @@ window.parenthood = (function ($) {
         init: init,
         isInput: isInput,
         makeLabel: makeLabel,
-        substitute: substitute
+        substitute: substitute,
+        treeIntoScreens: treeIntoScreens
     }
 }(window.jQuery));

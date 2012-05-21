@@ -52,4 +52,18 @@
         equal(subs[1].word, "the");
         equal(subs[2].word, "chimp");
     });
+
+    test("Expand tree structure into array of screens", function () {
+        var tree = window.parenthood.getBlocks();
+        var screens = window.parenthood.treeIntoScreens(tree);
+        equal(screens.length, _.reduce(tree, function (count, block) {
+            if (block.instructions) {
+                count++;
+            }
+            if (block.trials) {
+                count += block.trials.length;
+            }
+            return count;
+        }, 0));
+    });
 }());
