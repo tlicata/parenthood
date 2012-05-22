@@ -295,14 +295,15 @@ window.parenthood = (function ($) {
         return key == "SPACE";
     };
 
+    var addInput = function (id, answer) {
+        if (input.id) {
+            throw new Error("duplicate ids");
+        } else {
+            input[id] = answer;
+        }
+    };
+
     var advanceTest = (function () {
-        var addInput = function (id, answer) {
-            if (input.id) {
-                throw new Error("duplicate ids");
-            } else {
-                input[id] = answer;
-            }
-        };
         var getNextBlock = function (block) {
             var next = $.getNextItem(block, BLOCKS);
             if (!next) {throw new Error("no next block");}
