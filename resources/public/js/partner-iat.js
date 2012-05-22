@@ -359,6 +359,40 @@ window.parenthood = (function ($) {
         };
     }());
 
+
+    var display = (function () {
+
+        // Build table and style it in JavaScript
+        // so it applies to tests too.
+        var createTable = function () {
+            $("body").append($([
+                '<table id="iatTable" width="100%">',
+                '<tbody>','<tr>',
+                '<td width="20%"><div id="left" class="labels"></div></td>',
+                '<td width="60%"></td>',
+                '<td width="20%"><div id="right" class="labels"></div></td>',
+                '</tr>','<tr>',
+                '<td colspan="3" height="100">',
+                '<div id="instructions" class="instructions">',
+                '</div>','</td>','</tr>','<tr>',
+                '<td width="15%"></td>',
+                '<td width="50%"><div id="center" class="labels"></div></td>',
+                '<td width="15%"></td>',
+                '</tr>','<tr>',
+                '<td width="15%"></td>',
+                '<td width="50%"><div class="labels"></div></td>',
+                '<td width="15%"></td>',
+                '</tr>','</tbody>','</table>'].join("")));
+
+            $("td,div.center,div.instructions").css("text-align", "center");
+            $("div.labels").css("font-size", "30px");
+        };
+
+        return {
+            createTable: createTable
+        };
+    }());
+
     var init = _.once(function () {
 
         var error = (function () {
@@ -435,41 +469,8 @@ window.parenthood = (function ($) {
         }());
         $("body").on("keypress", handleKeyPress);
 
-        // Build table and style it in JavaScript
-        // so it applies to tests too.
-        var createTable = function () {
-            $("body").append($(['<table id="iatTable" width="100%">',
-                                '<tbody>',
-                                '<tr>',
-                                '<td width="20%"><div id="left" class="labels"></div></td>',
-                                '<td width="60%"></td>',
-                                '<td width="20%"><div id="right" class="labels"></div></td>',
-                                '</tr>',
-                                '<tr>',
-                                '<td colspan="3" height="100">',
-                                '<div id="instructions" class="instructions">',
-                                '</div>',
-                                '</td>',
-                                '</tr>',
-                                '<tr>',
-                                '<td width="15%"></td>',
-                                '<td width="50%"><div id="center" class="labels"></div></td>',
-                                '<td width="15%"></td>',
-                                '</tr>',
-                                '<tr>',
-                                '<td width="15%"></td>',
-                                '<td width="50%"><div class="labels"></div></td>',
-                                '<td width="15%"></td>',
-                                '</tr>',
-                                '</tbody>',
-                                '</table>'].join("")));
-
-            $("td,div.center,div.instructions").css("text-align", "center");
-            $("div.labels").css("font-size", "30px");
-        };
-
         // initialize
-        createTable();
+        display.createTable();
         advanceTest();
     });
 
