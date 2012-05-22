@@ -364,7 +364,7 @@ window.parenthood = (function ($) {
 
         // Build table and style it in JavaScript
         // so it applies to tests too.
-        var createTable = function () {
+        var createTable = _.once(function () {
             $("body").append($([
                 '<table id="iatTable" width="100%">',
                 '<tbody>','<tr>',
@@ -386,7 +386,7 @@ window.parenthood = (function ($) {
 
             $("td,div.center,div.instructions").css("text-align", "center");
             $("div.labels").css("font-size", "30px");
-        };
+        });
 
         return {
             createTable: createTable
