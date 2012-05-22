@@ -262,6 +262,39 @@ window.parenthood = (function ($) {
             });
         };
     }());
+    var getKey = function (event) {
+        var code = event.keyCode;
+        var key = null;
+        if (code == 32) {
+            key = "SPACE";
+        } else if (code == 97 || code == 65) {
+            key = "LEFT";
+        } else if (code == 107 || code == 75) {
+            key = "RIGHT";
+        }
+        return key;
+    };
+    var correctKey = function (block, trial, key) {
+        if (isInput(trial)) {
+            return false;
+        }
+        if (block && trial) {
+            if (key == "LEFT") {
+                var left = block ? block.leftWord : null;
+                return $.isArray(left) ?
+                    $.inArray(trial.category, left) !== -1 :
+                    left == trial.category;
+            } else if (key == "RIGHT") {
+                var right = block ? block.rightWord : null;
+                return $.isArray(right) ?
+                    $.inArray(trial.category, right) !== -1 :
+                    right == trial.category;
+            }
+            return false;
+        }
+        return key == "SPACE";
+    };
+
     var advanceTest = (function () {
         var addInput = function (id, answer) {
             if (input.id) {
@@ -325,39 +358,6 @@ window.parenthood = (function ($) {
             }
         };
     }());
-
-    var getKey = function (event) {
-        var code = event.keyCode;
-        var key = null;
-        if (code == 32) {
-            key = "SPACE";
-        } else if (code == 97 || code == 65) {
-            key = "LEFT";
-        } else if (code == 107 || code == 75) {
-            key = "RIGHT";
-        }
-        return key;
-    };
-    var correctKey = function (block, trial, key) {
-        if (isInput(trial)) {
-            return false;
-        }
-        if (block && trial) {
-            if (key == "LEFT") {
-                var left = block ? block.leftWord : null;
-                return $.isArray(left) ?
-                    $.inArray(trial.category, left) !== -1 :
-                    left == trial.category;
-            } else if (key == "RIGHT") {
-                var right = block ? block.rightWord : null;
-                return $.isArray(right) ?
-                    $.inArray(trial.category, right) !== -1 :
-                    right == trial.category;
-            }
-            return false;
-        }
-        return key == "SPACE";
-    };
 
     var init = _.once(function () {
 
