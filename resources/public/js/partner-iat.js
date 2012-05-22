@@ -362,6 +362,11 @@ window.parenthood = (function ($) {
 
     var display = (function () {
 
+        var clear = function () {
+            error.hide();
+            $("#center").text("");
+        };
+
         // Build table and style it in JavaScript
         // so it applies to tests too.
         var createTable = _.once(function () {
@@ -414,6 +419,7 @@ window.parenthood = (function ($) {
         }());
 
         return {
+            clear: clear,
             createTable: createTable,
             error: error
         };
@@ -424,10 +430,6 @@ window.parenthood = (function ($) {
         var handleKeyPress = (function () {
             var inReadMode = true;
 
-            var clearDisplay = function () {
-                display.error.hide();
-                $("#center").text("");
-            };
             var showEndMessage = function () {
                 $("#left, #right, #center").text("");
                 $("#instructions").text("Test Finished. Thank you!");
@@ -443,7 +445,7 @@ window.parenthood = (function ($) {
                 var key = getKey(e);
                 if (correctKey(blockGlobal, trial, key)) {
                     inReadMode = false;
-                    clearDisplay();
+                    display.clear();
                     if (isEnd(blockGlobal, trial)) {
                         // If user just finished last step, display
                         // a message of completion and leave test
