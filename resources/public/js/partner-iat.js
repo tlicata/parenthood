@@ -388,13 +388,6 @@ window.parenthood = (function ($) {
             $("div.labels").css("font-size", "30px");
         });
 
-        return {
-            createTable: createTable
-        };
-    }());
-
-    var init = _.once(function () {
-
         var error = (function () {
             var intervalId;
             var show = function () {
@@ -420,11 +413,19 @@ window.parenthood = (function ($) {
             }
         }());
 
+        return {
+            createTable: createTable,
+            error: error
+        };
+    }());
+
+    var init = _.once(function () {
+
         var handleKeyPress = (function () {
             var inReadMode = true;
 
             var clearDisplay = function () {
-                error.hide();
+                display.error.hide();
                 $("#center").text("");
             };
             var showEndMessage = function () {
@@ -463,7 +464,7 @@ window.parenthood = (function ($) {
                         }
                     }
                 } else if (trial && (key == "LEFT" || key == "RIGHT")) {
-                    error.show();
+                    display.error.show();
                 }
             }
         }());
