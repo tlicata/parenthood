@@ -418,10 +418,16 @@ window.parenthood = (function ($) {
             }
         }());
 
+        var showEndMessage = function () {
+            $("#left, #right, #center").text("");
+            $("#instructions").text("Test Finished. Thank you!");
+        };
+
         return {
             clear: clear,
             createTable: createTable,
-            error: error
+            error: error,
+            showEndMessage: showEndMessage
         };
     }());
 
@@ -429,11 +435,6 @@ window.parenthood = (function ($) {
 
         var handleKeyPress = (function () {
             var inReadMode = true;
-
-            var showEndMessage = function () {
-                $("#left, #right, #center").text("");
-                $("#instructions").text("Test Finished. Thank you!");
-            };
 
             return function (e) {
                 var time = new Date().getTime();
@@ -452,7 +453,7 @@ window.parenthood = (function ($) {
                         // with inReadMode set to false so no more
                         // input is allowed. Remove key press handler
                         // to further shut things down.
-                        showEndMessage();
+                        display.showEndMessage();
                         $("body").off("keypress", handleKeyPress);
                     } else {
                         var doAdvanceTest = function () {
