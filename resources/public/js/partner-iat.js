@@ -161,6 +161,9 @@ window.parenthood = (function ($) {
     // the next trial is displayed (and input is accepted).
     var DELAY = 300;
 
+    // Pattern to replace with user input.
+    var INPUT_REGEX = /\${(.*)}/;
+
     // Extend jQuery with utility methods.
     $.extend({
         deepCopy: function (obj) {
@@ -187,45 +190,72 @@ window.parenthood = (function ($) {
         }
     });
 
-    var treeIntoScreens = function (tree) {
-        return _.reduce(tree, function (screens, block) {
-            if (block.instructions) {
-                screens.push({instructions: block.instructions});
-            }
-            var n = block.trials ? block.trials.length : 0;
-            for (var i = 0; i < n; i++) {
-                var trial = $.deepCopy(block.trials[i]);
-                if (trial.word) {
-                    _.extend(trial, {
-                        left: block.leftWord,
-                        right: block.rightWord
-                    });
-                }
-                screens.push(trial);
-            }
-            return screens;
-        }, []);
+    var isInput = function (screen) {
+        return screen && screen.prompt ? true : false;
     };
-
-    var blockGlobal = null;
-    var trial = null;
-    var input = {};
-
-    var isInput = function (trial) {
-        return trial && trial.prompt ? true : false;
+    var isInstructions = function (screen) {
+        return screen && screen.instructions ? true : false;
     };
-    var isLastTrialInBlock = function (block, trial) {
-        return $.isLastItem(trial, block.trials);
-    };
-    var isLastBlock = function (block) {
-        return $.isLastItem(block, BLOCKS);
-    };
-    var isEnd = function (block, trial) {
-        return isLastBlock(block) && isLastTrialInBlock(block, trial);
+    var isTrial = function (screen) {
+        return screen && screen.word ? true : false;
     };
     var makeLabel = function (category) {
         return $.isArray(category) ? category.join("<br>") : category;
     };
+    var isEnter = function (key) {
+        return key == 13;
+    };
+    var isSpace = function (key) {
+        return key == 32;
+    };
+    var isLeft = function (key) {
+        return key == 97 || key == 65;
+    };
+    var isRight = function (key) {
+        return key == 107 || key == 75;
+    };
+    var correctKey = function (screen, key) {
+        var isCorrect = false;
+        if (isInput(screen)) {
+            isCorrect = isEnter(key);
+            // We aren't really getting the input from the keystrokes,
+            // but instead reaching into the page to pull out the form
+            // value.  Building it from the keystrokes would have the
+            // problem of dealing with backspaces or mouse highlights
+            // and deletions.
+            if (isCorrect) {
+                var form = $("#"+display.makeInputId(screen));
+                if (form.length != 1) {
+                    throw new Error("should be one matching input element");
+                }
+                addInput(screen.id, form.val());
+            }
+        } else if (isTrial(screen)) {
+            if (isLeft(key)) {
+                var left = screen ? screen.left : null;
+                isCorrect = $.isArray(left) ?
+                    $.inArray(screen.category, left) !== -1 :
+                    left == screen.category;
+            } else if (isRight(key)) {
+                var right = screen ? screen.right : null;
+                isCorrect = $.isArray(right) ?
+                    $.inArray(screen.category, right) !== -1 :
+                    right == screen.category;
+            }
+        } else if (isInstructions(screen)) {
+            isCorrect = isSpace(key);
+        }
+        return isCorrect;
+    };
+
+    var addInput = function (id, answer) {
+        if (input.id) {
+            throw new Error("duplicate ids");
+        } else {
+            input[id] = answer;
+        }
+    };
+
     // If a trial is specified with count property of n, then
     // replace that trial with n copies of the trial (with the
     // count properties removed).
@@ -244,122 +274,38 @@ window.parenthood = (function ($) {
     // If a trial word contains ${}, replace it with
     // user input. Put the id of the input you want
     // between the brackets.
-    var substitute = (function () {
-        var regex = /\${(.*)}/;
-        var sub = function (t, inputs) {
-            var word = t.word;
-            if (_.isString(word)) {
-                var match = word.match(regex);
-                if (match) {
-                    t.word = word.replace(regex, inputs[match[1]]);
-                }
+    var substitute = function (word, inputs) {
+        if (_.isString(word)) {
+            var match = word.match(INPUT_REGEX);
+            if (match) {
+                word = word.replace(INPUT_REGEX, inputs[match[1]]);
             }
-            return t;
-        };
-        return function (trials, inputs) {
-            return _.map(trials, function (t) {
-                return sub(t, inputs);
-            });
-        };
-    }());
-    var getKey = function (event) {
-        var code = event.keyCode;
-        var key = null;
-        if (code == 32) {
-            key = "SPACE";
-        } else if (code == 97 || code == 65) {
-            key = "LEFT";
-        } else if (code == 107 || code == 75) {
-            key = "RIGHT";
         }
-        return key;
+        return word;
     };
-    var correctKey = function (block, trial, key) {
-        if (isInput(trial)) {
-            return false;
-        }
-        if (block && trial) {
-            if (key == "LEFT") {
-                var left = block ? block.leftWord : null;
-                return $.isArray(left) ?
-                    $.inArray(trial.category, left) !== -1 :
-                    left == trial.category;
-            } else if (key == "RIGHT") {
-                var right = block ? block.rightWord : null;
-                return $.isArray(right) ?
-                    $.inArray(trial.category, right) !== -1 :
-                    right == trial.category;
+    var treeIntoScreens = function (tree) {
+        return _.reduce(tree, function (screens, block) {
+            if (block.instructions) {
+                screens.push({instructions: block.instructions});
             }
-            return false;
-        }
-        return key == "SPACE";
-    };
-
-    var addInput = function (id, answer) {
-        if (input.id) {
-            throw new Error("duplicate ids");
-        } else {
-            input[id] = answer;
-        }
-    };
-
-    var advanceTest = (function () {
-        var getNextBlock = function (block) {
-            var next = $.getNextItem(block, BLOCKS);
-            if (!next) {throw new Error("no next block");}
-            return next;
-        };
-        var getNextTrial = function (block, trial) {
-            var next = $.getNextItem(trial, block.trials);
-            if (!next) {throw new Error("no next trial");}
-            return next;
-        };
-        return function () {
-            if (!blockGlobal || isLastTrialInBlock(blockGlobal, trial)) {
-                blockGlobal = getNextBlock(blockGlobal);
-                blockGlobal.trials = expand(blockGlobal.trials);
-                blockGlobal.trials = substitute(blockGlobal.trials, input);
-                // Shuffle trials, but not input blocks.
-                if (!_.any(blockGlobal.trials, isInput)) {
-                    blockGlobal.trials = _.shuffle(blockGlobal.trials);
-                }
-
-                // Show instructions if exist, otherwise
-                // jump right to the trials.
-                if (blockGlobal.instructions) {
-                    trial = null;
-                } else {
-                    trial = getNextTrial(blockGlobal, null);
-                }
-            } else {
-                trial = getNextTrial(blockGlobal, trial);
+            var allTrials = (block && block.trials) || [];
+            allTrials = expand(allTrials);
+            if (_.all(allTrials, isTrial)) {
+                allTrials = _.shuffle(allTrials);
             }
-
-            $("#instructions").html(trial ? "" : blockGlobal.instructions);
-            if (isInput(trial)) {
-                var inputLabel = $("<label/>").attr({
-                    "for": trial.id
-                }).html(trial.prompt);
-                var textInput = $("<input/>").attr({
-                    "autofocus": true,
-                    "name": trial.id
-                });
-                var form = $("<form/>")
-                    .append(inputLabel, textInput)
-                    .submit(function () {
-                        addInput(trial.id, textInput.val())
-                        advanceTest();
-                        return false;
+            for (var i = 0, n = allTrials.length; i < n; i++) {
+                var trial = $.deepCopy(allTrials[i]);
+                if (isTrial(trial)) {
+                    _.extend(trial, {
+                        left: block.leftWord,
+                        right: block.rightWord
                     });
-                $("#center").html(form);
-            } else {
-                $("#left").html(trial ?  makeLabel(blockGlobal.leftWord) : "");
-                $("#right").html(trial ? makeLabel(blockGlobal.rightWord) : "");
-                $("#center").html(trial ? trial.word : "Press space to continue");
+                }
+                screens.push(trial);
             }
-        };
-    }());
-
+            return screens;
+        }, []);
+    };
 
     var display = (function () {
 
@@ -371,7 +317,7 @@ window.parenthood = (function ($) {
         // Build table and style it in JavaScript
         // so it applies to tests too.
         var createTable = _.once(function () {
-            $("body").append($([
+            $("body").prepend($([
                 '<table id="iatTable" width="100%">',
                 '<tbody>','<tr>',
                 '<td width="20%"><div id="left" class="labels"></div></td>',
@@ -391,7 +337,10 @@ window.parenthood = (function ($) {
                 '</tr>','</tbody>','</table>'].join("")));
 
             $("td,div.center,div.instructions").css("text-align", "center");
-            $("div.labels").css("font-size", "30px");
+            $("div.labels").css({
+                "font-size": "30px",
+                "min-height": "50px"
+            });
         });
 
         var error = (function () {
@@ -419,91 +368,121 @@ window.parenthood = (function ($) {
             }
         }());
 
+        var makeInputId = function (screen) {
+            return "input" + screen.id;
+        };
+
         var showEndMessage = function () {
             $("#left, #right, #center").text("");
             $("#instructions").text("Test Finished. Thank you!");
+        };
+
+        var update = function (screen) {
+            $("#instructions").html((screen && screen.instructions) || "");
+            if (isInput(screen)) {
+                var id = makeInputId(screen);
+                var inputLabel = $("<label/>").attr({
+                    "for": id
+                }).html(screen.prompt);
+                var textInput = $("<input/>").attr({
+                    "autofocus": true,
+                    "id": id,
+                    "name": id
+                });
+                $("#center").append(inputLabel, textInput);
+            } else {
+                var word = substitute(screen.word, input);
+                $("#left").html(isTrial(screen) ?  makeLabel(screen.left) : "");
+                $("#right").html(isTrial(screen) ? makeLabel(screen.right) : "");
+                $("#center").html(isInstructions(screen) ? "Press space to continue" : word);
+            }
         };
 
         return {
             clear: clear,
             createTable: createTable,
             error: error,
-            showEndMessage: showEndMessage
+            makeInputId: makeInputId,
+            showEndMessage: showEndMessage,
+            update: update
         };
     }());
 
-    var init = _.once(function () {
+    var input = {};
+    var SCREENS = treeIntoScreens(BLOCKS);
+    var screen = null;
 
-        var handleKeyPress = (function () {
-            var inReadMode = true;
+    var handleKeyPress = (function () {
+        var inReadMode = true;
 
-            return function (e) {
-                var time = new Date().getTime();
+        return function (e) {
+            var time = new Date().getTime();
 
-                if (!inReadMode || isInput(trial)) {
-                    return;
-                }
-
-                var key = getKey(e);
-                if (correctKey(blockGlobal, trial, key)) {
-                    inReadMode = false;
-                    display.clear();
-                    if (isEnd(blockGlobal, trial)) {
-                        // If user just finished last step, display
-                        // a message of completion and leave test
-                        // with inReadMode set to false so no more
-                        // input is allowed. Remove key press handler
-                        // to further shut things down.
-                        display.showEndMessage();
-                        $("body").off("keypress", handleKeyPress);
-                    } else {
-                        var doAdvanceTest = function () {
-                            inReadMode = true;
-                            advanceTest();
-                        };
-                        if (key == "SPACE") {
-                            doAdvanceTest();
-                        } else {
-                            setTimeout(doAdvanceTest, DELAY);
-                        }
-                    }
-                } else if (trial && (key == "LEFT" || key == "RIGHT")) {
-                    display.error.show();
-                }
+            if (!inReadMode) {
+                return;
             }
-        }());
-        $("body").on("keypress", handleKeyPress);
 
-        // initialize
+            var key = e.keyCode;
+            if (correctKey(screen, key)) {
+                inReadMode = false;
+                display.clear();
+                if ($.isLastItem(screen, SCREENS)) {
+                    // If user just finished last step, display
+                    // a message of completion and leave test
+                    // with inReadMode set to false so no more
+                    // input is allowed. Remove key press handler
+                    // to further shut things down.
+                    display.showEndMessage();
+                    $("body").off("keypress", handleKeyPress);
+                } else {
+                    var doAdvanceTest = function () {
+                        inReadMode = true;
+                        screen = $.getNextItem(screen, SCREENS);
+                        display.update(screen);
+                    };
+                    if (isInput(screen)) {
+                        doAdvanceTest();
+                    } else {
+                        setTimeout(doAdvanceTest, DELAY);
+                    }
+                }
+            } else if (isTrial(screen) && (isLeft(key)||isRight(key))) {
+                display.error.show();
+            }
+        }
+    }());
+
+    var init = _.once(function () {
+        screen = $.getNextItem(screen, SCREENS);
         display.createTable();
-        advanceTest();
+        display.update(screen);
+        $("body").on("keypress", handleKeyPress);
     });
 
     // Expose some methods. Mainly for testing.
     return {
         correctKey: correctKey,
+        display: display,
         expand: expand,
-        getBlock: function (idx) {
-            return isNaN(idx) ? blockGlobal : BLOCKS[idx];
-        },
         getBlocks: function () {
-            var arr = [];
-            for (var i = 0, n = this.getNumBlocks(); i < n; i++) {
-                arr.push($.deepCopy(this.getBlock(i)));
-            }
-            return arr;
-        },
-        getCurrentTrial: function () {
-            return trial;
+            return BLOCKS;
         },
         getDelay: function () {
             return DELAY;
         },
-        getNumBlocks: function () {
-            return BLOCKS.length;
+        getInputRegex: function () {
+            return INPUT_REGEX;
+        },
+        getNumScreens: function () {
+            return SCREENS.length;
+        },
+        getScreen: function (idx) {
+            return $.deepCopy(isNaN(idx) ? screen : SCREENS[idx]);
         },
         init: init,
         isInput: isInput,
+        isInstructions: isInstructions,
+        isTrial: isTrial,
         makeLabel: makeLabel,
         substitute: substitute,
         treeIntoScreens: treeIntoScreens
