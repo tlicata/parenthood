@@ -388,7 +388,7 @@ window.parenthood = (function ($) {
                     "autofocus": true,
                     "id": id,
                     "name": id
-                });
+                }).focus();
                 $("#center").append(inputLabel, textInput);
             } else {
                 var word = screen.word;
