@@ -9,7 +9,7 @@
     // upper and lowercase keys to account for caps lock.
     var fakePress = function (keyCode, context) {
         var e = $.Event("keypress");
-        e.keyCode = keyCode;
+        e.which = keyCode;
         if (context) {
             context.trigger(e);
         } else {

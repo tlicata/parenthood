@@ -422,7 +422,7 @@ window.parenthood = (function ($) {
                 return;
             }
 
-            var key = e.keyCode;
+            var key = e.which;
             if (correctKey(screen, key)) {
                 inReadMode = false;
                 display.clear();
