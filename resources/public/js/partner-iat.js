@@ -391,7 +391,7 @@ window.parenthood = (function ($) {
                 });
                 $("#center").append(inputLabel, textInput);
             } else {
-                var word = substitute(screen.word, input);
+                var word = screen.word;
                 $("#left").html(isTrial(screen) ?  makeLabel(screen.left) : "");
                 $("#right").html(isTrial(screen) ? makeLabel(screen.right) : "");
                 $("#center").html(isInstructions(screen) ? "Press space to continue" : word);
@@ -411,6 +411,14 @@ window.parenthood = (function ($) {
     var input = {};
     var SCREENS = treeIntoScreens(BLOCKS);
     var screen = null;
+
+    var showNextScreen = function () {
+        var next = $.getNextItem(screen, SCREENS);
+        screen = $.extend(next, {
+            word: substitute(next.word, input)
+        });
+        display.update(screen);
+    };
 
     var handleKeyPress = (function () {
         var inReadMode = true;
@@ -437,8 +445,7 @@ window.parenthood = (function ($) {
                 } else {
                     var doAdvanceTest = function () {
                         inReadMode = true;
-                        screen = $.getNextItem(screen, SCREENS);
-                        display.update(screen);
+                        showNextScreen();
                     };
                     if (isInput(screen)) {
                         doAdvanceTest();
@@ -453,9 +460,8 @@ window.parenthood = (function ($) {
     }());
 
     var init = _.once(function () {
-        screen = $.getNextItem(screen, SCREENS);
         display.createTable();
-        display.update(screen);
+        showNextScreen();
         $("body").on("keypress", handleKeyPress);
     });
 

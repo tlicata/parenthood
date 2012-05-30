@@ -50,7 +50,6 @@
     var isTrial = window.parenthood.isTrial;
     var isInstructions = window.parenthood.isInstructions;
     var makeLabel = window.parenthood.makeLabel;
-    var substitute = window.parenthood.substitute;
     var getTable = function () {
         return $("table#iatTable");
     };
@@ -101,7 +100,7 @@
             // prompt appears in the center.
             equal($("#left").html(), makeLabel(screen.left),"left");
             equal($("#right").html(), makeLabel(screen.right), "right");
-            equal($("#center").html(), substitute(screen.word, INPUTS), screen.word);
+            equal($("#center").html(), screen.word, screen.word);
 
             // Try to verify that input replacement happened properly.
             notEqual(screen.word, undefined, "word should not be undefined");
