@@ -7,28 +7,48 @@
 
     // Our tests will mimic a user typing on a keyboard.  Accept
     // upper and lowercase keys to account for caps lock.
-    var fakePress = function (keyCode) {
+    var fakePress = function (keyCode, context) {
         var e = $.Event("keypress");
         e.keyCode = keyCode;
-        $("body").trigger(e);
+        if (context) {
+            context.trigger(e);
+        } else {
+            $("body").trigger(e);
+        }
+    };
+    var getEnterKeyCode = function () {
+        return 13;
+    };
+    var getLeftKeyCode = function () {
+        return Math.random() > .5 ? 97 : 65;
+    };
+    var getRightKeyCode = function () {
+        return Math.random() > .5 ? 107 : 75;
+    };
+    var getSpaceKeyCode =  function () {
+        return 32;
+    };
+    var fakeEnterPress = function () {
+        fakePress(getEnterKeyCode());
     };
     var fakeLeftPress = function () {
-        fakePress(Math.random() > .5 ? 97 : 65);
+        fakePress(getLeftKeyCode());
     };
     var fakeRightPress = function () {
-        fakePress(Math.random() > .5 ? 107 : 75);
+        fakePress(getRightKeyCode());
     };
     var fakeSpacePress = function () {
-        fakePress(32);
+        fakePress(getSpaceKeyCode());
     };
 
     // Some methods to pull the current state out of the IAT.
-    var getBlock = window.parenthood.getBlock;
     var getDelay = window.parenthood.getDelay;
-    var getNumBlocks = window.parenthood.getNumBlocks;
-    var getTrial = window.parenthood.getCurrentTrial;
+    var getNumScreens = window.parenthood.getNumScreens;
+    var getScreen = window.parenthood.getScreen;
     var isCorrectKey = window.parenthood.correctKey;
     var isInput = window.parenthood.isInput;
+    var isTrial = window.parenthood.isTrial;
+    var isInstructions = window.parenthood.isInstructions;
     var makeLabel = window.parenthood.makeLabel;
     var substitute = window.parenthood.substitute;
     var getTable = function () {
@@ -38,15 +58,7 @@
         return getTable().find("#instructions").html();
     };
 
-    // Grab a copy of the original BLOCKS datastructure so
-    // we can test that several transformations happen.
-    var ORIG_BLOCKS = (function () {
-        var arr = [];
-        for (var i = 0, n = getNumBlocks(); i < n; i++) {
-            arr.push($.deepCopy(getBlock(i)));
-        }
-        return arr;
-    }());
+    var INPUT_REGEX = window.parenthood.getInputRegex();
     var INPUTS = {
         name: "boy",
         pname: "girl",
@@ -54,98 +66,77 @@
         pfood: "tacos"
     };
 
-    // Put a block through its exercises.
+    var leftIsCorrect = function (screen) {
+        return isCorrectKey(screen, getLeftKeyCode());
+    };
+    var rightIsCorrect = function (screen) {
+        return isCorrectKey(screen, getRightKeyCode());
+    };
+
+    // Put a screen through its exercises.
     var workout = function (index) {
-
-        // Make sure current block is pointing to the block
+        // Make sure current screen is pointing to the screen
         // we're supposed to be at.
-        var block = getBlock();
-        equal(block, getBlock(index), "block");
+        var screen = getScreen();
+        deepEqual(screen, getScreen(index), "screen " + index);
 
-        if (block.instructions) {
-            // Block starts with an instruction screen. Make sure
-            // the right instructions appear in the html.
-            equal(block.instructions, getInstructions(), "instructions");
-
-            // Advance passed this block's instructions.
+        if (isInstructions(screen)) {
+            equal(screen.instructions, getInstructions(), "instructions");
             fakeSpacePress();
-        }
-
-        // Make sure proper categories appear in the top
-        // left and right corners of the screen.
-        if (block.leftWord && block.rightWord) {
-            equal($("#left").html(), makeLabel(block.leftWord), "left categor(y|ies)");
-            equal($("#right").html(), makeLabel(block.rightWord), "right categor(y|ies)");
-        }
-
-        var i = 0, n = block.trials.length;
-
-        // Make sure the trials have been shuffled and substituted. So their
-        // order is random (unless it's an input block), and their words with
-        // placeholders have been swapped for input.
-        if (n > 0) {
-            (function () {
-                var getUniqueId = function (trial) {
-                    return isInput(trial) ? trial.id : trial.word;
-                };
-                var nowWords = _.map(substitute(block.trials, INPUTS), getUniqueId);
-                var origWords = _.map(substitute(ORIG_BLOCKS[index].trials, INPUTS), getUniqueId);
-                var uniqNow = _.uniq(nowWords);
-                var uniqOrig = _.uniq(origWords);
-                if (_.any(block.trials, isInput)) {
-                    deepEqual(uniqNow, uniqOrig, "input order should not be shuffled");
-                } else {
-                    notDeepEqual(uniqNow, uniqOrig, "trial order should be shuffled");
-                }
-            }());
-        }
-
-        // For each trial, make sure the proper key results
-        // in successfully advancing to the next trial and
-        // that the improper key shows an "X" and waits for
-        // the correct response.
-        var afterDelay = function () {
-            setTimeout(doTrial, getDelay() + 100);
-        };
-        var doTrial = function () {
-
-            if (i == n) {
-                start();
-                return;
-            }
-
-            var trial = getTrial();
-            if (isInput(trial)) {
-                $(document.activeElement).trigger("submit");
+        } else if (isInput(screen)) {
+            var active = $(document.activeElement);
+            if (active.is("input")) {
+                var value = INPUTS[screen.id];
+                active.val(value);
+                _.map(value.split(""), function (letter) {
+                    fakePress(letter.charCodeAt(0), active);
+                });
             } else {
-                equal(block.trials[i], trial, trial.word);
-                equal($("#center").html(), trial.word, trial.word + " html");
-                if (isCorrectKey(block, trial, "LEFT")) {
-                    fakeLeftPress();
-                } else if (isCorrectKey(block, trial, "RIGHT")) {
-                    fakeRightPress();
-                } else {
-                    throw new Error("trial should fall into LEFT or RIGHT category");
-                }
+                throw new Error("active element should be form input");
             }
+            fakeEnterPress();
+        } else if (isTrial(screen)) {
+            // Make sure proper categories appear in the top
+            // left and right corners of the screen and the
+            // prompt appears in the center.
+            equal($("#left").html(), makeLabel(screen.left),"left");
+            equal($("#right").html(), makeLabel(screen.right), "right");
+            equal($("#center").html(), substitute(screen.word, INPUTS), screen.word);
 
-            i++;
-            afterDelay();
+            // Try to verify that input replacement happened properly.
+            notEqual(screen.word, undefined, "word should not be undefined");
+            notEqual(screen.word, "undefined", "word should not be string undefined");
+            strictEqual($("#center").html().match(INPUT_REGEX), null, "word should not contain input regex");
+
+            // Press the correct key for the trial.
+            if (leftIsCorrect(screen)) {
+                fakeLeftPress();
+            } else if (rightIsCorrect(screen)) {
+                fakeRightPress();
+            } else {
+                throw new Error("trial should fall into LEFT or RIGHT category");
+            }
+        } else {
+            throw new Error("screen should be instructions, input, or trial");
         }
-        afterDelay();
+        setTimeout(start, getDelay() + 100);
     };
 
     // Tests
-    for (var i = 0, n = getNumBlocks(); i < n; i++) {
+    for (var i = 0, n = getNumScreens(); i < n; i++) {
         (function (index) {
-            test("Run through block no. " + index, function () {
+            test("screen "  + index, function () {
                 // Insert IAT into DOM. Have to do this after
                 // $.onReady() but before tests run.
                 if (index == 0) {
                     window.parenthood.init();
                 }
                 stop();
-                workout(index);
+                // Must defer firs test so that html renders
+                // and the first input can receive focus.
+                _.defer(function () {
+                    workout(index);
+                });
             });
         }(i));
     };
