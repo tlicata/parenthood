@@ -2,7 +2,8 @@
   (:use [noir.core :only [defpage]]
         [hiccup.core :only [html]]
         [hiccup.page-helpers :only [html5 include-js]])
-  (:require [noir.request :as request]
+  (:require [noir.response :as response]
+            [noir.request :as request]
             [noir.server :as server]
             [parenthood.db :as db]))
 
@@ -22,13 +23,20 @@
         "/js/partner-iat.js")]
       [:body
        [:script {:type "text/javascript"}
-        "$(function(){window.parenthood.init()}());"]]))))
+        (str "$(function(){window.parenthood.init("
+             unique
+             ")}());")]]))))
 
-(defpage "/study/" []
-  (let [id (first (db/all-studies))
-        study (db/get-study id)]
-    (html (html5 [:p (:name study)]))))
+(defpage [:post "/partner-iat.html"] {:keys [id results unique]}
+  (let [request (request/ring-request)
+        user-agent (get-in request [:headers "user-agent"])
+        ip (:remote-addr request)
+        fresh (db/update-response id unique user-agent ip results)]
+    (if fresh
+      (response/json fresh)
+      (response/status 403 {}))))
 
 (defn -main []
   (let [port (Integer/parseInt (System/getenv "PORT"))]
     (server/start port)))
+

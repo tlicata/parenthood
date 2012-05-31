@@ -31,8 +31,15 @@
   ([id unique]
      (let [key (response-key id)]
        (if (nil? unique)
-         (redis/hkeys db key)
+         (into #{} (redis/hkeys db key))
          (json/read-json (redis/hget db key unique))))))
+(defn update-response [id unique user-agent ip results]
+  (let [key (response-key id)
+        stale (get-response id unique)
+        fresh (assoc stale :results results)]
+    (if (and (= (:user-agent stale) user-agent)
+             (= (:ip stale) ip))
+        (redis/hset db key unique (json/json-str fresh)))))
 (defn del-response
   ([id]
      (redis/del db [(response-key id)]))
