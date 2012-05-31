@@ -390,6 +390,11 @@ window.parenthood = (function ($) {
                     "name": id
                 }).focus();
                 $("#center").append(inputLabel, textInput);
+                // On windows machines, the call to focus() above
+                // isn't doing anything. Call it again after a delay.
+                setTimeout(function () {
+                    textInput.focus();
+                }, 250);
             } else {
                 var word = screen.word;
                 $("#left").html(isTrial(screen) ?  makeLabel(screen.left) : "");
