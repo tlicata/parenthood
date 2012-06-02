@@ -47,30 +47,3 @@
      (redis/hdel db (response-key id) unique)))
 (defn all-responses []
   (map response-fix (get-keys (response-key "*"))))
-
-;; studies
-(def study-prefix "study:")
-(defn study-fix [key]
-  (second (string/split key #"study:")))
-(defn add-study [id tree]
-  (redis/set db (str study-prefix id) (json/json-str tree)))
-(defn get-study [id]
-  (json/read-json (redis/get db (str study-prefix id))))
-(defn all-studies []
-  (map study-fix (get-keys (str study-prefix "*"))))
-
-;; users
-(defn user-key [id] (str "user:" id))
-(defn add-user [id]
-  (let [key (user-key id)]
-    (if (redis/exists db key)
-      (throw (Exception. "User already exists"))
-      (redis/hset db key "responses" (json/json-str [])))))
-(defn del-user [id]
-  (redis/del db [(user-key id)]))
-(defn get-user [id]
-  (redis/hgetall db (user-key id)))
-(defn get-user-responses [id]
-  (redis/hget db (user-key id) "responses"))
-(defn all-users []
-  (get-keys (user-key "*")))
