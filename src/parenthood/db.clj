@@ -29,7 +29,8 @@
   ([]
      (map response-fix (get-keys (response-key "*"))))
   ([id]
-     (get-response id nil))
+     (let [uniques (get-response id nil)]
+       (map #(get-response id %) uniques)))
   ([id unique]
      (let [key (response-key id)]
        (if (nil? unique)
