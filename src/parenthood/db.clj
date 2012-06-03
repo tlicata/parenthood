@@ -48,3 +48,23 @@
      (redis/del db [(response-key id)]))
   ([id unique]
      (redis/hdel db (response-key id) unique)))
+
+;; utils
+(defn has-response-data? [response]
+  (and (contains? response :ip)
+       (contains? response :user-agent)
+       (> (count (keys response)) 2)))
+(defn non-responses
+  ([]
+     (let [ids (get-response)]
+       (flatten (map non-responses ids))))
+  ([id]
+     (let [all (get-response id)]
+       (remove has-response-data? all))))
+(defn only-responses
+  ([]
+     (let [ids (get-response)]
+       (flatten (map only-responses ids))))
+  ([id]
+     (let [all (get-response id)]
+       (filter has-response-data? all))))
