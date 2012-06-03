@@ -26,6 +26,8 @@
       (redis/hset db key unique (json/json-str body))
       unique)))
 (defn get-response
+  ([]
+     (map response-fix (get-keys (response-key "*"))))
   ([id]
      (get-response id nil))
   ([id unique]
@@ -45,5 +47,3 @@
      (redis/del db [(response-key id)]))
   ([id unique]
      (redis/hdel db (response-key id) unique)))
-(defn all-responses []
-  (map response-fix (get-keys (response-key "*"))))
