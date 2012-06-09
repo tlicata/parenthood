@@ -14,6 +14,11 @@
 (defn inspect-top-level []
   (get-keys nil))
 
+(defn has-response-data? [response]
+  (and (contains? response :ip)
+       (contains? response :user-agent)
+       (> (count (keys response)) 2)))
+
 ;; responses
 (defn response-key [id] (str "response:" id))
 (defn response-fix [key]
@@ -41,7 +46,8 @@
         stale (get-response id unique)
         fresh (assoc stale :results results)]
     (if (and (= (:user-agent stale) user-agent)
-             (= (:ip stale) ip))
+             (= (:ip stale) ip)
+             (not (has-response-data? stale)))
         (redis/hset db key unique (json/json-str fresh)))))
 (defn del-response
   ([id]
@@ -50,10 +56,6 @@
      (redis/hdel db (response-key id) unique)))
 
 ;; utils
-(defn has-response-data? [response]
-  (and (contains? response :ip)
-       (contains? response :user-agent)
-       (> (count (keys response)) 2)))
 (defn non-responses
   ([]
      (let [ids (get-response)]
