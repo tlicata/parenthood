@@ -48,7 +48,10 @@
     (if (and (= (:user-agent stale) user-agent)
              (= (:ip stale) ip)
              (not (has-response-data? stale)))
-        (redis/hset db key unique (json/json-str fresh)))))
+      (do
+        (println (str "updating response " id ":" unique))
+        (redis/hset db key unique (json/json-str fresh)))
+      (println (str "not updating response " id ":" unique)))))
 (defn del-response
   ([id]
      (redis/del db [(response-key id)]))

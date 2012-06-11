@@ -34,7 +34,9 @@
         fresh (db/update-response id unique user-agent ip results)]
     (if (nil? fresh)
       (response/status 403 "cannot overwrite existing data")
-      (response/json fresh))))
+      (do
+        (println (str "successful post to " id ":" unique))
+        (response/json fresh)))))
 
 (defn -main []
   (let [port (Integer/parseInt (System/getenv "PORT"))]
