@@ -423,6 +423,7 @@ window.parenthood = (function ($) {
     }());
 
     var input = {};
+    var remote = {};
     var results = [];
     var SCREENS = treeIntoScreens(BLOCKS);
     var screen = null;
@@ -443,6 +444,17 @@ window.parenthood = (function ($) {
 
         var inReadMode = true;
 
+        remote.submitResults = function (data) {
+            $.ajax({
+                data: {
+                    results: JSON.stringify(data),
+                    unique: unique
+                },
+                type: "POST",
+                url: ""
+            });
+        };
+
         var handleKeyPress = function (e) {
             var time = new Date().getTime();
 
@@ -462,14 +474,7 @@ window.parenthood = (function ($) {
                     // to further shut things down.
                     display.showEndMessage();
                     $("body").off("keypress", handleKeyPress);
-                    $.ajax({
-                        data: {
-                            results: JSON.stringify(results),
-                            unique: unique
-                        },
-                        type: "POST",
-                        url: ""
-                    });
+                    remote.submitResults(results);
                 } else {
                     var doAdvanceTest = function () {
                         inReadMode = true;
@@ -516,6 +521,9 @@ window.parenthood = (function ($) {
         isInstructions: isInstructions,
         isTrial: isTrial,
         makeLabel: makeLabel,
+        submitResults: function (data) {
+            remote.submitResults(data);
+        },
         substitute: substitute,
         treeIntoScreens: treeIntoScreens
     }
