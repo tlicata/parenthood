@@ -51,7 +51,7 @@
       (do
         (println (str "updating response " id ":" unique))
         (redis/hset db key unique (json/json-str fresh)))
-      (println (str "not updating response " id ":" unique)))))
+      (println (string/join ":" ["not updating response " id unique ip user-agent])))))
 (defn del-response
   ([id]
      (redis/del db [(response-key id)]))
