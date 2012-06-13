@@ -12,8 +12,7 @@
 (defpage "/partner-iat.html" {:keys [id]}
   (let [request (request/ring-request)
         user-agent (get-in request [:headers "user-agent"])
-        ip (:remote-addr request)
-        unique (db/add-response id user-agent ip)]
+        unique (db/add-response id user-agent)]
     (html
      (html5
       [:head
@@ -30,8 +29,7 @@
 (defpage [:post "/partner-iat.html"] {:keys [id results unique]}
   (let [request (request/ring-request)
         user-agent (get-in request [:headers "user-agent"])
-        ip (:remote-addr request)
-        fresh (db/update-response id unique user-agent ip results)]
+        fresh (db/update-response id unique user-agent results)]
     (if (nil? fresh)
       (response/status 403 "cannot overwrite existing data")
       (do

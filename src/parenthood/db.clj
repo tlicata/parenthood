@@ -15,18 +15,17 @@
   (get-keys nil))
 
 (defn has-response-data? [response]
-  (and (contains? response :ip)
-       (contains? response :user-agent)
-       (> (count (keys response)) 2)))
+  (and (contains? response :user-agent)
+       (> (count (keys response)) 1)))
 
 ;; responses
 (defn response-key [id] (str "response:" id))
 (defn response-fix [key]
   (second (string/split key #"response:")))
-(defn add-response [id user-agent ip]
+(defn add-response [id user-agent]
   (let [unique (str (redis/incr db "responses"))
         key (response-key id)
-        body {:ip ip :user-agent user-agent}]
+        body {:user-agent user-agent}]
     (do
       (redis/hset db key unique (json/json-str body))
       unique)))
@@ -41,17 +40,16 @@
        (if (nil? unique)
          (into #{} (redis/hkeys db key))
          (json/read-json (redis/hget db key unique))))))
-(defn update-response [id unique user-agent ip results]
+(defn update-response [id unique user-agent results]
   (let [key (response-key id)
         stale (get-response id unique)
         fresh (assoc stale :results results)]
     (if (and (= (:user-agent stale) user-agent)
-             (= (:ip stale) ip)
              (not (has-response-data? stale)))
       (do
         (println (str "updating response " id ":" unique))
         (redis/hset db key unique (json/json-str fresh)))
-      (println (string/join ":" ["not updating response " id unique ip user-agent])))))
+      (println (string/join ":" ["not updating response " id unique user-agent])))))
 (defn del-response
   ([id]
      (redis/del db [(response-key id)]))
