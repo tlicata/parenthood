@@ -345,6 +345,11 @@ window.parenthood = (function ($) {
                 '<td width="15%"></td>',
                 '</tr>','</tbody>','</table>'].join("")));
 
+            $("body").css({
+                "background-color": "steelblue",
+                "color": "white",
+                "font-family": "sans-serif"
+            });
             $("td,div.center,div.instructions").css("text-align", "center");
             $("div.labels").css({
                 "font-size": "30px",
@@ -358,17 +363,15 @@ window.parenthood = (function ($) {
                 clearTimeout(intervalId);
                 $("#instructions").text("X").css({
                     color: "red",
-                    fontSize: "2em",
-                    fontFamily: "sans-serif"
+                    fontSize: "2em"
                 });
                 intervalId = setTimeout(hide, 500);
             };
             var hide = function () {
                 clearTimeout(intervalId);
                 $("#instructions").text("").css({
-                    color: "black",
-                    fontSize: "1em",
-                    fontFamily: "serif"
+                    color: "white",
+                    fontSize: "1em"
                 });
             };
             return {
