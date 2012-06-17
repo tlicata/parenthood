@@ -15,8 +15,7 @@
   (get-keys nil))
 
 (defn has-response-data? [response]
-  (and (contains? response :user-agent)
-       (> (count (keys response)) 1)))
+  (contains? response :results))
 
 ;; responses
 (defn response-key [id] (str "response:" id))
