@@ -214,7 +214,7 @@ window.parenthood = (function ($) {
     var isRight = function (key) {
         return key == 107 || key == 75;
     };
-    var correctKey = function (screen, key) {
+    var correctKey = function (screen, key, time) {
         var isCorrect = false;
         if (isInput(screen)) {
             isCorrect = isEnter(key);
@@ -228,7 +228,7 @@ window.parenthood = (function ($) {
                 if (form.length != 1) {
                     throw new Error("should be one matching input element");
                 }
-                addInput(screen.id, form.val());
+                addInput(screen, form.val());
             }
         } else if (isTrial(screen)) {
             if (isLeft(key)) {
@@ -242,17 +242,26 @@ window.parenthood = (function ($) {
                     $.inArray(screen.category, right) !== -1 :
                     right == screen.category;
             }
+
+            var keyEvent = {time:time, key:key, correct:isCorrect};
+            if (screen.responses) {
+                screen.responses.push(keyEvent);
+            } else {
+                screen.responses = [keyEvent];
+            }
         } else if (isInstructions(screen)) {
             isCorrect = isSpace(key);
         }
         return isCorrect;
     };
 
-    var addInput = function (id, answer) {
-        if (input.id) {
+    var addInput = function (screen, answer) {
+        var id = screen.id;
+        if (input[id]) {
             throw new Error("duplicate ids");
         } else {
             input[id] = answer;
+            screen.response = answer;
         }
     };
 
@@ -414,21 +423,39 @@ window.parenthood = (function ($) {
     }());
 
     var input = {};
+    var remote = {};
+    var results = [];
     var SCREENS = treeIntoScreens(BLOCKS);
     var screen = null;
 
     var showNextScreen = function () {
+        if (screen) {
+            results.push($.deepCopy(screen));
+        }
         var next = $.getNextItem(screen, SCREENS);
         screen = $.extend(next, {
-            word: substitute(next.word, input)
+            word: substitute(next.word, input),
+            time: new Date().getTime()
         });
         display.update(screen);
     };
 
-    var handleKeyPress = (function () {
+    var init = _.once(function (unique) {
+
         var inReadMode = true;
 
-        return function (e) {
+        remote.submitResults = function (data) {
+            $.ajax({
+                data: {
+                    results: JSON.stringify(data),
+                    unique: unique
+                },
+                type: "POST",
+                url: ""
+            });
+        };
+
+        var handleKeyPress = function (e) {
             var time = new Date().getTime();
 
             if (!inReadMode) {
@@ -436,7 +463,7 @@ window.parenthood = (function ($) {
             }
 
             var key = e.which;
-            if (correctKey(screen, key)) {
+            if (correctKey(screen, key, time)) {
                 inReadMode = false;
                 display.clear();
                 if ($.isLastItem(screen, SCREENS)) {
@@ -447,6 +474,7 @@ window.parenthood = (function ($) {
                     // to further shut things down.
                     display.showEndMessage();
                     $("body").off("keypress", handleKeyPress);
+                    remote.submitResults(results);
                 } else {
                     var doAdvanceTest = function () {
                         inReadMode = true;
@@ -461,12 +489,10 @@ window.parenthood = (function ($) {
             } else if (isTrial(screen) && (isLeft(key)||isRight(key))) {
                 display.error.show();
             }
-        }
-    }());
+        };
 
-    var init = _.once(function () {
         display.createTable();
-        showNextScreen();
+        showNextScreen(unique);
         $("body").on("keypress", handleKeyPress);
     });
 
@@ -495,6 +521,9 @@ window.parenthood = (function ($) {
         isInstructions: isInstructions,
         isTrial: isTrial,
         makeLabel: makeLabel,
+        submitResults: function (data) {
+            remote.submitResults(data);
+        },
         substitute: substitute,
         treeIntoScreens: treeIntoScreens
     }

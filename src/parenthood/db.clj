@@ -14,56 +14,59 @@
 (defn inspect-top-level []
   (get-keys nil))
 
+(defn has-response-data? [response]
+  (contains? response :results))
+
 ;; responses
 (defn response-key [id] (str "response:" id))
 (defn response-fix [key]
   (second (string/split key #"response:")))
-(defn add-response [id user-agent ip]
+(defn add-response [id user-agent]
   (let [unique (str (redis/incr db "responses"))
         key (response-key id)
-        body {:ip ip :user-agent user-agent}]
+        body {:user-agent user-agent}]
     (do
       (redis/hset db key unique (json/json-str body))
       unique)))
 (defn get-response
+  ([]
+     (map response-fix (get-keys (response-key "*"))))
   ([id]
-     (get-response id nil))
+     (let [uniques (get-response id nil)]
+       (map #(get-response id %) uniques)))
   ([id unique]
      (let [key (response-key id)]
        (if (nil? unique)
-         (redis/hkeys db key)
+         (into #{} (redis/hkeys db key))
          (json/read-json (redis/hget db key unique))))))
+(defn update-response [id unique user-agent results]
+  (let [key (response-key id)
+        stale (get-response id unique)
+        fresh (assoc stale :results results)]
+    (if (and (= (:user-agent stale) user-agent)
+             (not (has-response-data? stale)))
+      (do
+        (println (str "updating response " id ":" unique))
+        (redis/hset db key unique (json/json-str fresh)))
+      (println (string/join ":" ["not updating response " id unique user-agent])))))
 (defn del-response
   ([id]
      (redis/del db [(response-key id)]))
   ([id unique]
      (redis/hdel db (response-key id) unique)))
-(defn all-responses []
-  (map response-fix (get-keys (response-key "*"))))
 
-;; studies
-(def study-prefix "study:")
-(defn study-fix [key]
-  (second (string/split key #"study:")))
-(defn add-study [id tree]
-  (redis/set db (str study-prefix id) (json/json-str tree)))
-(defn get-study [id]
-  (json/read-json (redis/get db (str study-prefix id))))
-(defn all-studies []
-  (map study-fix (get-keys (str study-prefix "*"))))
-
-;; users
-(defn user-key [id] (str "user:" id))
-(defn add-user [id]
-  (let [key (user-key id)]
-    (if (redis/exists db key)
-      (throw (Exception. "User already exists"))
-      (redis/hset db key "responses" (json/json-str [])))))
-(defn del-user [id]
-  (redis/del db [(user-key id)]))
-(defn get-user [id]
-  (redis/hgetall db (user-key id)))
-(defn get-user-responses [id]
-  (redis/hget db (user-key id) "responses"))
-(defn all-users []
-  (get-keys (user-key "*")))
+;; utils
+(defn non-responses
+  ([]
+     (let [ids (get-response)]
+       (flatten (map non-responses ids))))
+  ([id]
+     (let [all (get-response id)]
+       (remove has-response-data? all))))
+(defn only-responses
+  ([]
+     (let [ids (get-response)]
+       (flatten (map only-responses ids))))
+  ([id]
+     (let [all (get-response id)]
+       (filter has-response-data? all))))
