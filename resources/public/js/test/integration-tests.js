@@ -59,10 +59,17 @@
 
     var INPUT_REGEX = window.parenthood.getInputRegex();
     var INPUTS = {
-        name: "boy",
-        pname: "girl",
-        food: "pizza",
-        pfood: "tacos"
+        nameCategory: "Partner's First Name",
+        first: "Partner's First Name Again",
+        last: "Partner's Last Name",
+        nick: "Partner's Nick Name",
+        relation: "Partner's Relationship",
+        birthday: "Partner's Birthday",
+        firstNot: "Random First Name",
+        lastNot: "Random Last Name",
+        birthdayNot: "Random Birthday",
+        stateNot: "Random State",
+        countryNot: "Random Country"
     };
 
     var leftIsCorrect = function (screen) {
