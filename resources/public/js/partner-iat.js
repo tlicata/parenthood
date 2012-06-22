@@ -23,6 +23,20 @@ window.parenthood = (function ($) {
         "Tradgedy",
         "Jail"
     ];
+    var PARTNER_WORDS = [
+        "${first}",
+        "${last}",
+        "${nick}",
+        "${relation}",
+        "${birthday}"
+    ];
+    var NOT_PARTNER_WORDS = [
+        "${firstNot}",
+        "${lastNot}",
+        "${birthdayNot}",
+        "${stateNot}",
+        "${countryNot}"
+    ];
 
     var PARTNER_CATEGORY = "${nameCategory}";
     var NOT_PARTNER_CATEGORY = "Not " + PARTNER_CATEGORY;
@@ -30,8 +44,6 @@ window.parenthood = (function ($) {
     var UNPLEASANT_CATEGORY = "Unpleasant";
 
     var input = {};
-    var partner_words = [];
-    var nonpartner_words = [];
 
     var makeTrials = function (words, category) {
         return _.map(words, function (word) {
@@ -39,36 +51,30 @@ window.parenthood = (function ($) {
         });
     };
     var makePartnerTrials = function (count) {
-        return function () {
-            var half = Math.floor(count / 2);
-            var partner = _.shuffle(partner_words).slice(0, half);
-            var nonpartner = _.shuffle(nonpartner_word).slice(0, count - half);
+        var half = Math.floor(count / 2);
+        var partner = _.shuffle(PARTNER_WORDS).slice(0, half);
+        var nonpartner = _.shuffle(NOT_PARTNER_WORDS).slice(0, count - half);
 
-            partner = makeTrials(partner, substitute(PARTNER_CATEGORY, inputs));
-            nonpartner = makeTrials(nonpartner, substitute(NOT_PARTNER_CATEGORY, inputs));
+        partner = makeTrials(partner, PARTNER_CATEGORY);
+        nonpartner = makeTrials(nonpartner, NOT_PARTNER_CATEGORY);
 
-            return _.shuffle(partner.concat(nonpartner));
-        };
+        return _.shuffle(partner.concat(nonpartner));
     };
     var makePleasantTrials = function (count) {
-        return function () {
-            var half = Math.floor(count / 2);
-            var pleasant = _.shuffle(PLEASANT_WORDS).slice(0, half);
-            var unpleasant = _.shuffle(UNPLEASANT_WORDS).slice(0, count - half);
+        var half = Math.floor(count / 2);
+        var pleasant = _.shuffle(PLEASANT_WORDS).slice(0, half);
+        var unpleasant = _.shuffle(UNPLEASANT_WORDS).slice(0, count - half);
 
-            pleasant = makeTrials(pleasant, "pleasant");
-            unpleasant = makeTrials(unpleasant, "unpleasant");
+        pleasant = makeTrials(pleasant, PLEASANT_CATEGORY);
+        unpleasant = makeTrials(unpleasant, UNPLEASANT_CATEGORY);
 
-            return _.shuffle(pleasant.concat(unpleasant));
-        };
+        return _.shuffle(pleasant.concat(unpleasant));
     };
     var makeMixedTrials = function (count) {
-        return function () {
-            var half = Math.floor(count / 2);
-            var pleasant = makePleasantTrials(half)();
-            var partner= markPartnerTrials(count - half)();
-            return _.shuffle(pleasant.concat(partner));
-        };
+        var half = Math.floor(count / 2);
+        var pleasant = makePleasantTrials(half);
+        var partner= makePartnerTrials(count - half);
+        return _.shuffle(pleasant.concat(partner));
     };
 
     var BLOCKS = [{
@@ -575,6 +581,9 @@ window.parenthood = (function ($) {
         }
         var next = $.getNextItem(screen, SCREENS);
         screen = $.extend(next, {
+            category: substitute(next.category, input),
+            left: substitute(next.left, input),
+            right: substitute(next.right, input),
             word: substitute(next.word, input),
             time: new Date().getTime()
         });
