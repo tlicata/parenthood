@@ -406,21 +406,6 @@ window.parenthood = (function ($) {
         }
     };
 
-    // If a trial is specified with count property of n, then
-    // replace that trial with n copies of the trial (with the
-    // count properties removed).
-    var expand = function (trials) {
-        return _.flatten(_.map(trials, function (trial) {
-            var count = parseInt(trial.count);
-            var keys = _.reject(_.keys(trial), function (val) {
-                return val == "count";
-            });
-            return _.isFinite(count) ?
-                _.map(_.range(0, count), function () {
-                    return _.pick(trial, keys);
-                }) : trial;
-        }));
-    };
     // If a trial word contains ${}, replace it with
     // user input. Put the id of the input you want
     // between the brackets.
@@ -443,7 +428,6 @@ window.parenthood = (function ($) {
                 screens.push({instructions: block.instructions});
             }
             var allTrials = (block && block.trials) || [];
-            allTrials = expand(allTrials);
             if (_.all(allTrials, isTrial)) {
                 allTrials = _.shuffle(allTrials);
             }
@@ -651,7 +635,6 @@ window.parenthood = (function ($) {
     return {
         correctKey: correctKey,
         display: display,
-        expand: expand,
         getBlocks: function () {
             return BLOCKS;
         },
