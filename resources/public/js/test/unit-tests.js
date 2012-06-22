@@ -47,6 +47,8 @@
         equal(subs("to", inputs), "to");
         equal(subs("the", inputs), "the");
         equal(subs("${bird}", inputs), "chimp");
+
+        deepEqual(subs(["other", "${bird}"], inputs), ["other", "chimp"])
     });
 
     test("Expand tree structure into array of screens", function () {

@@ -419,6 +419,10 @@ window.parenthood = (function ($) {
             if (match) {
                 word = word.replace(INPUT_REGEX, inputs[match[1]]);
             }
+        } else if (_.isArray(word)) {
+            word = _.map(word, function (category) {
+                return substitute(category, inputs);
+            });
         }
         return word;
     };
