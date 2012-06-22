@@ -24,8 +24,7 @@ window.parenthood = (function ($) {
         "Jail"
     ];
 
-    var PARTNER_CATEGORY_KEY = "nameCategory";
-    var PARTNER_CATEGORY = "${" + PARTNER_CATEGORY_KEY + "}";
+    var PARTNER_CATEGORY = "${nameCategory}";
     var NOT_PARTNER_CATEGORY = "Not " + PARTNER_CATEGORY;
     var PLEASANT_CATEGORY = "Pleasant";
     var UNPLEASANT_CATEGORY = "Unpleasant";
@@ -95,7 +94,7 @@ window.parenthood = (function ($) {
             {prompt: ["Please enter the name of your romantic partner. Please ",
                       "make sure to only capitalize the first letter in your ",
                       "partner's name."].join(""),
-             id: PARTNER_CATEGORY_KEY}
+             id: "nameCategory"}
         ]
     }, {
         center: PARTNER_CATEGORY,
