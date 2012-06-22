@@ -447,6 +447,7 @@ window.parenthood = (function ($) {
 
         var inReadMode = true;
 
+        // Define this here so "unique" is closed over.
         remote.submitResults = function (data) {
             $.ajax({
                 data: {
@@ -495,7 +496,7 @@ window.parenthood = (function ($) {
         };
 
         display.createTable();
-        showNextScreen(unique);
+        showNextScreen();
         $("body").on("keypress", handleKeyPress);
     });
 
