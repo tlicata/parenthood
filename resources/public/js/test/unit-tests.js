@@ -52,7 +52,7 @@
     test("Expand tree structure into array of screens", function () {
         var tree = window.parenthood.getBlocks();
         var screens = window.parenthood.treeIntoScreens(tree);
-        notEqual(screens.length, _.reduce(tree, function (count, block) {
+        equal(screens.length, _.reduce(tree, function (count, block) {
             if (block.instructions) {
                 count++;
             }
