@@ -33,6 +33,11 @@ window.parenthood = (function ($) {
     var partner_words = [];
     var nonpartner_words = [];
 
+    var makeTrials = function (words, category) {
+        return _.map(words, function (word) {
+            return {word:word, category:category};
+        });
+    };
     var makePartnerTrials = function (count) {
         return function () {
             var half = Math.floor(count / 2);
