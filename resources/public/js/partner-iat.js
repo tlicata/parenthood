@@ -43,6 +43,9 @@ window.parenthood = (function ($) {
     var PLEASANT_CATEGORY = "Pleasant";
     var UNPLEASANT_CATEGORY = "Unpleasant";
 
+    var PARTNER_COLOR = "#FFF";
+    var PLEASANT_COLOR = "#00FF00";
+
     var input = {};
 
     var makeTrials = function (words, category) {
@@ -352,7 +355,9 @@ window.parenthood = (function ($) {
         var color = function (category) {
             return $("<div/>")
                 .text(category)
-                .css("color", isPleasant(category) ? "#00FF00" : "#FFFFFF");
+                .css("color", isPleasant(category) ?
+                     PLEASANT_COLOR:
+                     PARTNER_COLOR);
         };
         return function (category) {
             if (_.isString(category)) {
