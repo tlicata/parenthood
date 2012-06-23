@@ -96,9 +96,9 @@ window.parenthood = (function ($) {
     }, {
         instructions: [
             "Your responses to these questions will later be used in the ",
-            "\"Your partner\" and \"Not your partner\" categories.",
+            "\"Your partner\" and \"Not your partner\" categories.  ",
             "In the task your partner's name will appear instead of the word ",
-            "\"Partner\". All of the information recorded here is completely ",
+            "\"Partner\".  All of the information recorded here is completely ",
             "confidential. We will delete this information after the study is ",
             "completed."].join(""),
         trials: [
