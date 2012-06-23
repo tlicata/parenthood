@@ -340,9 +340,29 @@ window.parenthood = (function ($) {
     var isTrial = function (screen) {
         return screen && screen.word ? true : false;
     };
-    var makeLabel = function (category) {
-        return $.isArray(category) ? category.join("<br>") : category;
-    };
+    // Make the category labels that appear in the top
+    // left and right corners of the screen. They must
+    // be colored correctly and, if there's an array,
+    // multiple labels must be shown.
+    var makeLabel = (function () {
+        var isPleasant = function (category) {
+            return category == PLEASANT_CATEGORY ||
+                category == UNPLEASANT_CATEGORY;
+        };
+        var color = function (category) {
+            return $("<div/>")
+                .text(category)
+                .css("color", isPleasant(category) ? "#00FF00" : "#FFFFFF");
+        };
+        return function (category) {
+            if (_.isString(category)) {
+                return color(category);
+            } else if (_.isArray(category)) {
+                var or = $("<div/>").text("or").css("color", "#FFF");
+                return [color(category[0]), or, color(category[1])]
+            };
+        };
+    }());
     var isEnter = function (key) {
         return key == 13;
     };
@@ -538,8 +558,12 @@ window.parenthood = (function ($) {
                 }, 250);
             } else {
                 var word = screen.word;
-                $("#left").html(isTrial(screen) ?  makeLabel(screen.left) : "");
-                $("#right").html(isTrial(screen) ? makeLabel(screen.right) : "");
+                var leftElem = $("#left").empty();
+                var rightElem = $("#right").empty();
+                if (isTrial(screen)) {
+                    leftElem.append.apply(leftElem, makeLabel(screen.left));
+                    rightElem.append.apply(rightElem, makeLabel(screen.right));
+                }
                 $("#center").html(isInstructions(screen) ? "Press space to continue" : word);
             }
         };
