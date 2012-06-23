@@ -368,6 +368,12 @@ window.parenthood = (function ($) {
             };
         };
     }());
+    var colorContent = function (word) {
+        var isPleasantWord = _.include(UNPLEASANT_WORDS, word) ||
+            _.include(PLEASANT_WORDS, word);
+        var color = isPleasantWord ? PLEASANT_COLOR : PARTNER_COLOR;
+        return $("<span/>").text(word).css("color", color);
+    };
     var isEnter = function (key) {
         return key == 13;
     };
@@ -562,14 +568,18 @@ window.parenthood = (function ($) {
                     textInput.focus();
                 }, 250);
             } else {
-                var word = screen.word;
+                var centerElem = $("#center").empty();
                 var leftElem = $("#left").empty();
                 var rightElem = $("#right").empty();
                 if (isTrial(screen)) {
                     leftElem.append.apply(leftElem, makeLabel(screen.left));
                     rightElem.append.apply(rightElem, makeLabel(screen.right));
+                    centerElem.append(colorContent(screen.word));
+                } else if (isInstructions(screen)) {
+                    centerElem.append($("<span/>")
+                                      .css("color", "#FFF")
+                                      .text("Press space to continue"));
                 }
-                $("#center").html(isInstructions(screen) ? "Press space to continue" : word);
             }
         };
 
