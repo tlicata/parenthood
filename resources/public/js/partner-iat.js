@@ -350,10 +350,10 @@ window.parenthood = (function ($) {
         return key == 32;
     };
     var isLeft = function (key) {
-        return key == 97 || key == 65;
+        return key == 101 || key == 69;
     };
     var isRight = function (key) {
-        return key == 107 || key == 75;
+        return key == 105 || key == 73;
     };
     var correctKey = function (screen, key, time) {
         var isCorrect = false;

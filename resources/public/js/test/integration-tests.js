@@ -20,10 +20,10 @@
         return 13;
     };
     var getLeftKeyCode = function () {
-        return Math.random() > .5 ? 97 : 65;
+        return Math.random() > .5 ? 101 : 69;
     };
     var getRightKeyCode = function () {
-        return Math.random() > .5 ? 107 : 75;
+        return Math.random() > .5 ? 105 : 73;
     };
     var getSpaceKeyCode =  function () {
         return 32;
