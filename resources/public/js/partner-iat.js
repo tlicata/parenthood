@@ -506,7 +506,7 @@ window.parenthood = (function ($) {
                 '</tr>','</tbody>','</table>'].join("")));
 
             $("body").css({
-                "background-color": "steelblue",
+                "background-color": "#004B97",
                 "color": "white",
                 "font-family": "sans-serif"
             });
