@@ -22,24 +22,6 @@
         ok($.isLastItem(null, []), "special case we require for trials");
     });
 
-    test("Expand counts in trials", function () {
-        var trials = [{word: "test", category: "easter"}, // stays the same
-                      {word: "wonk", category: "awesome", count: -1}, // removed
-                      {word: "work", category: "egg", count: 0}, // removed
-                      {word: "unit", category: "hunt", count: 1}, // stay the same
-                      {word: "yes", category: "please", count: "5"}]; // 5 copies
-        var expanded = parenthood.expand(trials);
-
-        equal(5, trials.length); // original array is not modified
-        equal(7, expanded.length); // expanded array has proper length
-        equal(3, _.uniq(expanded, false, function (trial, index, array) {
-            // make sure expanded contains only 3 items. kept the
-            // trial with no count specifed, and removed the items
-            // with counts of 0 or negative.
-            return trial.word;
-        }).length);
-    });
-
     test("Replace placeholders with input", function () {
         var inputs = {bird: "chimp"};
         var subs = parenthood.substitute;
@@ -47,12 +29,14 @@
         equal(subs("to", inputs), "to");
         equal(subs("the", inputs), "the");
         equal(subs("${bird}", inputs), "chimp");
+
+        deepEqual(subs(["other", "${bird}"], inputs), ["other", "chimp"])
     });
 
     test("Expand tree structure into array of screens", function () {
         var tree = window.parenthood.getBlocks();
         var screens = window.parenthood.treeIntoScreens(tree);
-        notEqual(screens.length, _.reduce(tree, function (count, block) {
+        equal(screens.length, _.reduce(tree, function (count, block) {
             if (block.instructions) {
                 count++;
             }
