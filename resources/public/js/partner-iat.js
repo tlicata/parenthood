@@ -674,11 +674,26 @@ window.parenthood = (function ($) {
             } else if (isTrial(screen) && (isLeft(key)||isRight(key))) {
                 display.error.show();
             }
+
+            // Prevent default behavior is backspace key is pressed.
+            // (i.e., prevent browser from going back a page).
+            return !(isInstructions(screen) && isBackspace(key));
+        };
+        var handleKeyDown = function (e) {
+            if (isInstructions(screen) && isBackspace(e.which)) {
+                // Intercept backspace press, pass it to the normal
+                // handler, and then prevent the browser from going
+                // back to the previous page (the default behavior).
+                handleKeyPress(e);
+                return false;
+            };
         };
 
         display.createTable();
         showNextScreen();
-        $("body").on("keypress", handleKeyPress);
+        $("body")
+            .on("keypress", handleKeyPress)
+            .on("keydown", handleKeyDown);
     });
 
     // Expose some methods. Mainly for testing.
