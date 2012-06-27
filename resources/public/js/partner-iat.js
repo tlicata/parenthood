@@ -43,7 +43,7 @@ window.parenthood = (function ($) {
     var PLEASANT_CATEGORY = "Pleasant";
     var UNPLEASANT_CATEGORY = "Unpleasant";
 
-    var PARTNER_COLOR = "#FFF";
+    var PARTNER_COLOR = "white";
     var PLEASANT_COLOR = "#00FF00";
 
     var input = {};
@@ -371,7 +371,7 @@ window.parenthood = (function ($) {
             if (_.isString(category)) {
                 return color(category);
             } else if (_.isArray(category)) {
-                var or = $("<div/>").text("or").css("color", "#FFF");
+                var or = $("<div/>").text("or").css("color", "white");
                 return [color(category[0]), or, color(category[1])]
             };
         };
