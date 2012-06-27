@@ -382,6 +382,9 @@ window.parenthood = (function ($) {
         var color = isPleasantWord ? PLEASANT_COLOR : PARTNER_COLOR;
         return $("<span/>").text(word).css("color", color);
     };
+    var isBackspace = function (key) {
+        return key == 8;
+    };
     var isEnter = function (key) {
         return key == 13;
     };
