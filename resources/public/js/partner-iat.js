@@ -609,19 +609,24 @@ window.parenthood = (function ($) {
     var SCREENS = treeIntoScreens(BLOCKS);
     var screen = null;
 
+    var show = function (fresh) {
+        screen = $.extend(fresh, {
+            category: substitute(fresh.category, input),
+            left: substitute(fresh.left, input),
+            right: substitute(fresh.right, input),
+            word: substitute(fresh.word, input),
+            time: new Date().getTime()
+        });
+        display.update(screen);
+    };
+    var showPreviousScreen = function () {
+        show($.getPreviousItem(screen, SCREENS));
+    };
     var showNextScreen = function () {
         if (screen) {
             results.push($.deepCopy(screen));
         }
-        var next = $.getNextItem(screen, SCREENS);
-        screen = $.extend(next, {
-            category: substitute(next.category, input),
-            left: substitute(next.left, input),
-            right: substitute(next.right, input),
-            word: substitute(next.word, input),
-            time: new Date().getTime()
-        });
-        display.update(screen);
+        show($.getNextItem(screen, SCREENS));
     };
 
     var init = _.once(function (unique) {
