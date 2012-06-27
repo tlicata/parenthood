@@ -332,6 +332,9 @@ window.parenthood = (function ($) {
             var previousIndex = index - 1;
             return previousIndex >= 0 ? array[previousIndex] : null;
         },
+        isFirstItem: function (item, array) {
+            return item === array[0];
+        },
         // Is the item last element in array?
         isLastItem: function (item, array) {
             var index = $.inArray(item, array);
