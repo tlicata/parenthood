@@ -89,6 +89,7 @@ window.parenthood = (function ($) {
             "\"Pleasant\", \"Unpleasant\"<br><br>",
             "\"Your partner\" and \"Not your partner\"."].join("")
     }, {
+        allowBackspace: true,
         instructions: [
             "Before you begin the sorting task, the computer will prompt you ",
             "through a series of questions. The purpose of these questions is to:<br>",
@@ -97,6 +98,7 @@ window.parenthood = (function ($) {
             "2) Develop another series of items that are NOT associated with your ",
             "partner."].join("")
     }, {
+        allowBackspace: true,
         instructions: [
             "Your responses to these questions will later be used in the ",
             "\"Your partner\" and \"Not your partner\" categories.  ",
@@ -351,6 +353,9 @@ window.parenthood = (function ($) {
     var isTrial = function (screen) {
         return screen && screen.word ? true : false;
     };
+    var allowsBackspace = function (screen) {
+        return screen.allowBackspace;
+    };
     // Make the category labels that appear in the top
     // left and right corners of the screen. They must
     // be colored correctly and, if there's an array,
@@ -438,7 +443,10 @@ window.parenthood = (function ($) {
                 screen.responses = [keyEvent];
             }
         } else if (isInstructions(screen)) {
-            isCorrect = isSpace(key);
+            isCorrect = isEnter(key);
+            if (!isCorrect && allowsBackspace(screen)) {
+                isCorrect = isBackspace(key);
+            }
         }
         return isCorrect;
     };
@@ -472,7 +480,10 @@ window.parenthood = (function ($) {
     var treeIntoScreens = function (tree) {
         return _.reduce(tree, function (screens, block) {
             if (block.instructions) {
-                screens.push({instructions: block.instructions});
+                screens.push({
+                    allowBackspace: block.allowBackspace,
+                    instructions: block.instructions
+                });
             }
             var allTrials = (block && block.trials) || [];
             if (_.all(allTrials, isTrial)) {
@@ -587,7 +598,7 @@ window.parenthood = (function ($) {
                 "position": "relative",
                 "width": "100%"
             });
-            if (!$.isFirstItem(screen, SCREENS)) {
+            if (!$.isFirstItem(screen, SCREENS) && allowsBackspace(screen)) {
                 buttons.append($("<button/>").css({
                     "font-size": ".8em",
                     "margin-left": "1em"
@@ -720,7 +731,11 @@ window.parenthood = (function ($) {
                 } else {
                     var doAdvanceTest = function () {
                         inReadMode = true;
-                        showNextScreen();
+                        if (isBackspace(key)) {
+                            showPreviousScreen();
+                        } else {
+                            showNextScreen();
+                        }
                     };
                     if (isTrial(screen)) {
                         setTimeout(doAdvanceTest, DELAY);
