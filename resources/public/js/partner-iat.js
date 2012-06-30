@@ -734,16 +734,16 @@ window.parenthood = (function ($) {
 
             // Prevent default behavior is backspace key is pressed.
             // (i.e., prevent browser from going back a page).
-            return !(isInstructions(screen) && isBackspace(key));
+            return isBackspace(key) ? isInput(screen) : true;
         };
         var handleKeyDown = function (e) {
-            if (isInstructions(screen) && isBackspace(e.which)) {
+            if (isBackspace(e.which) && !isInput(screen)) {
                 // Intercept backspace press, pass it to the normal
                 // handler, and then prevent the browser from going
                 // back to the previous page (the default behavior).
                 handleKeyPress(e);
                 return false;
-            };
+            }
         };
 
         showNextScreen();
