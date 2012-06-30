@@ -111,7 +111,7 @@ window.parenthood = (function ($) {
              id: "nameCategory"}
         ]
     }, {
-        center: PARTNER_CATEGORY,
+        inputCategory: PARTNER_CATEGORY,
         trials: [{
             prompt: ["First we will start with the 'Partner' questions. Please retype ",
                      "your partner's first name in the space provided (this information ",
@@ -146,7 +146,7 @@ window.parenthood = (function ($) {
             id: "birthday"
         }]
     }, {
-        center: NOT_PARTNER_CATEGORY,
+        inputCategory: NOT_PARTNER_CATEGORY,
         trials: [{
             prompt: ["Now you will be asked questions that are not related to your ",
                      "partner. Choose a first name from the list below that does not ",
@@ -480,6 +480,10 @@ window.parenthood = (function ($) {
                         left: block.leftWord,
                         right: block.rightWord
                     });
+                } else if (isInput(trial) && block.inputCategory) {
+                    _.extend(trial, {
+                        inputCategory: block.inputCategory
+                    });
                 }
                 screens.push(trial);
             }
@@ -612,6 +616,7 @@ window.parenthood = (function ($) {
     var show = function (fresh) {
         screen = $.extend(fresh, {
             category: substitute(fresh.category, input),
+            inputCategory: substitute(fresh.inputCategory, input),
             left: substitute(fresh.left, input),
             right: substitute(fresh.right, input),
             word: substitute(fresh.word, input),
