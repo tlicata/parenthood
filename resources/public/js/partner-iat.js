@@ -498,10 +498,13 @@ window.parenthood = (function ($) {
 
     var display = (function () {
 
-        var clear = function () {
+        var softClear = function () {
             error.hide();
             $("#center").empty();
         };
+        var hardClear = function () {
+            $("body").empty();
+        }
 
         var error = (function () {
             var intervalId;
@@ -629,11 +632,12 @@ window.parenthood = (function ($) {
             } else if (isTrial(screen)) {
                 domFunc = trialDOM;
             }
-            $("body").empty().append(domFunc(screen));
+            hardClear();
+            $("body").append(domFunc(screen));
         };
 
         return {
-            clear: clear,
+            softClear: softClear,
             error: error,
             makeInputId: makeInputId,
             showEndMessage: showEndMessage,
@@ -693,7 +697,7 @@ window.parenthood = (function ($) {
             var key = e.which;
             if (correctKey(screen, key, time)) {
                 inReadMode = false;
-                display.clear();
+                display.softClear();
                 if ($.isLastItem(screen, SCREENS)) {
                     // If user just finished last step, display
                     // a message of completion and leave test
