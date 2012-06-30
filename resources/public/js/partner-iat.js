@@ -528,6 +528,16 @@ window.parenthood = (function ($) {
         };
 
         var showEndMessage = function () {
+            hardClear();
+            var message = $("<div/>")
+                .text("Test Finished. Thank you!")
+                .css({
+                    "top": "49%",
+                    "position": "absolute",
+                    "text-align": "center",
+                    "width": "100%"
+                });
+            $("body").append(message);
         };
 
         var inputDOM = function (screen) {
