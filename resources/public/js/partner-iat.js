@@ -366,7 +366,8 @@ window.parenthood = (function ($) {
             };
             return $("<div/>").text(category).css({
                 "color": hex,
-                "font-size": "1.4em"
+                "font-size": "1.4em",
+                "text-align": "center"
             });
         };
         return function (category) {
