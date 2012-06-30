@@ -92,9 +92,9 @@ window.parenthood = (function ($) {
         allowBackspace: true,
         instructions: [
             "Before you begin the sorting task, the computer will prompt you ",
-            "through a series of questions. The purpose of these questions is to:<br>",
+            "through a series of questions. The purpose of these questions is to:<br><br>",
             "1) Develop a series of brief (usually 1 word) items that will be used ",
-            "to describe your partner.<br>",
+            "to describe your partner.<br><br>",
             "2) Develop another series of items that are NOT associated with your ",
             "partner."].join("")
     }, {
