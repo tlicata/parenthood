@@ -361,11 +361,11 @@ window.parenthood = (function ($) {
                 category == UNPLEASANT_CATEGORY;
         };
         var color = function (category) {
-            return $("<div/>")
-                .text(category)
-                .css("color", isPleasant(category) ?
-                     PLEASANT_COLOR:
-                     PARTNER_COLOR);
+            var hex = isPleasant(category) ? PLEASANT_COLOR : PARTNER_COLOR
+            return $("<div/>").text(category).css({
+                "color": hex,
+                "font-size": "1.4em"
+            });
         };
         return function (category) {
             if (_.isString(category)) {
@@ -374,6 +374,7 @@ window.parenthood = (function ($) {
                 var or = $("<div/>").text("or").css("color", "white");
                 return [color(category[0]), or, color(category[1])]
             };
+            return color("");
         };
     }());
     var colorContent = function (word) {
@@ -494,60 +495,19 @@ window.parenthood = (function ($) {
     var display = (function () {
 
         var clear = function () {
-            error.hide();
-            $("#center").text("");
+            $("body").empty();
         };
-
-        // Build table and style it in JavaScript
-        // so it applies to tests too.
-        var createTable = _.once(function () {
-            $("body").prepend($([
-                '<table id="iatTable" width="100%">',
-                '<tbody>','<tr>',
-                '<td width="20%"><div id="left" class="labels"></div></td>',
-                '<td width="60%"></td>',
-                '<td width="20%"><div id="right" class="labels"></div></td>',
-                '</tr>','<tr>',
-                '<td colspan="3" height="100">',
-                '<div id="instructions" class="instructions">',
-                '</div>','</td>','</tr>','<tr>',
-                '<td width="15%"></td>',
-                '<td width="50%"><div id="center" class="labels"></div></td>',
-                '<td width="15%"></td>',
-                '</tr>','<tr>',
-                '<td width="15%"></td>',
-                '<td width="50%"><div class="labels"></div></td>',
-                '<td width="15%"></td>',
-                '</tr>','</tbody>','</table>'].join("")));
-
-            $("body").css({
-                "background-color": "#004B97",
-                "color": "white",
-                "font-family": "sans-serif"
-            });
-            $("td,div.center,div.instructions").css("text-align", "center");
-            $("div.labels").css({
-                "font-size": "30px",
-                "min-height": "50px"
-            });
-        });
 
         var error = (function () {
             var intervalId;
             var show = function () {
                 clearTimeout(intervalId);
-                $("#instructions").text("X").css({
-                    color: "red",
-                    fontSize: "2em"
-                });
+                $("#errorDisplay").text("X");
                 intervalId = setTimeout(hide, 500);
             };
             var hide = function () {
                 clearTimeout(intervalId);
-                $("#instructions").text("").css({
-                    color: "white",
-                    fontSize: "1em"
-                });
+                $("#errorDisplay").text("");
             };
             return {
                 show: show,
@@ -560,47 +520,115 @@ window.parenthood = (function ($) {
         };
 
         var showEndMessage = function () {
-            $("#left, #right, #center").text("");
-            $("#instructions").text("Test Finished. Thank you!");
+        };
+
+        var inputDOM = function (screen) {
+            var id = makeInputId(screen);
+            var topLabel = makeLabel(screen.inputCategory).css({
+                "min-height": "50px",
+                "text-align": "center",
+                "width": "100%"
+            });
+            var inputLabel = $("<label/>")
+                .attr("for", id)
+                .html(screen.prompt)
+                .css({
+                    "display": "block",
+                    "font-size": ".8em",
+                    "margin-bottom": "1em"
+                });
+            var textInput = $("<input/>").attr({
+                "autofocus": true,
+                "id": id,
+                "name": id
+            }).css({
+                "margin-left": "30%",
+                "width": "40%"
+            }).focus();
+            // On windows machines, the call to focus() above
+            // isn't doing anything. Call it again after a delay.
+            setTimeout(function () {
+                textInput.focus();
+            }, 250);
+            return $("<div/>")
+                .append(topLabel, inputLabel, textInput)
+                .css({
+                    "margin-left": "20%",
+                    "width": "60%",
+                });
+        };
+        var instructionsDOM = function (screen) {
+            var instr = $("<div/>")
+                .html(screen.instructions)
+                .css({
+                    "line-height": "1.2em"
+                });
+            var buttons = $("<div/>").css({
+                "margin-top": "1em",
+                "min-height": "1.1em",
+                "position": "relative",
+                "width": "100%"
+            });
+            if (!$.isFirstItem(screen, SCREENS)) {
+                buttons.append($("<button/>").css({
+                    "font-size": ".8em",
+                    "margin-left": "1em"
+                }).text("Press Backspace to previous"));
+            }
+            buttons.append($("<button/>").css({
+                "font-size": ".8em",
+                "position": "absolute",
+                "right": "1em"
+            }).text("Press Enter to continue"));
+            return $("<div/>").css({
+                background: "white",
+                color: "black",
+                padding: "1em",
+                marginLeft: "20%",
+                width: "60%"
+            }).append(instr, buttons);
+        };
+        var trialDOM = function (screen) {
+            var leftElem = $("<div/>").css({
+                "left": "1em",
+                "position": "absolute"
+            });
+            leftElem.append.apply(leftElem, makeLabel(screen.left));
+            var rightElem = $("<div/>").css({
+                position: "absolute",
+                right: "1em"
+            });
+            rightElem.append.apply(rightElem, makeLabel(screen.right));
+            var errorElem = $("<div/>").attr("id", "errorDisplay").css({
+                color: "red",
+                fontSize: "2em",
+                position: "absolute",
+                top: "115px",
+                textAlign: "center",
+                width: "100%"
+            });
+            var centerElem = $("<div/>").css({
+                fontSize: "1.4em",
+                position: "absolute",
+                textAlign: "center",
+                top: "200px",
+                width: "100%"
+            }).append(colorContent(screen.word));
+            return $("<div/>").append(leftElem, rightElem, errorElem, centerElem);
         };
 
         var update = function (screen) {
-            $("#instructions").html((screen && screen.instructions) || "");
-            if (isInput(screen)) {
-                var id = makeInputId(screen);
-                var inputLabel = $("<label/>").attr({
-                    "for": id
-                }).html(screen.prompt);
-                var textInput = $("<input/>").attr({
-                    "autofocus": true,
-                    "id": id,
-                    "name": id
-                }).focus();
-                $("#center").append(inputLabel, textInput);
-                // On windows machines, the call to focus() above
-                // isn't doing anything. Call it again after a delay.
-                setTimeout(function () {
-                    textInput.focus();
-                }, 250);
-            } else {
-                var centerElem = $("#center").empty();
-                var leftElem = $("#left").empty();
-                var rightElem = $("#right").empty();
-                if (isTrial(screen)) {
-                    leftElem.append.apply(leftElem, makeLabel(screen.left));
-                    rightElem.append.apply(rightElem, makeLabel(screen.right));
-                    centerElem.append(colorContent(screen.word));
-                } else if (isInstructions(screen)) {
-                    centerElem.append($("<span/>")
-                                      .css("color", "#FFF")
-                                      .text("Press space to continue"));
-                }
+            var domFunc = inputDOM;
+            if (isInstructions(screen)) {
+                domFunc = instructionsDOM;
+            } else if (isTrial(screen)) {
+                domFunc = trialDOM;
             }
+            $("body").append(domFunc(screen));
         };
 
         return {
             clear: clear,
-            createTable: createTable,
             error: error,
             makeInputId: makeInputId,
             showEndMessage: showEndMessage,
@@ -699,11 +727,16 @@ window.parenthood = (function ($) {
             };
         };
 
-        display.createTable();
         showNextScreen();
         $("body")
             .on("keypress", handleKeyPress)
-            .on("keydown", handleKeyDown);
+            .on("keydown", handleKeyDown)
+            .css({
+                "background-color": "#004B97",
+                "color": "white",
+                "font-family": "sans-serif",
+                "font-size": "1.4em"
+            });
     });
 
     // Expose some methods. Mainly for testing.
