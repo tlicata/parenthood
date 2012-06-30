@@ -495,7 +495,8 @@ window.parenthood = (function ($) {
     var display = (function () {
 
         var clear = function () {
-            $("body").empty();
+            error.hide();
+            $("#center").empty();
         };
 
         var error = (function () {
@@ -607,7 +608,7 @@ window.parenthood = (function ($) {
                 textAlign: "center",
                 width: "100%"
             });
-            var centerElem = $("<div/>").css({
+            var centerElem = $("<div/>").attr("id", "center").css({
                 fontSize: "1.4em",
                 position: "absolute",
                 textAlign: "center",
@@ -624,7 +625,7 @@ window.parenthood = (function ($) {
             } else if (isTrial(screen)) {
                 domFunc = trialDOM;
             }
-            $("body").append(domFunc(screen));
+            $("body").empty().append(domFunc(screen));
         };
 
         return {
@@ -703,10 +704,10 @@ window.parenthood = (function ($) {
                         inReadMode = true;
                         showNextScreen();
                     };
-                    if (isInput(screen)) {
-                        doAdvanceTest();
-                    } else {
+                    if (isTrial(screen)) {
                         setTimeout(doAdvanceTest, DELAY);
+                    } else {
+                        doAdvanceTest();
                     }
                 }
             } else if (isTrial(screen) && (isLeft(key)||isRight(key))) {
