@@ -360,8 +360,10 @@ window.parenthood = (function ($) {
             return category == PLEASANT_CATEGORY ||
                 category == UNPLEASANT_CATEGORY;
         };
-        var color = function (category) {
-            var hex = isPleasant(category) ? PLEASANT_COLOR : PARTNER_COLOR
+        var color = function (category, hex) {
+            if (typeof hex == "undefined") {
+                hex = isPleasant(category) ? PLEASANT_COLOR : PARTNER_COLOR;
+            };
             return $("<div/>").text(category).css({
                 "color": hex,
                 "font-size": "1.4em"
@@ -371,8 +373,9 @@ window.parenthood = (function ($) {
             if (_.isString(category)) {
                 return color(category);
             } else if (_.isArray(category)) {
-                var or = $("<div/>").text("or").css("color", "white");
-                return [color(category[0]), or, color(category[1])]
+                return [color(category[0]),
+                        color("or", "white"),
+                        color(category[1])];
             };
             return color("");
         };
