@@ -421,7 +421,13 @@ window.parenthood = (function ($) {
                 if (form.length != 1) {
                     throw new Error("should be one matching input element");
                 }
-                addInput(screen, form.val());
+                var val = form.val();
+                if (val === "") {
+                    // Make sure they entered something.
+                    isCorrect = false;
+                } else {
+                    addInput(screen, form.val());
+                }
             }
         } else if (isTrial(screen)) {
             if (isLeft(key)) {
