@@ -351,7 +351,7 @@ window.parenthood = (function ($) {
         return screen && screen.instructions ? true : false;
     };
     var isTrial = function (screen) {
-        return screen && screen.word ? true : false;
+        return screen && typeof screen.word != "undefined";
     };
     var allowsBackspace = function (screen) {
         return screen.allowBackspace;
