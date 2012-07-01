@@ -250,8 +250,8 @@ window.parenthood = (function ($) {
                        "Use the E key to classify items into the categories on the left.",
                        "Use the I key to classify items into the categories on the right. ",
                        "Correct errors by hitting the other key."].join(""),
-        leftWord: [UNPLEASANT_CATEGORY, PARTNER_CATEGORY],
-        rightWord: [PLEASANT_CATEGORY, NOT_PARTNER_CATEGORY],
+        leftWord: [PLEASANT_CATEGORY, PARTNER_CATEGORY],
+        rightWord: [UNPLEASANT_CATEGORY, NOT_PARTNER_CATEGORY],
         trials: makeMixedTrials(20)
     }, {
         block: "test1",
@@ -262,8 +262,8 @@ window.parenthood = (function ($) {
                        "categories on the left. Use the I key to classify items into the ",
                        "categories on the right. Correct errors by hitting the other key."
                       ].join(""),
-        leftWord: [UNPLEASANT_CATEGORY, PARTNER_CATEGORY],
-        rightWord: [PLEASANT_CATEGORY, NOT_PARTNER_CATEGORY],
+        leftWord: [PLEASANT_CATEGORY, PARTNER_CATEGORY],
+        rightWord: [UNPLEASANT_CATEGORY, NOT_PARTNER_CATEGORY],
         trials: makeMixedTrials(40)
     }, {
         block: "practice4",
