@@ -589,7 +589,7 @@ window.parenthood = (function ($) {
                 .append(topLabel, inputLabel, textInput)
                 .css({
                     "margin-left": "20%",
-                    "width": "60%",
+                    "width": "60%"
                 });
         };
         var instructionsDOM = function (screen) {
