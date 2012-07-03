@@ -379,9 +379,9 @@ window.parenthood = (function ($) {
             if (_.isString(category)) {
                 return color(category);
             } else if (_.isArray(category)) {
-                return [color(category[0]),
-                        color("or", "white"),
-                        color(category[1])];
+                return $("<div/>").append(color(category[0]),
+                                          color("or", "white"),
+                                          color(category[1]));
             };
             return color("");
         };
@@ -628,16 +628,14 @@ window.parenthood = (function ($) {
             }).append(instr, buttons);
         };
         var trialDOM = function (screen) {
-            var leftElem = $("<div/>").css({
+            var leftElem = makeLabel(screen.left).css({
                 "left": "1em",
                 "position": "absolute"
             });
-            leftElem.append.apply(leftElem, makeLabel(screen.left));
-            var rightElem = $("<div/>").css({
+            var rightElem = makeLabel(screen.right).css({
                 position: "absolute",
                 right: "1em"
             });
-            rightElem.append.apply(rightElem, makeLabel(screen.right));
             var errorElem = $("<div/>").attr("id", "errorDisplay").css({
                 color: "red",
                 fontSize: "2em",
