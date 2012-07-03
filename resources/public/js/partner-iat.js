@@ -616,9 +616,9 @@ window.parenthood = (function ($) {
                 "right": "1em"
             }).text("Press Enter to continue");
             buttons.append(nextButton.focus());
-            setTimeout(250, function () {
+            setTimeout(function () {
                 nextButton.focus();
-            });
+            }, 250);
             return $("<div/>").css({
                 background: "white",
                 color: "black",
