@@ -720,7 +720,7 @@ window.parenthood = (function ($) {
 
         var handleKeyDown = function (e) {
             var time = new Date().getTime();
-            alert("key press " + e.which);
+
             if (!inReadMode) {
                 return;
             }
