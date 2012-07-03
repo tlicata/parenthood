@@ -18,6 +18,7 @@
       [:head
        (include-js
         "https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
+        "/js/lib/json2.js"
         "/js/lib/underscore-min.js"
         "/js/partner-iat.js?7")]
       [:body
