@@ -610,11 +610,15 @@ window.parenthood = (function ($) {
                     "margin-left": "1em"
                 }).text("Press Backspace to previous"));
             }
-            buttons.append($("<button/>").css({
+            var nextButton = $("<button/>").css({
                 "font-size": ".8em",
                 "position": "absolute",
                 "right": "1em"
-            }).text("Press Enter to continue"));
+            }).text("Press Enter to continue");
+            buttons.append(nextButton.focus());
+            setTimeout(250, function () {
+                nextButton.focus();
+            });
             return $("<div/>").css({
                 background: "white",
                 color: "black",
