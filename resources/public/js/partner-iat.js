@@ -720,7 +720,7 @@ window.parenthood = (function ($) {
 
         var handleKeyPress = function (e) {
             var time = new Date().getTime();
-
+            alert("key press " + e.which);
             if (!inReadMode) {
                 return;
             }
@@ -762,6 +762,7 @@ window.parenthood = (function ($) {
             return isBackspace(key) ? isInput(screen) : true;
         };
         var handleKeyDown = function (e) {
+            alert("key down " + e.which);
             if (isBackspace(e.which) && !isInput(screen)) {
                 // Intercept backspace press, pass it to the normal
                 // handler, and then prevent the browser from going
