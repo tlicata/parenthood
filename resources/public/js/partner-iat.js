@@ -718,7 +718,7 @@ window.parenthood = (function ($) {
             });
         };
 
-        var handleKeyPress = function (e) {
+        var handleKeyDown = function (e) {
             var time = new Date().getTime();
             alert("key press " + e.which);
             if (!inReadMode) {
@@ -761,33 +761,15 @@ window.parenthood = (function ($) {
             // (i.e., prevent browser from going back a page).
             return isBackspace(key) ? isInput(screen) : true;
         };
-        var handleKeyDown = function (e) {
-            alert("key down " + e.which);
-            if (isBackspace(e.which) && !isInput(screen)) {
-                // Intercept backspace press, pass it to the normal
-                // handler, and then prevent the browser from going
-                // back to the previous page (the default behavior).
-                handleKeyPress(e);
-                return false;
-            }
-        };
 
         showNextScreen();
-        $("body")
-            .on("keypress", handleKeyPress)
-            .on("keydown", handleKeyDown)
-            .css({
-                "background-color": "#004B97",
-                "color": "white",
-                "font-family": "sans-serif",
-                "font-size": "1.4em"
-            });
-        $(document).on("keydown", function () {
-            alert("document keydown");
+        $("body").css({
+            "background-color": "#004B97",
+            "color": "white",
+            "font-family": "sans-serif",
+            "font-size": "1.4em"
         });
-        $(window).on("keydown", function () {
-            alert("window keydown");
-        });
+        $(document).on("keydown", handleKeyDown)
     });
 
     // Expose some methods. Mainly for testing.
