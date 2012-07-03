@@ -19,7 +19,7 @@
        (include-js
         "https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
         "/js/lib/underscore-min.js"
-        "/js/partner-iat.js")]
+        "/js/partner-iat.js?1")]
       [:body
        [:script {:type "text/javascript"}
         (str "$(function(){window.parenthood.init("
