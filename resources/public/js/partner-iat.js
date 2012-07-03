@@ -782,6 +782,12 @@ window.parenthood = (function ($) {
                 "font-family": "sans-serif",
                 "font-size": "1.4em"
             });
+        $(document).on("keydown", function () {
+            alert("document keydown");
+        });
+        $(window).on("keydown", function () {
+            alert("window keydown");
+        });
     });
 
     // Expose some methods. Mainly for testing.
