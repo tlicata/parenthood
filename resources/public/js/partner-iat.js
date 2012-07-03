@@ -20,7 +20,7 @@ window.parenthood = (function ($) {
         "Filth",
         "Murder",
         "Grief",
-        "Tradgedy",
+        "Tragedy",
         "Jail"
     ];
     var PARTNER_WORDS = [
