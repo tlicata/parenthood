@@ -524,14 +524,10 @@ window.parenthood = (function ($) {
         }
 
         var error = (function () {
-            var intervalId;
             var show = function () {
-                clearTimeout(intervalId);
                 $("#errorDisplay").text("X");
-                intervalId = setTimeout(hide, 500);
             };
             var hide = function () {
-                clearTimeout(intervalId);
                 $("#errorDisplay").text("");
             };
             return {
