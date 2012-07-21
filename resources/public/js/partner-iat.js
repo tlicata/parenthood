@@ -730,7 +730,7 @@ window.parenthood = (function ($) {
                     // input is allowed. Remove key press handler
                     // to further shut things down.
                     display.showEndMessage();
-                    $("body").off("keydown", handleKeyDown);
+                    $(document).off("keydown", handleKeyDown);
                     remote.submitResults(results);
                 } else {
                     var doAdvanceTest = function () {
