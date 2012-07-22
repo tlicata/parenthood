@@ -515,12 +515,14 @@ window.parenthood = (function ($) {
 
     var display = (function () {
 
+        var container = null;
+
         var softClear = function () {
             error.hide();
             $("#center").empty();
         };
         var hardClear = function () {
-            $("body").empty();
+            container.empty();
         }
 
         var error = (function () {
@@ -550,7 +552,7 @@ window.parenthood = (function ($) {
                     "text-align": "center",
                     "width": "100%"
                 });
-            $("body").append(message);
+            container.append(message);
         };
 
         var inputDOM = function (screen) {
@@ -651,14 +653,24 @@ window.parenthood = (function ($) {
         };
 
         var update = function (screen) {
+            if (!container) {
+                var body = $("body").css("background-color", "#004B97");
+                container = $("<div/>").css({
+                    "color": "white",
+                    "font-family": "sans-serif",
+                    "font-size": "1.4em"
+                }).appendTo(body);
+            }
+
             var domFunc = inputDOM;
             if (isInstructions(screen)) {
                 domFunc = instructionsDOM;
             } else if (isTrial(screen)) {
                 domFunc = trialDOM;
             }
+
             hardClear();
-            $("body").append(domFunc(screen));
+            container.append(domFunc(screen));
         };
 
         return {
@@ -757,12 +769,6 @@ window.parenthood = (function ($) {
         };
 
         showNextScreen();
-        $("body").css({
-            "background-color": "#004B97",
-            "color": "white",
-            "font-family": "sans-serif",
-            "font-size": "1.4em"
-        });
         $(document).on("keydown", handleKeyDown)
     });
 
