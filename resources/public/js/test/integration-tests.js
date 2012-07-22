@@ -86,7 +86,7 @@
 
         if (isInstructions(screen)) {
             equal(screen.instructions, getInstructions(), "instructions");
-            fakeSpacePress();
+            fakeEnterPress();
         } else if (isInput(screen)) {
             var active = $(document.activeElement);
             if (active.is("input")) {
