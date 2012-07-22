@@ -592,6 +592,7 @@ window.parenthood = (function ($) {
         };
         var instructionsDOM = function (screen) {
             var instr = $("<div/>")
+                .attr("id", "instructions")
                 .html(screen.instructions)
                 .css({
                     "line-height": "1.2em"

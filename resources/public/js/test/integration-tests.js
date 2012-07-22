@@ -50,11 +50,9 @@
     var isTrial = window.parenthood.isTrial;
     var isInstructions = window.parenthood.isInstructions;
     var makeLabel = window.parenthood.makeLabel;
-    var getTable = function () {
-        return $("table#iatTable");
-    };
+
     var getInstructions = function () {
-        return getTable().find("#instructions").html();
+        return $("#instructions").html();
     };
 
     var INPUT_REGEX = window.parenthood.getInputRegex();
