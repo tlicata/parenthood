@@ -8,12 +8,12 @@
     // Our tests will mimic a user typing on a keyboard.  Accept
     // upper and lowercase keys to account for caps lock.
     var fakePress = function (keyCode, context) {
-        var e = $.Event("keypress");
+        var e = $.Event("keydown");
         e.which = keyCode;
         if (context) {
             context.trigger(e);
         } else {
-            $("body").trigger(e);
+            $(document).trigger(e);
         }
     };
     var getEnterKeyCode = function () {
