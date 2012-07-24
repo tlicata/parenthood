@@ -8,12 +8,12 @@
     // Our tests will mimic a user typing on a keyboard.  Accept
     // upper and lowercase keys to account for caps lock.
     var fakePress = function (keyCode, context) {
-        var e = $.Event("keypress");
+        var e = $.Event("keydown");
         e.which = keyCode;
         if (context) {
             context.trigger(e);
         } else {
-            $("body").trigger(e);
+            $(document).trigger(e);
         }
     };
     var getEnterKeyCode = function () {
@@ -42,6 +42,7 @@
     };
 
     // Some methods to pull the current state out of the IAT.
+    var createCenterWord = window.parenthood.createCenterWord;
     var getDelay = window.parenthood.getDelay;
     var getNumScreens = window.parenthood.getNumScreens;
     var getScreen = window.parenthood.getScreen;
@@ -50,11 +51,9 @@
     var isTrial = window.parenthood.isTrial;
     var isInstructions = window.parenthood.isInstructions;
     var makeLabel = window.parenthood.makeLabel;
-    var getTable = function () {
-        return $("table#iatTable");
-    };
+
     var getInstructions = function () {
-        return getTable().find("#instructions").html();
+        return $("#instructions").html();
     };
 
     var INPUT_REGEX = window.parenthood.getInputRegex();
@@ -88,7 +87,7 @@
 
         if (isInstructions(screen)) {
             equal(screen.instructions, getInstructions(), "instructions");
-            fakeSpacePress();
+            fakeEnterPress();
         } else if (isInput(screen)) {
             var active = $(document.activeElement);
             if (active.is("input")) {
@@ -105,9 +104,9 @@
             // Make sure proper categories appear in the top
             // left and right corners of the screen and the
             // prompt appears in the center.
-            equal($("#left").html(), makeLabel(screen.left),"left");
-            equal($("#right").html(), makeLabel(screen.right), "right");
-            equal($("#center").html(), screen.word, screen.word);
+            equal($("#left").html(), makeLabel(screen.left).html(),"left");
+            equal($("#right").html(), makeLabel(screen.right).html(), "right");
+            equal($("#center").html(), createCenterWord(screen.word).html(), screen.word);
 
             // Try to verify that input replacement happened properly.
             notEqual(screen.word, undefined, "word should not be undefined");
