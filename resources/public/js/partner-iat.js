@@ -665,7 +665,8 @@ window.parenthood = (function ($) {
                 container = $("<div/>").css({
                     "color": "white",
                     "font-family": "sans-serif",
-                    "font-size": "1.4em"
+                    "font-size": "1.4em",
+                    "position": "relative"
                 }).appendTo(body);
             }
 
