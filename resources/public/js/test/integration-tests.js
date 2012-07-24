@@ -42,6 +42,7 @@
     };
 
     // Some methods to pull the current state out of the IAT.
+    var createCenterWord = window.parenthood.createCenterWord;
     var getDelay = window.parenthood.getDelay;
     var getNumScreens = window.parenthood.getNumScreens;
     var getScreen = window.parenthood.getScreen;
@@ -103,9 +104,9 @@
             // Make sure proper categories appear in the top
             // left and right corners of the screen and the
             // prompt appears in the center.
-            equal($("#center").html(), screen.word, screen.word);
             equal($("#left").html(), makeLabel(screen.left).html(),"left");
             equal($("#right").html(), makeLabel(screen.right).html(), "right");
+            equal($("#center").html(), createCenterWord(screen.word).html(), screen.word);
 
             // Try to verify that input replacement happened properly.
             notEqual(screen.word, undefined, "word should not be undefined");

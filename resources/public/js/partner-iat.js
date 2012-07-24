@@ -386,12 +386,24 @@ window.parenthood = (function ($) {
             return color("");
         };
     }());
-    var colorContent = function (word) {
-        var isPleasantWord = _.include(UNPLEASANT_WORDS, word) ||
-            _.include(PLEASANT_WORDS, word);
-        var color = isPleasantWord ? PLEASANT_COLOR : PARTNER_COLOR;
-        return $("<span/>").text(word).css("color", color);
-    };
+    var createCenterWord = (function () {
+        var colorWord = function (word) {
+            var isPleasantWord = _.include(UNPLEASANT_WORDS, word) ||
+                _.include(PLEASANT_WORDS, word);
+            var color = isPleasantWord ? PLEASANT_COLOR : PARTNER_COLOR;
+            return $("<span/>").text(word).css("color", color);
+        };
+        return function (word) {
+            return $("<div/>").attr("id", "center").css({
+                fontSize: "1.4em",
+                position: "absolute",
+                textAlign: "center",
+                top: "200px",
+                width: "100%"
+            }).append(colorWord(screen.word));
+        };
+    })();
+
     var isBackspace = function (key) {
         return key == 8;
     };
@@ -643,13 +655,7 @@ window.parenthood = (function ($) {
                 textAlign: "center",
                 width: "100%"
             });
-            var centerElem = $("<div/>").attr("id", "center").css({
-                fontSize: "1.4em",
-                position: "absolute",
-                textAlign: "center",
-                top: "200px",
-                width: "100%"
-            }).append(colorContent(screen.word));
+            var centerElem = createCenterWord(screen.word);
             return $("<div/>").append(leftElem, rightElem, errorElem, centerElem);
         };
 
@@ -775,6 +781,7 @@ window.parenthood = (function ($) {
 
     // Expose some methods. Mainly for testing.
     return {
+        createCenterWord: createCenterWord,
         correctKey: correctKey,
         display: display,
         getBlocks: function () {
