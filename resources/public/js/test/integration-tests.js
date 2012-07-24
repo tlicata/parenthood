@@ -103,9 +103,9 @@
             // Make sure proper categories appear in the top
             // left and right corners of the screen and the
             // prompt appears in the center.
-            equal($("#left").html(), makeLabel(screen.left),"left");
-            equal($("#right").html(), makeLabel(screen.right), "right");
             equal($("#center").html(), screen.word, screen.word);
+            equal($("#left").html(), makeLabel(screen.left).html(),"left");
+            equal($("#right").html(), makeLabel(screen.right).html(), "right");
 
             // Try to verify that input replacement happened properly.
             notEqual(screen.word, undefined, "word should not be undefined");

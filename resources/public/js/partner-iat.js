@@ -627,11 +627,11 @@ window.parenthood = (function ($) {
             }).append(instr, buttons);
         };
         var trialDOM = function (screen) {
-            var leftElem = makeLabel(screen.left).css({
+            var leftElem = makeLabel(screen.left).attr("id", "left").css({
                 "left": "1em",
                 "position": "absolute"
             });
-            var rightElem = makeLabel(screen.right).css({
+            var rightElem = makeLabel(screen.right).attr("id", "right").css({
                 position: "absolute",
                 right: "1em"
             });
