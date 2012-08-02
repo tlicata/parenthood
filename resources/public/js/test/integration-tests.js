@@ -131,11 +131,6 @@
     for (var i = 0, n = getNumScreens(); i < n; i++) {
         (function (index) {
             test("screen "  + index, function () {
-                // Insert IAT into DOM. Have to do this after
-                // $.onReady() but before tests run.
-                if (index == 0) {
-                    window.parenthood.init();
-                }
                 stop();
                 // Must defer firs test so that html renders
                 // and the first input can receive focus.
