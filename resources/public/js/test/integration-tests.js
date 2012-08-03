@@ -80,8 +80,7 @@
 
     // Put a screen through its exercises.
     var workout = function (index) {
-        // Make sure current screen is pointing to the screen
-        // we're supposed to be at.
+        // Make sure current screen is correct.
         var screen = getScreen();
         deepEqual(screen, getScreen(index), "screen " + index);
 
@@ -127,12 +126,11 @@
         setTimeout(start, getDelay() + 100);
     };
 
-    // Tests
     for (var i = 0, n = getNumScreens(); i < n; i++) {
         (function (index) {
             test("screen "  + index, function () {
                 stop();
-                // Must defer firs test so that html renders
+                // Must defer first test so that html renders
                 // and the first input can receive focus.
                 _.defer(function () {
                     workout(index);
