@@ -527,6 +527,11 @@ window.parenthood = (function ($) {
 
     var display = (function () {
 
+        // Some elements are absolutely positioned, and when being
+        // run on the tests page they don't "bump" the testing UI
+        // down, so they overlap. Fix that by setting a height;
+        var SPACE_FOR_TESTS = "275";
+
         var container = null;
 
         var softClear = function () {
@@ -559,8 +564,8 @@ window.parenthood = (function ($) {
             var message = $("<div/>")
                 .text("Test Finished. Thank you!")
                 .css({
-                    "top": "49%",
-                    "position": "absolute",
+                    "margin-bottom": "20px",
+                    "margin-top": (SPACE_FOR_TESTS - 50) + "px",
                     "text-align": "center",
                     "width": "100%"
                 });
@@ -656,7 +661,9 @@ window.parenthood = (function ($) {
                 width: "100%"
             });
             var centerElem = createCenterWord(screen.word);
-            return $("<div/>").append(leftElem, rightElem, errorElem, centerElem);
+            return $("<div/>")
+                .append(leftElem, rightElem, errorElem, centerElem)
+                .css("height", SPACE_FOR_TESTS + "px");
         };
 
         var update = function (screen) {
