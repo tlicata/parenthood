@@ -559,18 +559,32 @@ window.parenthood = (function ($) {
             return "input" + screen.id;
         };
 
-        var showEndMessage = function () {
-            hardClear();
-            var message = $("<div/>")
-                .text("Test Finished. Thank you!")
-                .css({
+        var centerMessages = (function () {
+            var style = function (elem) {
+                return elem.css({
                     "margin-bottom": "20px",
                     "margin-top": (SPACE_FOR_TESTS - 50) + "px",
                     "text-align": "center",
                     "width": "100%"
                 });
-            container.append(message);
-        };
+            }
+            var show = function (message) {
+                hardClear();
+                var elem = $("<div/>").text(message);
+                container.append(style(elem));
+            };
+            return {
+                showEnd: function () {
+                    show("Test Finished. Thank you!");
+                },
+                showError: function () {
+                    show("An error occurred submitting your response.");
+                },
+                showSending: function () {
+                    show("Submitting responses to server...");
+                }
+            };
+        })();
 
         var inputDOM = function (screen) {
             var id = makeInputId(screen);
@@ -692,7 +706,9 @@ window.parenthood = (function ($) {
             softClear: softClear,
             error: error,
             makeInputId: makeInputId,
-            showEndMessage: showEndMessage,
+            showEndMessage: centerMessages.showEnd,
+            showErrorMessage: centerMessages.showError,
+            showSendingMessage: centerMessages.showSending,
             update: update
         };
     }());
@@ -734,6 +750,8 @@ window.parenthood = (function ($) {
                     results: JSON.stringify(data),
                     unique: unique
                 },
+                error: display.showErrorMessage,
+                success: display.showEndMessage,
                 type: "POST",
                 url: ""
             });
@@ -756,7 +774,7 @@ window.parenthood = (function ($) {
                     // with inReadMode set to false so no more
                     // input is allowed. Remove key press handler
                     // to further shut things down.
-                    display.showEndMessage();
+                    display.showSendingMessage();
                     $(document).off("keydown", handleKeyDown);
                     remote.submitResults(results);
                 } else {
