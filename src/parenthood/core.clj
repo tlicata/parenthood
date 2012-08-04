@@ -64,8 +64,9 @@
 
 (defpage [:post "/partner-iat.html"] {:keys [id results unique]}
   (store-results id results unique))
-(defpage [:post "/integration-tests.html"] {:keys [id results unique]}
-  (store-results id results unique))
+(defpage [:post "/integration-tests.html"] {:keys [results unique]}
+  (store-results test-id results unique))
+
 (defn -main []
   (let [port (Integer/parseInt (System/getenv "PORT"))]
     (server/start port)))
