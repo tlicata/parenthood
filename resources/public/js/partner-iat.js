@@ -527,6 +527,11 @@ window.parenthood = (function ($) {
 
     var display = (function () {
 
+        // Some elements are absolutely positioned, and when being
+        // run on the tests page they don't "bump" the testing UI
+        // down, so they overlap. Fix that by setting a height;
+        var SPACE_FOR_TESTS = "275";
+
         var container = null;
 
         var softClear = function () {
@@ -554,18 +559,32 @@ window.parenthood = (function ($) {
             return "input" + screen.id;
         };
 
-        var showEndMessage = function () {
-            hardClear();
-            var message = $("<div/>")
-                .text("Test Finished. Thank you!")
-                .css({
-                    "top": "49%",
-                    "position": "absolute",
+        var centerMessages = (function () {
+            var style = function (elem) {
+                return elem.css({
+                    "margin-bottom": "20px",
+                    "margin-top": (SPACE_FOR_TESTS - 50) + "px",
                     "text-align": "center",
                     "width": "100%"
                 });
-            container.append(message);
-        };
+            }
+            var show = function (message) {
+                hardClear();
+                var elem = $("<div/>").text(message);
+                container.append(style(elem));
+            };
+            return {
+                showEnd: function () {
+                    show("Test Finished. Thank you!");
+                },
+                showError: function () {
+                    show("An error occurred submitting your response.");
+                },
+                showSending: function () {
+                    show("Submitting responses to server...");
+                }
+            };
+        })();
 
         var inputDOM = function (screen) {
             var id = makeInputId(screen);
@@ -656,7 +675,9 @@ window.parenthood = (function ($) {
                 width: "100%"
             });
             var centerElem = createCenterWord(screen.word);
-            return $("<div/>").append(leftElem, rightElem, errorElem, centerElem);
+            return $("<div/>")
+                .append(leftElem, rightElem, errorElem, centerElem)
+                .css("height", SPACE_FOR_TESTS + "px");
         };
 
         var update = function (screen) {
@@ -685,15 +706,49 @@ window.parenthood = (function ($) {
             softClear: softClear,
             error: error,
             makeInputId: makeInputId,
-            showEndMessage: showEndMessage,
+            showEndMessage: centerMessages.showEnd,
+            showErrorMessage: centerMessages.showError,
+            showSendingMessage: centerMessages.showSending,
             update: update
         };
     }());
 
-    var remote = {};
     var results = [];
     var SCREENS = treeIntoScreens(BLOCKS);
     var screen = null;
+
+    var remote = (function () {
+
+        var promise = null;
+        var unique = null;
+
+        var getPromise = function () {
+            return promise;
+        };
+
+        var init = _.once(function (uniq) {
+            unique = uniq;
+        });
+
+        var submitResults = _.once(function (data) {
+            var error = display.showErrorMessage;
+            var end = display.showEndMessage;
+            promise = $.ajax({
+                data: {
+                    results: JSON.stringify(data),
+                    unique: unique
+                },
+                type: "POST",
+                url: ""
+            }).error(error).success(end);
+        });
+
+        return {
+            getPromise: getPromise,
+            init: init,
+            submitResults: submitResults
+        };
+    })();
 
     var show = function (fresh) {
         screen = $.extend(fresh, {
@@ -720,17 +775,7 @@ window.parenthood = (function ($) {
 
         var inReadMode = true;
 
-        // Define this here so "unique" is closed over.
-        remote.submitResults = function (data) {
-            $.ajax({
-                data: {
-                    results: JSON.stringify(data),
-                    unique: unique
-                },
-                type: "POST",
-                url: ""
-            });
-        };
+        remote.init(unique);
 
         var handleKeyDown = function (e) {
             var time = new Date().getTime();
@@ -749,7 +794,7 @@ window.parenthood = (function ($) {
                     // with inReadMode set to false so no more
                     // input is allowed. Remove key press handler
                     // to further shut things down.
-                    display.showEndMessage();
+                    display.showSendingMessage();
                     $(document).off("keydown", handleKeyDown);
                     remote.submitResults(results);
                 } else {
@@ -805,9 +850,7 @@ window.parenthood = (function ($) {
         isInstructions: isInstructions,
         isTrial: isTrial,
         makeLabel: makeLabel,
-        submitResults: function (data) {
-            remote.submitResults(data);
-        },
+        remote: remote,
         substitute: substitute,
         treeIntoScreens: treeIntoScreens
     }

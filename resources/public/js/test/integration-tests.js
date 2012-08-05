@@ -45,6 +45,7 @@
     var createCenterWord = window.parenthood.createCenterWord;
     var getDelay = window.parenthood.getDelay;
     var getNumScreens = window.parenthood.getNumScreens;
+    var getPromise = window.parenthood.remote.getPromise;
     var getScreen = window.parenthood.getScreen;
     var isCorrectKey = window.parenthood.correctKey;
     var isInput = window.parenthood.isInput;
@@ -80,8 +81,7 @@
 
     // Put a screen through its exercises.
     var workout = function (index) {
-        // Make sure current screen is pointing to the screen
-        // we're supposed to be at.
+        // Make sure current screen is correct.
         var screen = getScreen();
         deepEqual(screen, getScreen(index), "screen " + index);
 
@@ -127,17 +127,11 @@
         setTimeout(start, getDelay() + 100);
     };
 
-    // Tests
     for (var i = 0, n = getNumScreens(); i < n; i++) {
         (function (index) {
             test("screen "  + index, function () {
-                // Insert IAT into DOM. Have to do this after
-                // $.onReady() but before tests run.
-                if (index == 0) {
-                    window.parenthood.init();
-                }
                 stop();
-                // Must defer firs test so that html renders
+                // Must defer first test so that html renders
                 // and the first input can receive focus.
                 _.defer(function () {
                     workout(index);
@@ -145,4 +139,13 @@
             });
         }(i));
     };
+
+    test("save data to server", function () {
+        stop();
+        getPromise().complete(function (jqXHR) {
+            var success = (jqXHR.status == 200);
+            ok(success, "POST response code should be 200");
+            start();
+        });
+    });
 }());
