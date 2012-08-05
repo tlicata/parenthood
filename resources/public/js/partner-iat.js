@@ -713,10 +713,42 @@ window.parenthood = (function ($) {
         };
     }());
 
-    var remote = {};
     var results = [];
     var SCREENS = treeIntoScreens(BLOCKS);
     var screen = null;
+
+    var remote = (function () {
+
+        var promise = null;
+        var unique = null;
+
+        var getPromise = function () {
+            return promise;
+        };
+
+        var init = _.once(function (uniq) {
+            unique = uniq;
+        });
+
+        var submitResults = _.once(function (data) {
+            var error = display.showErrorMessage;
+            var end = display.showEndMessage;
+            promise = $.ajax({
+                data: {
+                    results: JSON.stringify(data),
+                    unique: unique
+                },
+                type: "POST",
+                url: ""
+            }).error(error).success(end);
+        });
+
+        return {
+            getPromise: getPromise,
+            init: init,
+            submitResults: submitResults
+        };
+    })();
 
     var show = function (fresh) {
         screen = $.extend(fresh, {
@@ -743,19 +775,7 @@ window.parenthood = (function ($) {
 
         var inReadMode = true;
 
-        // Define this here so "unique" is closed over.
-        remote.submitResults = function (data) {
-            $.ajax({
-                data: {
-                    results: JSON.stringify(data),
-                    unique: unique
-                },
-                error: display.showErrorMessage,
-                success: display.showEndMessage,
-                type: "POST",
-                url: ""
-            });
-        };
+        remote.init(unique);
 
         var handleKeyDown = function (e) {
             var time = new Date().getTime();
@@ -830,9 +850,7 @@ window.parenthood = (function ($) {
         isInstructions: isInstructions,
         isTrial: isTrial,
         makeLabel: makeLabel,
-        submitResults: function (data) {
-            remote.submitResults(data);
-        },
+        remote: remote,
         substitute: substitute,
         treeIntoScreens: treeIntoScreens
     }

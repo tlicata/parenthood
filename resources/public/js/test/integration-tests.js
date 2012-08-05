@@ -45,6 +45,7 @@
     var createCenterWord = window.parenthood.createCenterWord;
     var getDelay = window.parenthood.getDelay;
     var getNumScreens = window.parenthood.getNumScreens;
+    var getPromise = window.parenthood.remote.getPromise;
     var getScreen = window.parenthood.getScreen;
     var isCorrectKey = window.parenthood.correctKey;
     var isInput = window.parenthood.isInput;
@@ -138,4 +139,13 @@
             });
         }(i));
     };
+
+    test("save data to server", function () {
+        stop();
+        getPromise().complete(function (jqXHR) {
+            var success = (jqXHR.status == 200);
+            ok(success, "POST response code should be 200");
+            start();
+        });
+    });
 }());
