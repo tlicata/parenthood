@@ -500,6 +500,8 @@ window.parenthood = (function ($) {
             if (block.instructions) {
                 screens.push({
                     allowBackspace: block.allowBackspace,
+                    left: block.leftWord,
+                    right: block.rightWord,
                     instructions: block.instructions
                 });
             }
@@ -634,11 +636,20 @@ window.parenthood = (function ($) {
                 });
         };
         var instructionsDOM = function (screen) {
+            var leftElem = leftCategoryDOM(screen);
+            var rightElem = rightCategoryDOM(screen);
             var instr = $("<div/>")
                 .attr("id", "instructions")
                 .html(screen.instructions)
                 .css({
-                    "line-height": "1.2em"
+                    background: "white",
+                    color: "black",
+                    padding: "1em",
+                    lineHeight: "1.2em",
+                    marginLeft: "20%",
+                    marginTop: "3em",
+                    position: "absolute",
+                    width: "60%"
                 });
             var buttons = $("<div/>").css({
                 "margin-top": "1em",
@@ -661,13 +672,7 @@ window.parenthood = (function ($) {
             setTimeout(function () {
                 nextButton.focus();
             }, 250);
-            return $("<div/>").css({
-                background: "white",
-                color: "black",
-                padding: "1em",
-                marginLeft: "20%",
-                width: "60%"
-            }).append(instr, buttons);
+            return $("<div/>").append(leftElem, rightElem, instr.append(buttons));
         };
         var trialDOM = function (screen) {
             var leftElem = leftCategoryDOM(screen);
