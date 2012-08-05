@@ -46,8 +46,6 @@ window.parenthood = (function ($) {
     var PARTNER_COLOR = "white";
     var PLEASANT_COLOR = "#00FF00";
 
-    var input = {};
-
     var makeTrials = function (words, category) {
         return _.map(words, function (word) {
             return {word:word, category:category};
@@ -724,6 +722,7 @@ window.parenthood = (function ($) {
         };
     }());
 
+    var input = {};
     var results = [];
     var SCREENS = treeIntoScreens(BLOCKS);
     var screen = null;
