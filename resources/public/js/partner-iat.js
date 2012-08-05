@@ -586,6 +586,18 @@ window.parenthood = (function ($) {
             };
         })();
 
+        var leftCategoryDOM = function (screen) {
+            return makeLabel(screen.left).attr("id", "left").css({
+                "left": "1em",
+                "position": "absolute"
+            });
+        };
+        var rightCategoryDOM = function (screen) {
+            return makeLabel(screen.right).attr("id", "right").css({
+                position: "absolute",
+                right: "1em"
+            });
+        };
         var inputDOM = function (screen) {
             var id = makeInputId(screen);
             var topLabel = makeLabel(screen.inputCategory).css({
@@ -658,14 +670,8 @@ window.parenthood = (function ($) {
             }).append(instr, buttons);
         };
         var trialDOM = function (screen) {
-            var leftElem = makeLabel(screen.left).attr("id", "left").css({
-                "left": "1em",
-                "position": "absolute"
-            });
-            var rightElem = makeLabel(screen.right).attr("id", "right").css({
-                position: "absolute",
-                right: "1em"
-            });
+            var leftElem = leftCategoryDOM(screen);
+            var rightElem = rightCategoryDOM(screen);
             var errorElem = $("<div/>").attr("id", "errorDisplay").css({
                 color: "red",
                 fontSize: "2em",
