@@ -43,10 +43,12 @@
 
     // Some methods to pull the current state out of the IAT.
     var createCenterWord = window.parenthood.createCenterWord;
+    var equalsResults = window.parenthood.equalsResults;
     var getDelay = window.parenthood.getDelay;
     var getNumScreens = window.parenthood.getNumScreens;
     var getPromise = window.parenthood.remote.getPromise;
     var getScreen = window.parenthood.getScreen;
+    var getTestData = window.parenthood.remote.getTestData;
     var isCorrectKey = window.parenthood.correctKey;
     var isInput = window.parenthood.isInput;
     var isTrial = window.parenthood.isTrial;
@@ -145,7 +147,17 @@
         getPromise().complete(function (jqXHR) {
             var success = (jqXHR.status == 200);
             ok(success, "POST response code should be 200");
-            start();
+            if (success) {
+                getTestData().complete(function (xhr) {
+                    var response = xhr.responseText;
+                    var obj = JSON.parse(response);
+                    var results = JSON.parse(obj.results);
+                    ok(equalsResults(results), "saved data equals sent data");
+                    start();
+                });
+            } else {
+                start();
+            }
         });
     });
 }());

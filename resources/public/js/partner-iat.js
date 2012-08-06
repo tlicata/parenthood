@@ -736,6 +736,14 @@ window.parenthood = (function ($) {
             return promise;
         };
 
+        var getTestData = function () {
+            return $.ajax({
+                data: {unique: unique},
+                type: "GET",
+                url: "/test-data"
+            });
+        };
+
         var init = _.once(function (uniq) {
             unique = uniq;
         });
@@ -755,6 +763,7 @@ window.parenthood = (function ($) {
 
         return {
             getPromise: getPromise,
+            getTestData: getTestData,
             init: init,
             submitResults: submitResults
         };
@@ -840,6 +849,9 @@ window.parenthood = (function ($) {
         createCenterWord: createCenterWord,
         correctKey: correctKey,
         display: display,
+        equalsResults: function (obj) {
+            return _.isEqual(obj, results);
+        },
         getBlocks: function () {
             return BLOCKS;
         },

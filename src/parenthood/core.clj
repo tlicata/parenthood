@@ -67,6 +67,9 @@
 (defpage [:post "/integration-tests.html"] {:keys [results unique]}
   (store-results test-id results unique))
 
+(defpage "/test-data" {:keys [unique]}
+  (response/json (db/get-response test-id unique)))
+
 (defn -main []
   (let [port (Integer/parseInt (System/getenv "PORT"))]
     (server/start port)))
