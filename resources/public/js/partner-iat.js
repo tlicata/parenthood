@@ -756,8 +756,7 @@ window.parenthood = (function ($) {
                     results: JSON.stringify(data),
                     unique: unique
                 },
-                type: "POST",
-                url: ""
+                type: "POST"
             }).error(error).success(end);
         });
 
