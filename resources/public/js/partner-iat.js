@@ -670,7 +670,9 @@ window.parenthood = (function ($) {
             setTimeout(function () {
                 nextButton.focus();
             }, 250);
-            return $("<div/>").append(leftElem, rightElem, instr.append(buttons));
+            return $("<div/>")
+                .append(leftElem, rightElem, instr.append(buttons))
+                .css("height", (SPACE_FOR_TESTS + 200) + "px");
         };
         var trialDOM = function (screen) {
             var leftElem = leftCategoryDOM(screen);
