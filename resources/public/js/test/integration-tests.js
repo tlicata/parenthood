@@ -56,7 +56,7 @@
     var makeLabel = window.parenthood.makeLabel;
 
     var getInstructions = function () {
-        return $("#instructions").html();
+        return $("#instructions span").html();
     };
 
     var INPUT_REGEX = window.parenthood.getInputRegex();

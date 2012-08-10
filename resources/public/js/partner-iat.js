@@ -638,7 +638,6 @@ window.parenthood = (function ($) {
             var rightElem = rightCategoryDOM(screen);
             var instr = $("<div/>")
                 .attr("id", "instructions")
-                .html(screen.instructions)
                 .css({
                     background: "white",
                     color: "black",
@@ -649,6 +648,7 @@ window.parenthood = (function ($) {
                     position: "absolute",
                     width: "60%"
                 });
+            var text = $("<span/>").html(screen.instructions);
             var buttons = $("<div/>").css({
                 "margin-top": "1em",
                 "min-height": "1.1em",
@@ -671,7 +671,7 @@ window.parenthood = (function ($) {
                 nextButton.focus();
             }, 250);
             return $("<div/>")
-                .append(leftElem, rightElem, instr.append(buttons))
+                .append(leftElem, rightElem, instr.append(text, buttons))
                 .css("height", (SPACE_FOR_TESTS + 200) + "px");
         };
         var trialDOM = function (screen) {
