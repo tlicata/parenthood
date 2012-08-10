@@ -644,7 +644,7 @@ window.parenthood = (function ($) {
                     padding: "1em",
                     lineHeight: "1.2em",
                     marginLeft: "20%",
-                    marginTop: "3em",
+                    marginTop: "6em",
                     position: "absolute",
                     width: "60%"
                 });
