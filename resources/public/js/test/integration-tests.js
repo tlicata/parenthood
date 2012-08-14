@@ -88,7 +88,9 @@
         deepEqual(screen, getScreen(index), "screen " + index);
 
         if (isInstructions(screen)) {
-            equal(screen.instructions, getInstructions(), "instructions");
+            equal(screen.instructions.toLowerCase(),
+                  getInstructions().toLowerCase(),
+                  "instructions");
             fakeEnterPress();
         } else if (isInput(screen)) {
             var active = $(document.activeElement);
