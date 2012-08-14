@@ -22,10 +22,10 @@
   (let [live (live-iat unique)
         test {:head (concat
                      (include-js
-                      "http://code.jquery.com/qunit/git/qunit.js"
+                      "https://code.jquery.com/qunit/git/qunit.js"
                       "/js/test/integration-tests.js")
                      (include-css
-                      "http://code.jquery.com/qunit/git/qunit.css"))
+                      "https://code.jquery.com/qunit/git/qunit.css"))
               :body [[:h1#qunit-header "Integration Tests"]
                      [:h2#qunit-banner]
                      [:div#qunit-testrunner-toolbar]
