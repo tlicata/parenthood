@@ -81,6 +81,14 @@
         return isCorrectKey(screen, getRightKeyCode());
     };
 
+    // The HTML I put into IE7/8 isn't always the html that
+    // comes out. Lowercase tags (<br>) get turned into
+    // uppercase tags (<BR>) and multiple spaces get turned
+    // into one.
+    var normalizeForIE = function (str) {
+        return str.toLowerCase().replace("  ", " ");
+    };
+
     // Put a screen through its exercises.
     var workout = function (index) {
         // Make sure current screen is correct.
@@ -88,8 +96,8 @@
         deepEqual(screen, getScreen(index), "screen " + index);
 
         if (isInstructions(screen)) {
-            equal(screen.instructions.toLowerCase(),
-                  getInstructions().toLowerCase(),
+            equal(normalizeForIE(screen.instructions),
+                  normalizeForIE(getInstructions()),
                   "instructions");
             fakeEnterPress();
         } else if (isInput(screen)) {
