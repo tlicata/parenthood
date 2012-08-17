@@ -530,7 +530,7 @@ window.parenthood = (function ($) {
         // Some elements are absolutely positioned, and when being
         // run on the tests page they don't "bump" the testing UI
         // down, so they overlap. Fix that by setting a height;
-        var SPACE_FOR_TESTS = "275";
+        var SPACE_FOR_TESTS = 275;
 
         var container = null;
 
