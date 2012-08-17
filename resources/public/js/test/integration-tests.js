@@ -94,6 +94,13 @@
             fakeEnterPress();
         } else if (isInput(screen)) {
             var active = $(document.activeElement);
+            // IE7/8 sometimes have the body as the active element.
+            if (!active.is("input")) {
+                active = $("input");
+                if (active.length > 1) {
+                    throw new Error("should only be one input");
+                }
+            }
             if (active.is("input")) {
                 var value = INPUTS[screen.id];
                 active.val(value);
