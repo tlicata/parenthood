@@ -5,7 +5,8 @@
   (:require [noir.response :as response]
             [noir.request :as request]
             [noir.server :as server]
-            [parenthood.db :as db]))
+            [parenthood.db :as db]
+            [parenthood.email :as email]))
 
 (def test-id "test-abc-123")
 
@@ -49,11 +50,14 @@
   (let [request (request/ring-request)
         user-agent (get-in request [:headers "user-agent"])
         fresh (db/update-response id unique user-agent results)]
-    (if (nil? fresh)
-      (response/status 403 "cannot overwrite existing data")
-      (do
-        (println (str "successful post to " id ":" unique))
-        (response/json fresh)))))
+    (do
+      (email/send-email (str "results for user " id)
+                        (str results user-agent))
+      (if (nil? fresh)
+        (response/status 403 "cannot overwrite existing data")
+        (do
+          (println (str "successful post to " id ":" unique))
+          (response/json fresh))))))
 
 (defpage "/" [] "Hello World!")
 
