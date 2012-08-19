@@ -57,9 +57,7 @@
         (catch Exception e nil))
       (if (nil? fresh)
         (response/status 403 "cannot overwrite existing data")
-        (do
-          (println (str "successful post to " id ":" unique))
-          (response/json fresh))))))
+        (response/json fresh)))))
 
 (defpage "/" [] "Hello World!")
 
