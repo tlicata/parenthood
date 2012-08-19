@@ -86,7 +86,7 @@
     // uppercase tags (<BR>) and multiple spaces get turned
     // into one.
     var normalizeForIE = function (str) {
-        return str.toLowerCase().replace("  ", " ");
+        return str.toLowerCase().replace(/  /g, " ");
     };
 
     // Put a screen through its exercises.
