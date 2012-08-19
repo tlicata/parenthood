@@ -752,15 +752,15 @@ window.parenthood = (function ($) {
         });
 
         var submitResults = _.once(function (data) {
-            var error = display.showErrorMessage;
-            var end = display.showEndMessage;
             promise = $.ajax({
                 data: {
                     results: JSON.stringify(data),
                     unique: unique
                 },
+                error: display.showErrorMessage,
+                success: display.showEndMessage,
                 type: "POST"
-            }).error(error).success(end);
+            });
         });
 
         return {
