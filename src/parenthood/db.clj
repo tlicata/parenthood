@@ -45,10 +45,7 @@
         fresh (assoc stale :results results)]
     (if (and (= (:user-agent stale) user-agent)
              (not (has-response-data? stale)))
-      (do
-        (println (str "updating response " id ":" unique))
-        (redis/hset db key unique (json/json-str fresh)))
-      (println (string/join ":" ["not updating response " id unique user-agent])))))
+      (redis/hset db key unique (json/json-str fresh)))))
 (defn del-response
   ([id]
      (redis/del db [(response-key id)]))
