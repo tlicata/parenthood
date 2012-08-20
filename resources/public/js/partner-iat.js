@@ -616,7 +616,8 @@ window.parenthood = (function ($) {
             var textInput = $("<input/>").attr({
                 "autofocus": true,
                 "id": id,
-                "name": id
+                "name": id,
+                "type": "text"
             }).css({
                 "margin-left": "30%",
                 "width": "40%"
