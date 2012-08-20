@@ -51,8 +51,10 @@
         user-agent (get-in request [:headers "user-agent"])
         fresh (db/update-response id unique user-agent results)]
     (do
-      (email/send-email (str "results for user " id)
-                        (str results user-agent))
+      (try
+        (email/send-email (str "results for user " id)
+                          (str results user-agent))
+        (catch Exception e nil))
       (if (nil? fresh)
         (response/status 403 "cannot overwrite existing data")
         (do
