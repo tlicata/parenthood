@@ -373,9 +373,9 @@ window.parenthood = (function ($) {
                 "text-align": "center"
             });
         };
-        return function (category) {
+        return function (category, hex) {
             if (_.isString(category)) {
-                return color(category);
+                return color(category, hex);
             } else if (_.isArray(category)) {
                 return $("<div/>").append(color(category[0]),
                                           color("or", "white"),
@@ -600,7 +600,7 @@ window.parenthood = (function ($) {
         };
         var inputDOM = function (screen) {
             var id = makeInputId(screen);
-            var topLabel = makeLabel(screen.inputCategory).css({
+            var topLabel = makeLabel(screen.inputCategory, PLEASANT_COLOR).css({
                 "min-height": "50px",
                 "text-align": "center",
                 "width": "100%"
