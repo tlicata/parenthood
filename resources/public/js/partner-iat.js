@@ -84,7 +84,7 @@ window.parenthood = (function ($) {
             "words one at a time in the middle of the computer screen. Your ",
             "task will be to classify the words as quickly as possible into the ",
             "following categories:<br><br>",
-            "\"Pleasant\", \"Unpleasant\"<br><br>",
+            "\"Pleasant\", \"Unpleasant\",<br><br>",
             "\"Your partner\" and \"Not your partner\"."].join("")
     }, {
         allowBackspace: true,
