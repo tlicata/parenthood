@@ -51,10 +51,20 @@ window.parenthood = (function ($) {
             return {word:word, category:category};
         });
     };
+    var grow = function (array, size) {
+        var more = array.concat();
+        if (isNaN(size)) {
+            return more;
+        }
+        while (more.length < size) {
+            more = more.concat(array);
+        }
+        return more.slice(0, size);
+    };
     var makePartnerTrials = function (count) {
         var half = Math.floor(count / 2);
-        var partner = _.shuffle(PARTNER_WORDS).slice(0, half);
-        var nonpartner = _.shuffle(NOT_PARTNER_WORDS).slice(0, count - half);
+        var partner = _.shuffle(grow(PARTNER_WORDS, half));
+        var nonpartner = _.shuffle(grow(NOT_PARTNER_WORDS, count - half));
 
         partner = makeTrials(partner, PARTNER_CATEGORY);
         nonpartner = makeTrials(nonpartner, NOT_PARTNER_CATEGORY);
@@ -869,11 +879,13 @@ window.parenthood = (function ($) {
         getScreen: function (idx) {
             return $.deepCopy(isNaN(idx) ? screen : SCREENS[idx]);
         },
+        grow: grow,
         init: init,
         isInput: isInput,
         isInstructions: isInstructions,
         isTrial: isTrial,
         makeLabel: makeLabel,
+        makePartnerTrials: makePartnerTrials,
         remote: remote,
         substitute: substitute,
         treeIntoScreens: treeIntoScreens

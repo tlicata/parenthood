@@ -46,4 +46,26 @@
             return count;
         }, 0));
     });
+
+    test("Grow an array", function () {
+        var grow = window.parenthood.grow;
+        var arr = [1, 2, 3, 4, 5];
+
+        equal(grow(arr).length, 5);
+        equal(grow(arr, -5).length, 0);
+        equal(grow(arr, 3).length, 3);
+        equal(grow(arr, 5).length, 5)
+        equal(grow(arr, 10).length, 10);
+    });
+
+    test("Generate partner trials", function () {
+        var makePartnerTrials = window.parenthood.makePartnerTrials;
+        var small = makePartnerTrials(4);
+        var exact = makePartnerTrials(10);
+        var big = makePartnerTrials(20);
+
+        equal(small.length, 4)
+        equal(exact.length, 10);
+        equal(big.length, 20);
+    });
 }());
