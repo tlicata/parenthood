@@ -1,4 +1,8 @@
 ;(function () {
+
+    var PARTNER_CATEGORY = window.parenthood.getPartnerCategory();
+    var NOT_PARTNER_CATEGORY = window.parenthood.getNotPartnerCategory();
+
     test("Deep copy arrays and object", function () {
         var arr = [1, 2, {foo: "bar"}];
         var arrCopy = $.deepCopy(arr);
@@ -67,5 +71,19 @@
         equal(small.length, 4)
         equal(exact.length, 10);
         equal(big.length, 20);
+
+        var isPartnerCategory = function (trial) {
+            return trial.category === PARTNER_CATEGORY;
+        };
+        var notPartnerCategory = function (trial) {
+            return trial.category === NOT_PARTNER_CATEGORY;
+        };
+
+        equal(_.filter(small, isPartnerCategory).length, 2);
+        equal(_.filter(small, notPartnerCategory).length, 2);
+        equal(_.filter(exact, isPartnerCategory).length, 5);
+        equal(_.filter(exact, notPartnerCategory).length, 5);
+        equal(_.filter(big, isPartnerCategory).length, 10);
+        equal(_.filter(big, notPartnerCategory).length, 10);
     });
 }());

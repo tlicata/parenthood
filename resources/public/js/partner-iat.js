@@ -873,8 +873,14 @@ window.parenthood = (function ($) {
         getInputRegex: function () {
             return INPUT_REGEX;
         },
+        getNotPartnerCategory: function () {
+            return NOT_PARTNER_CATEGORY;
+        },
         getNumScreens: function () {
             return SCREENS.length;
+        },
+        getPartnerCategory: function () {
+            return PARTNER_CATEGORY;
         },
         getScreen: function (idx) {
             return $.deepCopy(isNaN(idx) ? screen : SCREENS[idx]);
