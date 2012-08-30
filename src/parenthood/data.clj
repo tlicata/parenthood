@@ -29,11 +29,15 @@
      :tries (count responses)
      :done (- (:time (last responses)) start)}))
 
-(defn shrink-data [results]
-  (map shrink results))
-
-(defn generate-report []
-  (let [raw (db/only-responses)
-        parsed (map parse raw)
+(defn shrink-data [screens]
+  (map shrink screens))
+(defn make-readable [raw]
+  (let [parsed (map parse raw)
         readable (map #(shrink-data (:results %)) parsed)]
     readable))
+
+(defn generate-report
+  ([]
+     (make-readable (db/only-responses)))
+  ([id]
+     (make-readable (db/only-responses id))))
