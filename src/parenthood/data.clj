@@ -9,9 +9,9 @@
   (assoc data :results (json/read-json (:results data))))
 
 (defn screen-type [screen]
-  (if (contains? screen :prompt)
+  (if (contains? screen :id)
     :input
-    (if (contains? screen :instructions)
+    (if (contains? screen :blockname)
       :instructions
       (if (contains? screen :word) :trial :unknown))))
 

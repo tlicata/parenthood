@@ -747,8 +747,18 @@ window.parenthood = (function ($) {
         var results = [];
         var unique = null;
 
+        var shrink = function (completed) {
+            var smaller = $.deepCopy(completed);
+            if (isInstructions(completed)) {
+                delete smaller.instructions;
+            } else if (isInput(completed)) {
+                delete smaller.prompt;
+            }
+            return smaller;
+        };
+
         var addScreenInfo = function (completed) {
-            results.push($.deepCopy(completed));
+            results.push(shrink(completed));
         };
 
         var equalsResults = function (obj) {
