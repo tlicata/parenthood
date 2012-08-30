@@ -43,7 +43,7 @@
 
     // Some methods to pull the current state out of the IAT.
     var createCenterWord = window.parenthood.createCenterWord;
-    var equalsResults = window.parenthood.equalsResults;
+    var equalsResults = window.parenthood.remote.equalsResults;
     var getDelay = window.parenthood.getDelay;
     var getNumScreens = window.parenthood.getNumScreens;
     var getPromise = window.parenthood.remote.getPromise;

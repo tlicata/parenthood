@@ -738,14 +738,22 @@ window.parenthood = (function ($) {
     }());
 
     var input = {};
-    var results = [];
     var SCREENS = treeIntoScreens(BLOCKS);
     var screen = null;
 
     var remote = (function () {
 
         var promise = null;
+        var results = [];
         var unique = null;
+
+        var addScreenInfo = function (completed) {
+            results.push($.deepCopy(completed));
+        };
+
+        var equalsResults = function (obj) {
+            return _.isEqual(obj, results);
+        };
 
         var getPromise = function () {
             return promise;
@@ -763,12 +771,12 @@ window.parenthood = (function ($) {
             unique = uniq;
         });
 
-        var submitResults = _.once(function (data) {
+        var submitResults = _.once(function () {
             var error = display.showErrorMessage;
             var end = display.showEndMessage;
             promise = $.ajax({
                 data: {
-                    results: JSON.stringify(data),
+                    results: JSON.stringify(results),
                     unique: unique
                 },
                 type: "POST"
@@ -776,6 +784,8 @@ window.parenthood = (function ($) {
         });
 
         return {
+            addScreenInfo: addScreenInfo,
+            equalsResults: equalsResults,
             getPromise: getPromise,
             getTestData: getTestData,
             init: init,
@@ -799,7 +809,7 @@ window.parenthood = (function ($) {
     };
     var showNextScreen = function () {
         if (screen) {
-            results.push($.deepCopy(screen));
+            remote.addScreenInfo(screen);
         }
         show($.getNextItem(screen, SCREENS));
     };
@@ -829,7 +839,7 @@ window.parenthood = (function ($) {
                     // to further shut things down.
                     display.showSendingMessage();
                     $(document).off("keydown", handleKeyDown);
-                    remote.submitResults(results);
+                    remote.submitResults();
                 } else {
                     var doAdvanceTest = function () {
                         inReadMode = true;
@@ -863,9 +873,6 @@ window.parenthood = (function ($) {
         createCenterWord: createCenterWord,
         correctKey: correctKey,
         display: display,
-        equalsResults: function (obj) {
-            return _.isEqual(obj, results);
-        },
         getBlocks: function () {
             return BLOCKS;
         },
