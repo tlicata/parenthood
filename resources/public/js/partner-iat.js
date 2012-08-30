@@ -511,6 +511,7 @@ window.parenthood = (function ($) {
                     allowBackspace: block.allowBackspace,
                     left: block.leftWord,
                     right: block.rightWord,
+                    blockname: block.blockname || "",
                     instructions: block.instructions
                 });
             }
