@@ -114,6 +114,7 @@ window.parenthood = (function ($) {
             "\"Partner\".  All of the information recorded here is completely ",
             "confidential. We will delete this information after the study is ",
             "completed."].join(""),
+        block: "getTargetItems",
         trials: [
             {prompt: ["Please enter the name of your romantic partner. Please ",
                       "make sure to only capitalize the first letter in your ",
@@ -220,7 +221,7 @@ window.parenthood = (function ($) {
             id: "countryNot"
         }]
     }, {
-        block: "practice1",
+        block: "pleasantpractice",
         instructions: ["Put your middle or index fingers on the E and I keys of your ",
                        "keyboard. Words representing the categories at the top will ",
                        "appear one-by-one in the middle of the screen. When the item ",
@@ -236,7 +237,7 @@ window.parenthood = (function ($) {
         rightWord: PLEASANT_CATEGORY,
         trials: makePleasantTrials(20)
     }, {
-        block: "practice2",
+        block: "partnerleftpractice",
         instructions: ["Notice above that the categories have changed. You will ",
                        "now classify the items you provided earlier into the ",
                        "categories above. The rules are the same. When the item ",
@@ -249,7 +250,7 @@ window.parenthood = (function ($) {
         rightWord: NOT_PARTNER_CATEGORY,
         trials: makePartnerTrials(20)
     }, {
-        block: "practice3",
+        block: "compatiblepractice",
         instructions: ["Notice above that the four categories you saw separately ",
                        "now appear together. You will either classify the items you ",
                        "provided earlier into the categories Partner or Not Partner, ",
@@ -262,7 +263,7 @@ window.parenthood = (function ($) {
         rightWord: [UNPLEASANT_CATEGORY, NOT_PARTNER_CATEGORY],
         trials: makeMixedTrials(20)
     }, {
-        block: "test1",
+        block: "compatibletest",
         instructions: ["Sort the same four categories again. Remember to go as fast as ",
                        "you can while making as few mistakes as possible.<br>",
                        "The green and white labels and items may help you identify the ",
@@ -274,7 +275,7 @@ window.parenthood = (function ($) {
         rightWord: [UNPLEASANT_CATEGORY, NOT_PARTNER_CATEGORY],
         trials: makeMixedTrials(40)
     }, {
-        block: "practice4",
+        block: "partnerrightpractice",
         instructions: [
 		    "Notice above that there are only two categories and they have switched ",
             "positions. The category that was previously on the left is now on the ",
@@ -286,7 +287,7 @@ window.parenthood = (function ($) {
         rightWord: PARTNER_CATEGORY,
         trials: makePartnerTrials(20)
     }, {
-        block: "practice5",
+        block: "incompatiblepractice",
         instructions: [
             "Notice above that the four categories now appear together in a new ",
             "configuration. Remember, each item belongs to only one group.<br>",
@@ -298,7 +299,7 @@ window.parenthood = (function ($) {
         rightWord: [PARTNER_CATEGORY, UNPLEASANT_CATEGORY],
         trials: makeMixedTrials(20)
     }, {
-        block: "test2",
+        block: "incompatibletest",
         instructions: [
             "Sort the same four categories again. Remember to go as fast as you ",
             "can while making as few mistakes as possible.<br>",
