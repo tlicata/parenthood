@@ -21,7 +21,8 @@
    :cat (:inputCategory screen)
    :resp (:response screen)})
 (defmethod shrink :instructions [screen]
-  {:time (:time screen)})
+  {:time (:time screen)
+   :blockname (:blockname screen)})
 (defmethod shrink :trial [screen]
   (let [start (:time screen)
         responses (:responses screen)]
