@@ -818,9 +818,6 @@ window.parenthood = (function ($) {
         show($.getPreviousItem(screen, SCREENS));
     };
     var showNextScreen = function () {
-        if (screen) {
-            remote.addScreenInfo(screen);
-        }
         show($.getNextItem(screen, SCREENS));
     };
 
@@ -841,6 +838,7 @@ window.parenthood = (function ($) {
             if (correctKey(screen, key, time)) {
                 inReadMode = false;
                 display.softClear();
+                remote.addScreenInfo(screen);
                 if ($.isLastItem(screen, SCREENS)) {
                     // If user just finished last step, display
                     // a message of completion and leave test
