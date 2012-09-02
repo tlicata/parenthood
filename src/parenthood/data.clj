@@ -2,6 +2,16 @@
   (:require [clojure.data.json :as json]
             [parenthood.db :as db]))
 
+;; math
+(defn avg [times]
+  (/ (reduce + times) (count times)))
+(defn standard-deviation [times]
+  (let [n (count times)
+        mean (avg times)
+        intermediate (map #(Math/pow (- %1 mean) 2) times)]
+    (Math/sqrt
+          (/ (reduce + intermediate) n))))
+
 ;; when we get the data out of the database, the top level
 ;; has been parsed out of json, but the results value is
 ;; still in json, so we need to extract that.
