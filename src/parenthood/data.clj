@@ -21,6 +21,13 @@
 (defn trial? [screen]
   (= :trial (screen-type screen)))
 
+(defn under-300? [screen]
+  (and (trial? screen)
+       (< (:done screen) 300)))
+(defn over-1000? [screen]
+  (and (trial? screen)
+       (> (:done screen) 10000)))
+
 (defmulti shrink screen-type)
 (defmethod shrink :input [screen]
   {:id (:id screen)
