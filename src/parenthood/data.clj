@@ -18,6 +18,7 @@
 (defn parse [data]
   (assoc data :results (json/read-json (:results data))))
 
+;; functions for branching on screen type
 (defn screen-type [screen]
   (if (contains? screen :id)
     :input
@@ -31,6 +32,7 @@
 (defn trial? [screen]
   (= :trial (screen-type screen)))
 
+;; validation helpers
 (defn under-300? [screen]
   (and (trial? screen)
        (< (:done screen) 300)))
@@ -38,6 +40,7 @@
   (and (trial? screen)
        (> (:done screen) 10000)))
 
+;; turn raw data into a more minimal/readable format
 (defmulti shrink screen-type)
 (defmethod shrink :input [screen]
   {:id (:id screen)
