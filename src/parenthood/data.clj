@@ -14,6 +14,12 @@
     (if (contains? screen :blockname)
       :instructions
       (if (contains? screen :word) :trial :unknown))))
+(defn input? [screen]
+  (= :input (screen-type screen)))
+(defn instructions? [screen]
+  (= :instructions (screen-type screen)))
+(defn trial? [screen]
+  (= :trial (screen-type screen)))
 
 (defmulti shrink screen-type)
 (defmethod shrink :input [screen]
