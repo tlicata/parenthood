@@ -56,16 +56,57 @@
      :tries (count responses)
      :done (- (:time (last responses)) start)
      :correct (== 1 (count responses))}))
-
-(defn shrink-data [screens]
+(defn make-readable-shrink-data [screens]
   (map shrink screens))
-(defn make-readable [raw]
+(defn make-readable-helper [raw]
   (let [parsed (map parse raw)
-        readable (map #(shrink-data (:results %)) parsed)]
+        readable (map #(make-readable-shrink-data (:results %)) parsed)]
     readable))
+(defn make-readable [id]
+  (make-readable-helper (db/only-responses id)))
 
-(defn generate-report
-  ([]
-     (make-readable (db/only-responses)))
-  ([id]
-     (make-readable (db/only-responses id))))
+;; extract a single block (or only its trials) from a user's test
+(defn get-block [blockname screens]
+  (let [start (drop-while #(not= (:blockname %) blockname) screens)]
+    (take-while (fn [trial]
+                  (let [name (:blockname trial)]
+                    (or (nil? name) (= name blockname))))
+                start)))
+(defn get-trials [blockname screens]
+  (let [block (get-block blockname screens)]
+    (filter trial? block)))
+
+;; helper functions
+(defn pluck-times [trials]
+  (map :done trials))
+(defn set-less-than-300-to-300 [trial]
+  (if (under-300? trial)
+    (assoc trial :done 300)
+    trial))
+
+(defn score [incomp comp]
+  (let [incomp-times (pluck-times incomp)
+        comp-times (pluck-times comp)
+        incomp-avg-latency (avg incomp-times)
+        comp-avg-latency (avg comp-times)
+        std-dev (standard-deviation (concat incomp-times comp-times))]
+    (/ (- incomp-avg-latency comp-avg-latency) std-dev)))
+
+(defn generate-iat [id transform]
+  (let [readable (first (make-readable id))
+        trials (filter trial? readable)
+        total-incorrect (count (remove :correct trials))
+        percent-under-300 (/ (count (filter under-300? trials)) (count trials))
+        adjusted (transform readable)
+        pract-score (score (get-trials "incompatiblepractice" adjusted)
+                           (get-trials "compatiblepractice" adjusted))
+        test-score (score (get-trials  "compatiblepractice" adjusted)
+                          (get-trials "incompatibletest" adjusted))]
+    (/ (+ pract-score test-score) 2)))
+
+(defn generate-iatall [id]
+  (generate-iat id identity))
+(defn generate-iat300recode [id]
+  (generate-iat id #(map set-less-than-300-to-300 %)))
+(defn generate-iat10trials [id]
+  (generate-iat id #(remove over-1000? %)))
