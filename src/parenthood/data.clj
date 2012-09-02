@@ -34,7 +34,8 @@
         responses (:responses screen)]
     {:word (:word screen)
      :tries (count responses)
-     :done (- (:time (last responses)) start)}))
+     :done (- (:time (last responses)) start)
+     :correct (== 1 (count responses))}))
 
 (defn shrink-data [screens]
   (map shrink screens))
