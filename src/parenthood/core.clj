@@ -5,6 +5,7 @@
   (:require [noir.response :as response]
             [noir.request :as request]
             [noir.server :as server]
+            [parenthood.data :as data]
             [parenthood.db :as db]
             [parenthood.email :as email]))
 
@@ -53,7 +54,7 @@
     (do
       (try
         (email/send-email (str "results for user " id)
-                          (str results user-agent))
+                          (str (data/generate-iat id) results user-agent))
         (catch Exception e nil))
       (if (nil? fresh)
         (response/status 403 "cannot overwrite existing data")
