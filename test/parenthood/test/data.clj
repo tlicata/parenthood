@@ -27,3 +27,19 @@
     (is (not (over-10000? under)))
     (is (not (over-10000? on)))
     (is (over-10000? over))))
+
+(deftest test-get-block
+  (let [screens [{:time "0" :blockname "foo"}
+                 {:time "100" :blockname "bar"}
+                 {:id "x" :cat "x" :resp "x"}
+                 {:id "y" :cat "y" :resp "y"}
+                 {:time "1000" :blockname "baz"}
+                 {:done "1200" :word "a"}
+                 {:done "1600" :word "b"}
+                 {:done "2000" :word "c"}]]
+    (is (= 1 (count (get-block "foo" screens))))
+    (is (= 0 (count (get-trials "foo" screens))))
+    (is (= 3 (count (get-block "bar" screens))))
+    (is (= 0 (count (get-trials "bar" screens))))
+    (is (= 4 (count (get-block "baz" screens))))
+    (is (= 3 (count (get-trials "baz" screens))))))
