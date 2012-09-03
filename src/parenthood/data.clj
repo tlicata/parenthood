@@ -91,22 +91,19 @@
         comp-avg-latency (avg comp-times)
         std-dev (standard-deviation (concat incomp-times comp-times))]
     (/ (- incomp-avg-latency comp-avg-latency) std-dev)))
+(defn score-iat [screens]
+  (let [pract (score (get-trials "incompatiblepractice" screens)
+                     (get-trials "compatiblepractice" screens))
+        test (score (get-trials  "compatiblepractice" screens)
+                    (get-trials "incompatibletest" screens))]
+    (avg [pract test])))
 
-(defn generate-iat [id transform]
+(defn generate-iat [id]
   (let [readable (first (make-readable id))
-        trials (filter trial? readable)
-        total-incorrect (count (remove :correct trials))
-        percent-under-300 (/ (count (filter under-300? trials)) (count trials))
-        adjusted (transform readable)
-        pract-score (score (get-trials "incompatiblepractice" adjusted)
-                           (get-trials "compatiblepractice" adjusted))
-        test-score (score (get-trials  "compatiblepractice" adjusted)
-                          (get-trials "incompatibletest" adjusted))]
-    (/ (+ pract-score test-score) 2)))
-
-(defn generate-iatall [id]
-  (generate-iat id identity))
-(defn generate-iat300recode [id]
-  (generate-iat id #(map set-less-than-300-to-300 %)))
-(defn generate-iat10trials [id]
-  (generate-iat id #(remove over-1000? %)))
+        trials (filter trial? readable)]
+    {:subjectId id
+     :total_incorrect (count (remove :correct trials))
+     :flat_300_sum (/ (count (filter under-300? trials)) (count trials))
+     :iatall (score-iat readable)
+     :iat300recode (score-iat (map set-less-than-300-to-300 readable))
+     :iat10trials (score-iat (remove over-1000? readable))}))
