@@ -36,7 +36,7 @@
 (defn under-300? [screen]
   (and (trial? screen)
        (< (:done screen) 300)))
-(defn over-1000? [screen]
+(defn over-10000? [screen]
   (and (trial? screen)
        (> (:done screen) 10000)))
 
@@ -106,4 +106,4 @@
      :flat_300_sum (/ (count (filter under-300? trials)) (count trials))
      :iatall (score-iat readable)
      :iat300recode (score-iat (map set-less-than-300-to-300 readable))
-     :iat10trials (score-iat (remove over-1000? readable))}))
+     :iat10trials (score-iat (remove over-10000? readable))}))
