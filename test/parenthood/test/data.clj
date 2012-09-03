@@ -1,6 +1,11 @@
 (ns parenthood.test.data
   (:use [parenthood.data])
-  (:use [clojure.test]))
+  (:use [clojure.test])
+  (:require [clojure.math.numeric-tower :as math]))
+
+(defn round-places [number decimals]
+  (let [factor (math/expt 10.0 decimals)]
+    (/ (math/round (* factor number)) factor)))
 
 (deftest test-avg
   (is (= (avg [1 2 3 4 5]) 3))
@@ -9,8 +14,8 @@
   (is (= (avg [-2 -1 0 1 2]) 0)))
 
 (deftest test-std-dev
-  (is (= (standard-deviation [2 4 4 4 5 5 7 9]) 2.0))
-  (is (= (standard-deviation [4 2 5 8 6.0]) 2.0)))
+  (is (= (round-places (standard-deviation [2 4 4 4 5 5 7 9]) 2) 2.14))
+  (is (= (round-places (standard-deviation [4 2 5 8 6]) 2) 2.24)))
 
 (deftest test-under-300
   (let [under {:done 200 :word "foo"}

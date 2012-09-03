@@ -10,7 +10,7 @@
         mean (avg times)
         intermediate (map #(Math/pow (- %1 mean) 2) times)]
     (Math/sqrt
-          (/ (reduce + intermediate) n))))
+          (/ (reduce + intermediate) (- n 1)))))
 
 ;; when we get the data out of the database, the top level
 ;; has been parsed out of json, but the results value is
