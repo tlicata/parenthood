@@ -47,3 +47,14 @@
 (deftest test-pluck-times
   (let [screens [{:done 1} {:done 2} {:done 3}]]
     (is (= [1 2 3] (pluck-times screens)))))
+
+(deftest test-set-less-than-300-to-300
+  (let [trials [{:done 100 :word "a"}
+                {:done 200 :word "b"}
+                {:done 300 :word "c"}
+                {:done 400 :word "d"}]]
+    (is (= (map set-less-than-300-to-300 trials)
+           [{:done 300 :word "a"}
+            {:done 300 :word "b"}
+            {:done 300 :word "c"}
+            {:done 400 :word "d"}]))))
