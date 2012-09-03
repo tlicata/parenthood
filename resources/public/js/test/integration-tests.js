@@ -170,6 +170,7 @@
                     var obj = JSON.parse(response);
                     var results = JSON.parse(obj.results);
                     ok(equalsResults(results), "saved data equals sent data");
+                    equal(results.length, 201);
                     start();
                 });
             } else {
