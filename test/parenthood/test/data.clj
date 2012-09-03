@@ -43,3 +43,7 @@
     (is (= 0 (count (get-trials "bar" screens))))
     (is (= 4 (count (get-block "baz" screens))))
     (is (= 3 (count (get-trials "baz" screens))))))
+
+(deftest test-pluck-times
+  (let [screens [{:done 1} {:done 2} {:done 3}]]
+    (is (= [1 2 3] (pluck-times screens)))))
