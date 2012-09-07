@@ -106,4 +106,5 @@
      :flat_300_percent (/ (count (filter under-300? trials)) (count trials))
      :iatall (score-iat readable)
      :iat300recode (score-iat (map set-less-than-300-to-300 readable))
+     :iat300remove (score-iat (remove under-300? readable))
      :iat10trials (score-iat (remove over-10000? readable))}))
