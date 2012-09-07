@@ -11,11 +11,16 @@
   (is (= (avg [1 2 3 4 5]) 3))
   (is (= (avg [0 0 0 0 0]) 0))
   (is (= (avg [2]) 2))
-  (is (= (avg [-2 -1 0 1 2]) 0)))
+  (is (= (avg [-2 -1 0 1 2]) 0))
+  (is (nil? (avg nil)))
+  (is (nil? (avg []))))
 
 (deftest test-std-dev
   (is (= (round-places (standard-deviation [2 4 4 4 5 5 7 9]) 2) 2.14))
-  (is (= (round-places (standard-deviation [4 2 5 8 6]) 2) 2.24)))
+  (is (= (round-places (standard-deviation [4 2 5 8 6]) 2) 2.24))
+  (is (nil? (standard-deviation nil)))
+  (is (nil? (standard-deviation []))))
+
 
 (deftest test-under-300
   (let [under {:done 200 :word "foo"}

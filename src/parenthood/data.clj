@@ -4,13 +4,16 @@
 
 ;; math
 (defn avg [times]
-  (/ (reduce + times) (count times)))
+  (let [total (count times)]
+    (when-not (= total 0)
+      (/ (reduce + times) total))))
 (defn standard-deviation [times]
-  (let [n (count times)
-        mean (avg times)
-        intermediate (map #(Math/pow (- %1 mean) 2) times)]
-    (Math/sqrt
-          (/ (reduce + intermediate) (- n 1)))))
+  (let [n (count times)]
+    (when-not (= n 0)
+      (let [mean (avg times)
+            intermediate (map #(Math/pow (- %1 mean) 2) times)]
+        (Math/sqrt
+         (/ (reduce + intermediate) (- n 1)))))))
 
 ;; when we get the data out of the database, the top level
 ;; has been parsed out of json, but the results value is
