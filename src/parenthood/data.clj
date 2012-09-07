@@ -101,13 +101,19 @@
                     (get-trials "incompatibletest" screens))]
     (avg [pract test])))
 
-(defn generate-iat [id]
-  (let [readable (first (make-readable id))
-        trials (filter trial? readable)]
-    {:subjectId id
-     :total_incorrect (count (remove :correct trials))
-     :flat_300_percent (/ (count (filter under-300? trials)) (count trials))
-     :iatall (score-iat readable)
-     :iat300recode (score-iat (map set-less-than-300-to-300 readable))
-     :iat300remove (score-iat (remove under-300? readable))
-     :iat10trials (score-iat (remove over-10000? readable))}))
+(defn generate-iat
+  ([]
+     (let [ids (db/get-response)]
+       (map generate-iat ids)))
+  ([id]
+     (flatten
+      (map #(let [trials (filter trial? %)
+                  total (count trials)]
+              {:subjectId id
+               :total_incorrect (count (remove :correct trials))
+               :flat_300_percent (/ (count (filter under-300? trials)) total)
+               :iatall (score-iat %)
+               :iat300recode (score-iat (map set-less-than-300-to-300 %))
+               :iat300remove (score-iat (remove under-300? %))
+               :iat10trials (score-iat (remove over-10000? %))})
+           (make-readable id)))))
