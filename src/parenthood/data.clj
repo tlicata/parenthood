@@ -11,7 +11,7 @@
   (let [n (count times)]
     (when-not (= n 0)
       (let [mean (avg times)
-            intermediate (map #(Math/pow (- %1 mean) 2) times)]
+            intermediate (map #(Math/pow (- % mean) 2) times)]
         (Math/sqrt
          (/ (reduce + intermediate) (- n 1)))))))
 
