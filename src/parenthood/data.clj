@@ -61,12 +61,10 @@
      :correct (== 1 (count responses))}))
 (defn make-readable-shrink-data [screens]
   (map shrink screens))
-(defn make-readable-helper [raw]
+(defn make-readable [raw]
   (let [parsed (map parse raw)
         readable (map #(make-readable-shrink-data (:results %)) parsed)]
     readable))
-(defn make-readable [id]
-  (make-readable-helper (db/only-responses id)))
 
 ;; extract a single block (or only its trials) from a user's test
 (defn get-block [blockname screens]
@@ -116,4 +114,4 @@
                :iat300recode (score-iat (map set-less-than-300-to-300 %))
                :iat300remove (score-iat (remove under-300? %))
                :iat10trials (score-iat (remove over-10000? %))})
-           (make-readable id)))))
+           (make-readable (db/only-responses id))))))
