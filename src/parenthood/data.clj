@@ -56,8 +56,7 @@
 (defn make-readable-shrink-data [screens]
   (map shrink screens))
 (defn make-readable [raw]
-  (let [readable (map #(make-readable-shrink-data (:results %)) raw)]
-    readable))
+  (map #(make-readable-shrink-data (:results %)) raw))
 
 ;; extract a single block (or only its trials) from a user's test
 (defn get-block [blockname screens]
