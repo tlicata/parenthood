@@ -15,12 +15,6 @@
         (Math/sqrt
          (/ (reduce + intermediate) (- n 1)))))))
 
-;; when we get the data out of the database, the top level
-;; has been parsed out of json, but the results value is
-;; still in json, so we need to extract that.
-(defn parse [data]
-  (assoc data :results (json/read-json (:results data))))
-
 ;; functions for branching on screen type
 (defn screen-type [screen]
   (if (contains? screen :id)
@@ -62,8 +56,7 @@
 (defn make-readable-shrink-data [screens]
   (map shrink screens))
 (defn make-readable [raw]
-  (let [parsed (map parse raw)
-        readable (map #(make-readable-shrink-data (:results %)) parsed)]
+  (let [readable (map #(make-readable-shrink-data (:results %)) raw)]
     readable))
 
 ;; extract a single block (or only its trials) from a user's test
