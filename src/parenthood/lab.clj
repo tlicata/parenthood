@@ -1,4 +1,6 @@
 (ns parenthood.lab
+  (:use [clojure.string :only [join]]
+        [clojure-csv.core :only [write-csv]])
   (:require [clojure.data.json :as json]
             [parenthood.db :as db]
             [parenthood.data :as data]))
@@ -33,6 +35,16 @@
 (defn append-id [id screens]
   (map #(assoc % :subject id) screens))
 
+(defn make-csv [results]
+  (let [csv-head ["date" "time" "subject" "blockcode" "blocknum"
+                  "response" "correct" "latency"]
+        to-csv (fn [%]
+                 [(:date %) (:time %) (:subject %)
+                  (:blockcode %) (:blocknum %)
+                  (if (nil? (:resp %)) "" (:resp %))
+                  (if (:correct %) "1" "0") (str (:done %))])]
+    (write-csv (concat [csv-head] (map to-csv results)) :end-of-line "\r\n")))
+
 (defn output-lab-iat-format
   ([]
      (let [ids (db/get-response)]
@@ -43,5 +55,5 @@
         (let [all (get-all-blocks results)
               with-dates (append-day-and-time all)
               with-ids (append-id id with-dates)]
-          with-ids))
+          (make-csv (remove data/instructions? with-ids))))
       (data/make-readable (db/only-responses id)))))
