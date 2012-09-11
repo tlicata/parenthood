@@ -3,12 +3,25 @@
             [parenthood.db :as db]
             [parenthood.data :as data]))
 
+(defn get-num [blockname]
+  (case blockname
+    "getTargetItems" 1
+    "incompatiblepractice" 4
+    "incompatibletest" 6
+    "compatiblepractice" 8
+    "compatibletest" 10))
+
+(defn with-blockcode [blockname screens]
+  (let [existing (data/get-block blockname screens)
+        to-append {:blockcode blockname :blocknum (get-num blockname)}]
+    (map #(merge % to-append) existing)))
+
 (defn get-all-blocks [screens]
-  (concat (data/get-block "getTargetItems" screens)
-          (data/get-block "incompatiblepractice" screens)
-          (data/get-block "incompatibletest" screens)
-          (data/get-block "compatiblepractice" screens)
-          (data/get-block "compatibletest" screens)))
+  (concat (with-blockcode "getTargetItems" screens)
+          (with-blockcode "incompatiblepractice" screens)
+          (with-blockcode "incompatibletest" screens)
+          (with-blockcode "compatiblepractice" screens)
+          (with-blockcode "compatibletest" screens)))
 
 (defn append-day-and-time [screens]
   (let [date (java.util.Date. (:time (first screens)))
@@ -26,9 +39,9 @@
        (map output-lab-iat-format ids)))
   ([id]
      (map
-      (fn [{results :results}]
+      (fn [results]
         (let [all (get-all-blocks results)
               with-dates (append-day-and-time all)
               with-ids (append-id id with-dates)]
           with-ids))
-      (db/only-responses id))))
+      (data/make-readable (db/only-responses id)))))
