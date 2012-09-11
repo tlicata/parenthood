@@ -5,11 +5,11 @@
 
 (defn get-num [blockname]
   (case blockname
-    "getTargetItems" 1
-    "incompatiblepractice" 4
-    "incompatibletest" 6
-    "compatiblepractice" 8
-    "compatibletest" 10))
+    "getTargetItems" "1"
+    "incompatiblepractice" "4"
+    "incompatibletest" "6"
+    "compatiblepractice" "8"
+    "compatibletest" "10"))
 
 (defn with-blockcode [blockname screens]
   (let [existing (data/get-block blockname screens)
