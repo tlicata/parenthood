@@ -68,3 +68,19 @@
             {:done 300 :word "b"}
             {:done 300 :word "c"}
             {:done 400 :word "d"}]))))
+
+(deftest test-make-readable
+  (let [screens [{:results [{:blockname "" :time 1346622394861}
+                             {:blockname "" :time 1346622394989}
+                             {:blockname "getTargetItems" :time 1346622395443}
+                             {:id "nameCategory"
+                              :response "Jane" :time 1346622398450}
+                             {:id "first" :inputCategory "Jane"
+                              :response "Jane Again" :time 1346622398912}]
+                   :user-agent ""}]
+        pruned (first (make-readable screens))]
+    (is (= (:blockname (first pruned)) ""))
+    (is (= (:blockname (second pruned)) ""))
+    (is (= (:blockname (nth pruned 2)) "getTargetItems"))
+    (is (= (:resp (nth pruned 3)) "Jane"))
+    (is (= (:resp (nth pruned 4)) "Jane Again"))))
