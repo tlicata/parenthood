@@ -37,7 +37,7 @@
 
 (defn make-csv [results]
   (let [csv-head ["date" "time" "subject" "blockcode" "blocknum"
-                  "response" "correct" "latency"]
+                  "response" "correct" "RT"]
         to-csv (fn [%]
                  [(:date %) (:time %) (:subject %)
                   (:blockcode %) (:blocknum %)
