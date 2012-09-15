@@ -81,6 +81,11 @@
 (def incomp-test "incompatibletest")
 (def comp-test "compatibletest")
 
+(def scoreable-blocks [incomp-pract comp-pract incomp-test comp-test])
+
+(defn get-scoreable-trials [screens]
+  (apply concat (map #(get-trials % screens) scoreable-blocks)))
+
 (defn score [incomp comp]
   (let [incomp-times (pluck-times incomp)
         comp-times (pluck-times comp)
@@ -101,7 +106,7 @@
        (map generate-iat ids)))
   ([id]
      (flatten
-      (map #(let [trials (filter trial? %)
+      (map #(let [trials (get-scoreable-trials %)
                   total (count trials)]
               {:subjectId id
                :total_incorrect (count (remove :correct trials))
