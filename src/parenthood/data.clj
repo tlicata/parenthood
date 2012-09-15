@@ -75,6 +75,12 @@
     (assoc trial :done 300)
     trial))
 
+;; scoring
+(def incomp-pract "incompatiblepractice")
+(def comp-pract "compatiblepractice")
+(def incomp-test "incompatibletest")
+(def comp-test "compatibletest")
+
 (defn score [incomp comp]
   (let [incomp-times (pluck-times incomp)
         comp-times (pluck-times comp)
@@ -83,10 +89,10 @@
         std-dev (standard-deviation (concat incomp-times comp-times))]
     (/ (- incomp-avg-latency comp-avg-latency) std-dev)))
 (defn score-iat [screens]
-  (let [pract (score (get-trials "incompatiblepractice" screens)
-                     (get-trials "compatiblepractice" screens))
-        test (score (get-trials  "compatiblepractice" screens)
-                    (get-trials "incompatibletest" screens))]
+  (let [pract (score (get-trials incomp-pract screens)
+                     (get-trials comp-pract screens))
+        test (score (get-trials incomp-test screens)
+                    (get-trials comp-test screens))]
     (avg [pract test])))
 
 (defn generate-iat
