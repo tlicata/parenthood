@@ -57,3 +57,9 @@
               with-ids (append-id id with-dates)]
           (make-csv (remove data/instructions? with-ids))))
       (data/make-readable (db/only-responses id)))))
+
+(defn write-to-file [id]
+  (let [data (output-lab-iat-format id)]
+    (with-open [w (clojure.java.io/writer (str id ".csv"))]
+      (doseq [line data]
+        (.write w line)))))
