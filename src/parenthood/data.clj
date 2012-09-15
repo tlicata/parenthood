@@ -99,7 +99,7 @@
                   total (count trials)]
               {:subjectId id
                :total_incorrect (count (remove :correct trials))
-               :flat_300_percent (/ (count (filter under-300? trials)) total)
+               :flat_300_percent (float (/ (count (filter under-300? trials)) total))
                :iatall (score-iat %)
                :iat300recode (score-iat (map set-less-than-300-to-300 %))
                :iat300remove (score-iat (remove under-300? %))
