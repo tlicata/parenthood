@@ -277,7 +277,7 @@ window.parenthood = (function ($) {
     }, {
         blockname: "partnerrightpractice",
         instructions: [
-		    "Notice above that there are only two categories and they have switched ",
+            "Notice above that there are only two categories and they have switched ",
             "positions. The category that was previously on the left is now on the ",
             "right, and the category that was on the right is now on the left. ",
             "Practice this new configuration.<br>",
@@ -377,7 +377,7 @@ window.parenthood = (function ($) {
         var color = function (category, hex) {
             if (typeof hex == "undefined") {
                 hex = isPleasant(category) ? PLEASANT_COLOR : PARTNER_COLOR;
-            };
+            }
             return $("<div/>").text(category).css({
                 "color": hex,
                 "font-size": "1.4em",
@@ -391,7 +391,7 @@ window.parenthood = (function ($) {
                 return $("<div/>").append(color(category[0]),
                                           color("or", "white"),
                                           color(category[1]));
-            };
+            }
             return color("");
         };
     }());
@@ -552,7 +552,7 @@ window.parenthood = (function ($) {
         };
         var hardClear = function () {
             container.empty();
-        }
+        };
 
         var error = (function () {
             var show = function () {
@@ -564,7 +564,7 @@ window.parenthood = (function ($) {
             return {
                 show: show,
                 hide: hide
-            }
+            };
         }());
 
         var makeInputId = function (screen) {
@@ -579,7 +579,7 @@ window.parenthood = (function ($) {
                     "text-align": "center",
                     "width": "100%"
                 });
-            }
+            };
             var show = function (message) {
                 hardClear();
                 var elem = $("<div/>").text(message);
@@ -873,7 +873,7 @@ window.parenthood = (function ($) {
         };
 
         showNextScreen();
-        $(document).on("keydown", handleKeyDown)
+        $(document).on("keydown", handleKeyDown);
     });
 
     // Expose some methods. Mainly for testing.
