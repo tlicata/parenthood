@@ -91,6 +91,13 @@
 (defn score [incomp comp]
   (let [incomp-times (pluck-times incomp)
         comp-times (pluck-times comp)
+        mean-difference (- (avg incomp-times) (avg comp-times))
+        avg-std (avg [(standard-deviation incomp-times)
+                      (standard-deviation comp-times)])]
+    (/ mean-difference avg-std)))
+(defn score-my-version [incomp comp]
+  (let [incomp-times (pluck-times incomp)
+        comp-times (pluck-times comp)
         incomp-avg-latency (avg incomp-times)
         comp-avg-latency (avg comp-times)
         std-dev (standard-deviation (concat incomp-times comp-times))]
