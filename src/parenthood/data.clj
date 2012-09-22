@@ -9,11 +9,13 @@
       (/ (reduce + times) total))))
 (defn standard-deviation [times]
   (let [n (count times)]
-    (when-not (= n 0)
-      (let [mean (avg times)
-            intermediate (map #(Math/pow (- % mean) 2) times)]
-        (Math/sqrt
-         (/ (reduce + intermediate) (- n 1)))))))
+    (if (= n 1)
+      (first times)
+      (when-not (= n 0)
+        (let [mean (avg times)
+              intermediate (map #(Math/pow (- % mean) 2) times)]
+          (Math/sqrt
+           (/ (reduce + intermediate) (- n 1))))))))
 
 ;; functions for branching on screen type
 (defn screen-type [screen]
