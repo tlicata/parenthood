@@ -88,20 +88,18 @@
 (defn get-scoreable-trials [screens]
   (apply concat (map #(get-trials % screens) scoreable-blocks)))
 
+(defn score-lab-version [incomp comp mean-difference]
+  (let [avg-std (avg [(standard-deviation incomp)
+                      (standard-deviation comp)])]
+    (/ mean-difference avg-std)))
+(defn score-my-version [incomp comp mean-difference]
+  (let [std-dev (standard-deviation (concat incomp comp))]
+    (/ mean-difference std-dev)))
 (defn score [incomp comp]
   (let [incomp-times (pluck-times incomp)
         comp-times (pluck-times comp)
-        mean-difference (- (avg incomp-times) (avg comp-times))
-        avg-std (avg [(standard-deviation incomp-times)
-                      (standard-deviation comp-times)])]
-    (/ mean-difference avg-std)))
-(defn score-my-version [incomp comp]
-  (let [incomp-times (pluck-times incomp)
-        comp-times (pluck-times comp)
-        incomp-avg-latency (avg incomp-times)
-        comp-avg-latency (avg comp-times)
-        std-dev (standard-deviation (concat incomp-times comp-times))]
-    (/ (- incomp-avg-latency comp-avg-latency) std-dev)))
+        mean-difference (- (avg incomp-times) (avg comp-times))]
+    (score-lab-version incomp-times comp-times  mean-difference)))
 (defn score-iat [screens]
   (let [pract (score (get-trials incomp-pract screens)
                      (get-trials comp-pract screens))
