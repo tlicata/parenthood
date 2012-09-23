@@ -1,3 +1,5 @@
+var _;
+
 window.parenthood = (function ($) {
     var PLEASANT_WORDS = [
         "Vacation",
