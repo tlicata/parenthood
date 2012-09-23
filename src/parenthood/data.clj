@@ -9,17 +9,13 @@
       (/ (reduce + times) total))))
 (defn standard-deviation [times]
   (let [n (count times)]
-    (when-not (= n 0)
-      (let [mean (avg times)
-            intermediate (map #(Math/pow (- % mean) 2) times)]
-        (Math/sqrt
-         (/ (reduce + intermediate) (- n 1)))))))
-
-;; when we get the data out of the database, the top level
-;; has been parsed out of json, but the results value is
-;; still in json, so we need to extract that.
-(defn parse [data]
-  (assoc data :results (json/read-json (:results data))))
+    (if (= n 1)
+      (first times)
+      (when-not (= n 0)
+        (let [mean (avg times)
+              intermediate (map #(Math/pow (- % mean) 2) times)]
+          (Math/sqrt
+           (/ (reduce + intermediate) (- n 1))))))))
 
 ;; functions for branching on screen type
 (defn screen-type [screen]
@@ -59,14 +55,8 @@
      :tries (count responses)
      :done (- (:time (last responses)) start)
      :correct (== 1 (count responses))}))
-(defn make-readable-shrink-data [screens]
-  (map shrink screens))
-(defn make-readable-helper [raw]
-  (let [parsed (map parse raw)
-        readable (map #(make-readable-shrink-data (:results %)) parsed)]
-    readable))
-(defn make-readable [id]
-  (make-readable-helper (db/only-responses id)))
+(defn make-readable [raw]
+  (map #(map shrink (:results %)) raw))
 
 ;; extract a single block (or only its trials) from a user's test
 (defn get-block [blockname screens]
@@ -87,18 +77,34 @@
     (assoc trial :done 300)
     trial))
 
+;; scoring
+(def incomp-pract "incompatiblepractice")
+(def comp-pract "compatiblepractice")
+(def incomp-test "incompatibletest")
+(def comp-test "compatibletest")
+
+(def scoreable-blocks [incomp-pract comp-pract incomp-test comp-test])
+
+(defn get-scoreable-trials [screens]
+  (apply concat (map #(get-trials % screens) scoreable-blocks)))
+
+(defn score-lab-version [incomp comp mean-difference]
+  (let [avg-std (avg [(standard-deviation incomp)
+                      (standard-deviation comp)])]
+    (/ mean-difference avg-std)))
+(defn score-my-version [incomp comp mean-difference]
+  (let [std-dev (standard-deviation (concat incomp comp))]
+    (/ mean-difference std-dev)))
 (defn score [incomp comp]
   (let [incomp-times (pluck-times incomp)
         comp-times (pluck-times comp)
-        incomp-avg-latency (avg incomp-times)
-        comp-avg-latency (avg comp-times)
-        std-dev (standard-deviation (concat incomp-times comp-times))]
-    (/ (- incomp-avg-latency comp-avg-latency) std-dev)))
+        mean-difference (- (avg incomp-times) (avg comp-times))]
+    (score-lab-version incomp-times comp-times  mean-difference)))
 (defn score-iat [screens]
-  (let [pract (score (get-trials "incompatiblepractice" screens)
-                     (get-trials "compatiblepractice" screens))
-        test (score (get-trials  "compatiblepractice" screens)
-                    (get-trials "incompatibletest" screens))]
+  (let [pract (score (get-trials incomp-pract screens)
+                     (get-trials comp-pract screens))
+        test (score (get-trials incomp-test screens)
+                    (get-trials comp-test screens))]
     (avg [pract test])))
 
 (defn generate-iat
@@ -107,13 +113,13 @@
        (map generate-iat ids)))
   ([id]
      (flatten
-      (map #(let [trials (filter trial? %)
+      (map #(let [trials (get-scoreable-trials %)
                   total (count trials)]
               {:subjectId id
                :total_incorrect (count (remove :correct trials))
-               :flat_300_percent (/ (count (filter under-300? trials)) total)
+               :flat_300_percent (float (/ (count (filter under-300? trials)) total))
                :iatall (score-iat %)
                :iat300recode (score-iat (map set-less-than-300-to-300 %))
                :iat300remove (score-iat (remove under-300? %))
                :iat10trials (score-iat (remove over-10000? %))})
-           (make-readable id)))))
+           (make-readable (db/only-responses id))))))

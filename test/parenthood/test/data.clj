@@ -68,3 +68,39 @@
             {:done 300 :word "b"}
             {:done 300 :word "c"}
             {:done 400 :word "d"}]))))
+
+(def fake-data
+  [{:results
+    [{:blockname "" :time 1346622394861}
+     {:allowBackspace true :blockname "" :time 1346622394989}
+     {:allowBackspace true :blockname "getTargetItems" :time 1346622395443}
+     {:id "nameCategory" :time 1346622398450 :response "Jane"}
+     {:id "first" :inputCategory "Jane"
+      :time 1346622398912 :response "Jane Again"}
+     {:id "firstNot" :inputCategory "Not Jane"
+      :time 1346622405427 :response "Maria"}
+     {:left "Unpleasant" :right "Pleasant"
+      :blockname "pleasantpractice" :time 1346622413552}
+     {:word "Sunrise" :category "Pleasant"
+      :left "Unpleasant" :right "Pleasant" :time 1346622416560
+      :responses [{:time 1346622419570 :key 105 :correct true}]}
+     {:word "Vacation" :category "Pleasant"
+      :left "Unpleasant" :right "Pleasant" :time 1346622420572
+      :responses [{:time 1346622422379 :key 105 :correct false}
+                  {:time 1346622422579 :key 73 :correct true}]}]
+    :user-agent ""}])
+
+(deftest test-make-readable
+  (let [pruned (first (make-readable fake-data))]
+    (is (= (:blockname (first pruned)) ""))
+    (is (= (:blockname (second pruned)) ""))
+    (is (= (:blockname (nth pruned 2)) "getTargetItems"))
+    (is (= (:resp (nth pruned 3)) "Jane"))
+    (is (= (:resp (nth pruned 4)) "Jane Again"))
+    (is (= (:resp (nth pruned 5)) "Maria"))
+    (is (= (:blockname (nth pruned 6)) "pleasantpractice"))
+    (is (= (:word (nth pruned 7)) "Sunrise"))
+    (is (= (:correct (nth pruned 7)) true))
+    (is (= (:word (nth pruned 8) "Vacation")))
+    (is (= (:correct (nth pruned 8)) false))))
+

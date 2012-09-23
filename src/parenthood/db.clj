@@ -56,6 +56,8 @@
      (redis/hdel db (response-key id) unique)))
 
 ;; utils
+(defn thaw [data]
+  (assoc data :results (json/read-json (:results data))))
 (defn non-responses
   ([]
      (let [ids (get-response)]
@@ -68,5 +70,6 @@
      (let [ids (get-response)]
        (flatten (map only-responses ids))))
   ([id]
-     (let [all (get-response id)]
-       (filter has-response-data? all))))
+     (let [all (get-response id)
+           done (filter has-response-data? all)]
+       (map thaw done))))
