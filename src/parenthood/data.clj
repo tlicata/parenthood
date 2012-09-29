@@ -105,7 +105,7 @@
                      (get-trials comp-pract screens))
         test (score (get-trials incomp-test screens)
                     (get-trials comp-test screens))]
-    (avg [pract test])))
+    (float (avg [pract test]))))
 
 (defn generate-iat
   ([]
