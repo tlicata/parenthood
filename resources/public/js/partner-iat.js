@@ -465,7 +465,7 @@ window.parenthood = (function ($) {
                     right == screen.category;
             }
 
-            var keyEvent = {time:time, key:key, correct:isCorrect};
+            var keyEvent = {time:time, key:key};
             if (screen.responses) {
                 screen.responses.push(keyEvent);
             } else {
@@ -755,6 +755,9 @@ window.parenthood = (function ($) {
                 delete smaller.instructions;
             } else if (isInput(completed)) {
                 delete smaller.prompt;
+            } else if (isTrial(completed)) {
+                delete smaller.left;
+                delete smaller.right;
             }
             return smaller;
         };
