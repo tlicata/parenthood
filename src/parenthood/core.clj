@@ -38,8 +38,9 @@
 
 (defn iat-page [id live]
   (let [request (request/ring-request)
+        ip (get-in request [:headers "x-forwarded-for"])
         user-agent (get-in request [:headers "user-agent"])
-        unique (db/add-response id user-agent)
+        unique (db/add-response id user-agent ip)
         page (if live (live-iat unique) (test-iat unique))]
     (html
      (html5

@@ -21,10 +21,10 @@
 (defn response-key [id] (str "response:" id))
 (defn response-fix [key]
   (second (string/split key #"response:")))
-(defn add-response [id user-agent]
+(defn add-response [id user-agent ip]
   (let [unique (str (redis/incr db "responses"))
         key (response-key id)
-        body {:user-agent user-agent}]
+        body {:user-agent user-agent :ip ip}]
     (do
       (redis/hset db key unique (json/json-str body))
       unique)))
