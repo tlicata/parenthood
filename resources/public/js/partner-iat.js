@@ -316,7 +316,7 @@ window.parenthood = (function ($) {
 
     // After answering a trial, how many milliseconds until
     // the next trial is displayed (and input is accepted).
-    var DELAY = 300;
+    var DELAY = 250;
 
     // Pattern to replace with user input.
     var INPUT_REGEX = /\${(.*)}/;
