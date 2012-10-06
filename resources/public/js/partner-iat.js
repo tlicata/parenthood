@@ -915,5 +915,5 @@ window.parenthood = (function ($, _) {
         remote: remote,
         substitute: substitute,
         treeIntoScreens: treeIntoScreens
-    }
+    };
 }(window.jQuery, window._));
