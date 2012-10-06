@@ -1,6 +1,4 @@
-var _;
-
-window.parenthood = (function ($) {
+window.parenthood = (function ($, _) {
     var PLEASANT_WORDS = [
         "Vacation",
         "Success",
@@ -918,4 +916,4 @@ window.parenthood = (function ($) {
         substitute: substitute,
         treeIntoScreens: treeIntoScreens
     }
-}(window.jQuery));
+}(window.jQuery, window._));
