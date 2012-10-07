@@ -58,6 +58,11 @@
     var getInstructions = function () {
         return $("#instructions span").html();
     };
+    var verifyRedX = function () {
+        var elem = $("#errorDisplay");
+        equal(elem.text(), "X");
+        equal(elem.css("color"), "rgb(255, 0, 0)");
+    };
 
     var INPUT_REGEX = window.parenthood.getInputRegex();
     var INPUTS = {
@@ -139,12 +144,14 @@
                     fakeLeftPress();
                 } else {
                     fakeRightPress();
+                    verifyRedX();
                 }
             } else if (rightIsCorrect(screen)) {
                 if (pressCorrect) {
                     fakeRightPress();
                 } else {
                     fakeLeftPress();
+                    verifyRedX();
                 }
             } else {
                 throw new Error("trial should fall into LEFT or RIGHT category");
