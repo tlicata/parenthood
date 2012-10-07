@@ -132,13 +132,33 @@
             notEqual(screen.word, "undefined", "word should not be string undefined");
             strictEqual($("#center").html().match(INPUT_REGEX), null, "word should not contain input regex");
 
-            // Press the correct key for the trial.
+            // Press the correct key 90% of the time.
+            var pressCorrect = Math.random() > 0.1;
             if (leftIsCorrect(screen)) {
-                fakeLeftPress();
+                if (pressCorrect) {
+                    fakeLeftPress();
+                } else {
+                    fakeRightPress();
+                }
             } else if (rightIsCorrect(screen)) {
-                fakeRightPress();
+                if (pressCorrect) {
+                    fakeRightPress();
+                } else {
+                    fakeLeftPress();
+                }
             } else {
                 throw new Error("trial should fall into LEFT or RIGHT category");
+            }
+
+            // If we're pressing the wrong key, we have to correct our
+            // response before the screen will advance. So in another
+            // 100ms, try another key. Return early so we don't try
+            // to advance to the next test.
+            if (!pressCorrect) {
+                setTimeout(function () {
+                    workout(index);
+                }, 100);
+                return;
             }
         } else {
             throw new Error("screen should be instructions, input, or trial");
