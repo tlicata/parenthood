@@ -123,3 +123,12 @@
                :iat300remove (score-iat (remove under-300? %))
                :iat10trials (score-iat (remove over-10000? %))})
            (make-readable (db/only-responses id))))))
+
+(defn chart []
+  (let [ids (db/get-response)
+        get-info (fn [id]
+                   (let [resp (first (db/get-response id))]
+                     {:id id
+                      :ip (:ip resp)
+                      :user-agent (:user-agent resp)}))]
+    (map get-info ids)))
