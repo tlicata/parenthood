@@ -141,6 +141,6 @@
                     [(nil-safe (:id %))
                      (nil-safe (:ip %))
                      (nil-safe (:user-agent %))])
-                  (chart))]
+                  (filter :ip (chart)))]
     (csv/write-csv (concat [col-names] data) :end-of-line "\r\n")))
 
