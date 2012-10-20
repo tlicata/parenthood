@@ -65,6 +65,9 @@
   ([id]
      (let [all (get-response id)]
        (remove has-response-data? all))))
+(defn non-responses-ids []
+  (let [ids (get-response)]
+    (filter #(> (count (non-responses %)) 0) ids)))
 (defn only-responses
   ([]
      (let [ids (get-response)]
