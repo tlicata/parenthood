@@ -1,5 +1,6 @@
 (ns parenthood.core
-  (:use [noir.core :only [defpage]]
+  (:use [clojure.pprint :only [pprint]]
+        [noir.core :only [defpage]]
         [hiccup.core :only [html]]
         [hiccup.page-helpers :only [html5 include-css include-js]])
   (:require [noir.response :as response]
@@ -55,7 +56,7 @@
     (do
       (try
         (email/send-email (str "results for user " id)
-                          (str (data/generate-iat id) results user-agent))
+                          (pprint (data/generate-iat id) results user-agent))
         (catch Exception e nil))
       (if (nil? fresh)
         (response/status 403 "cannot overwrite existing data")
