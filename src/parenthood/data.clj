@@ -142,7 +142,7 @@
                      (nil-safe (:ip %))
                      (nil-safe (:user-agent %))])
                   (filter :ip (chart)))]
-    (csv/write-csv (concat [col-names] data) :end-of-line "\r\n")))
+    (csv/write-csv (concat [col-names] data) :delimiter "|")))
 
 (defn only-ips []
   (map :ip (chart)))
