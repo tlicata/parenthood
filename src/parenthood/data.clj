@@ -1,5 +1,6 @@
 (ns parenthood.data
   (:require [clojure.data.json :as json]
+            [clojure.string :as string]
             [clojure-csv.core :as csv]
             [parenthood.db :as db]))
 
@@ -128,11 +129,11 @@
 (defn chart []
   (let [ids (db/get-response)
         get-info (fn [id]
-                   (let [resp (first (db/get-response id))]
+                   (let [all (db/get-response id)]
                      {:id id
-                      :ip (:ip resp)
-                      :user-agent (:user-agent resp)}))]
-    (map get-info ids)))
+                      :ip (string/join "," (set (remove nil? (map :ip all))))
+                      :user-agent (:user-agent (first all))}))]
+    (filter #(not= (:ip %) "") (map get-info ids))))
 
 (defn chart-csv []
   (let [col-names ["Subject ID", "IP Address", "User-Agent"]
@@ -141,7 +142,7 @@
                     [(nil-safe (:id %))
                      (nil-safe (:ip %))
                      (nil-safe (:user-agent %))])
-                  (filter :ip (chart)))]
+                  (chart))]
     (csv/write-csv (concat [col-names] data) :delimiter "|")))
 
 (defn only-ips []
