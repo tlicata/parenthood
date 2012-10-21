@@ -144,3 +144,6 @@
                   (filter :ip (chart)))]
     (csv/write-csv (concat [col-names] data) :end-of-line "\r\n")))
 
+(defn only-ips []
+  (map :ip (chart)))
+
