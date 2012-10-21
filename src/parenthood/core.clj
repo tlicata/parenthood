@@ -1,6 +1,5 @@
 (ns parenthood.core
-  (:use [clojure.pprint :only [pprint]]
-        [noir.core :only [defpage]]
+  (:use [noir.core :only [defpage]]
         [hiccup.core :only [html]]
         [hiccup.page-helpers :only [html5 include-css include-js]])
   (:require [noir.response :as response]
@@ -56,7 +55,7 @@
     (do
       (try
         (let [subject (str "results for user " id)
-              body (str (pprint (data/generate-iat id)) results user-agent)]
+              body (str (vec (data/generate-iat id)) results user-agent)]
           (do
             (println body)
             (email/send-email subject body)))
