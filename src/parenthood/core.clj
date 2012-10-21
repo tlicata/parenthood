@@ -56,7 +56,7 @@
     (do
       (try
         (email/send-email (str "results for user " id)
-                          (pprint (data/generate-iat id) results user-agent))
+                          (str (pprint (data/generate-iat id)) results user-agent))
         (catch Exception e nil))
       (if (nil? fresh)
         (response/status 403 "cannot overwrite existing data")
