@@ -56,9 +56,7 @@
       (try
         (let [subject (str "results for user " id)
               body (str (vec (data/generate-iat id)) results user-agent)]
-          (do
-            (println body)
-            (email/send-email subject body)))
+          (email/send-email subject body))
         (catch Exception e nil))
       (if (nil? fresh)
         (response/status 403 "cannot overwrite existing data")
