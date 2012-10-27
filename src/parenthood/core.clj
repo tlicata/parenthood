@@ -1,7 +1,7 @@
 (ns parenthood.core
   (:use [noir.core :only [defpage]]
         [hiccup.core :only [html]]
-        [hiccup.page-helpers :only [html5 include-css include-js]])
+        [hiccup.page-helpers :only [html5 include-css include-js link-to]])
   (:require [noir.response :as response]
             [noir.request :as request]
             [noir.server :as server]
@@ -70,7 +70,26 @@
           (println (str "successful post to " id ":" unique))
           (response/json fresh))))))
 
-(defpage "/" [] "Hello World!")
+(defpage "/" []
+  (html
+   (html5
+    [:head
+     [:title "Transition to Parenthood"]
+     (include-css "/css/site.css")]
+    [:body
+     [:div#container
+      [:div#header
+       [:h1 "Transition to Parenthood"]
+       [:button#signin "Sign In"]]
+      [:div#nav
+       [:ul
+        [:li (link-to "#" "Home")]
+        [:li (link-to "#" "Particpate")]
+        [:li (link-to "#" "Create Your Own")]
+        [:li (link-to "#" "Contact")]]]
+      [:div#main
+       [:img {:src "/img/ub.jpeg" :alt "University of Buffalo logo"}]]
+      [:div#footer]]])))
 
 (defpage "/partner-iat.html" {:keys [id]}
   (iat-page id true))
