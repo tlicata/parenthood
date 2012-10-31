@@ -75,7 +75,7 @@
    (html5
     [:head
      [:title "Transition to Parenthood"]
-     (include-css "/css/site.css")]
+     (include-css "/css/site.css" "http://fonts.googleapis.com/css?family=Marcellus")]
     [:body
      [:div#container
       [:div#header
