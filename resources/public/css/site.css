@@ -1,13 +1,19 @@
 body {
+    color: #666;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
 }
 h1 {
-    font-family: Marcellus;
     font-size: 2em;
-    font-weight: normal;
     line-height: 40px;
+}
+h2 {
+    font-size: 1.6em;
+}
+h1, h2 {
+    font-family: Marcellus;
+    font-weight: normal;
 }
 
 #container {
@@ -16,42 +22,71 @@ h1 {
 }
 
 #header {
-    background: url("/img/parents.jpeg") no-repeat;
-    background-size: 100px;
-    height: 50px;
-    padding-top: 25px;
-}
+    background: url("/img/ub.jpeg") no-repeat;
+    background-position: -121px 7px;
+    background-size: 350px;
+    padding: 1em 0 .8em 121px;
+ }
 #header h1 {
-    color: #666;
     display: inline;
-    font-size: 2em;
-    font-weight: normal;
-    margin: 0 0 0 115px;
 }
 #header #signin {
     float: right;
 }
 
 #nav {
-    border-bottom: solid 1px #999;
-    border-top: solid 1px #999;
     font-weight: bold;
 }
 #nav a {
     color: #041A9B;
     text-decoration: none;
 }
+#nav a:hover {
+    text-decoration: underline;
+}
 #nav ul {
     padding: 0;
+    margin: 0
 }
 #nav li {
     display: inline;
     margin-right: 1em;
 }
 
-#main {
+#hero {
+    background: url("/img/parents.jpeg") no-repeat white;
+    background-position: -5px 0;
+    background-size: 400px;
+    height: 310px;
     text-align: center;
 }
-#main img {
-    width: 600px;
+#hero div {
+    background: url("/img/foggy_birds.png");
+    float: right;
+    overflow: hidden;
+    padding: 10px;
+    margin-right: 105px;
+    width: 200px;
+}
+#hero div h2 {
+    color: #041A9B;
+}
+#hero div p {
+    color: #777;
+    font-size: 1.1em;
+}
+#hero div button {
+    margin-bottom: .83em;
+}
+
+.border-shadow {
+    border-bottom: solid #777 2px;
+    border-left: solid #ccc 2px;
+    border-right: solid #777 2px;
+    border-top: solid #ccc 2px;
+    border-radius: 10px;
+}
+.no-top {
+    border-radius: 0 0 10px 10px;
+    border-top: none;
 }

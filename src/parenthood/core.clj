@@ -80,15 +80,22 @@
      [:div#container
       [:div#header
        [:h1 "Transition to Parenthood"]
-       [:button#signin "Sign In"]]
-      [:div#nav
-       [:ul
-        [:li (link-to "#" "Home")]
-        [:li (link-to "#" "Particpate")]
-        [:li (link-to "#" "Create Your Own")]
-        [:li (link-to "#" "Contact")]]]
+       [:button#signin "Sign In"]
+       [:div#nav
+        [:ul
+         [:li (link-to "#" "Home")]
+         [:li (link-to "#" "Particpants")]
+         [:li (link-to "#" "Technology")]
+         [:li (link-to "#" "Contact Us")]]]]
       [:div#main
-       [:img {:src "/img/ub.jpeg" :alt "University of Buffalo logo"}]]
+       [:div#hero.border-shadow
+        [:div.border-shadow.no-top
+         [:h2 "Expecting your first child?"]
+         [:p "Couples needed for a UB study of how couples adjust to parenthood."]
+         [:button "Contact Us"]]]
+       [:h2 "The Study"]
+       [:h2 "The Measure"]
+       [:h2 "The Lab "]]
       [:div#footer]]])))
 
 (defpage "/partner-iat.html" {:keys [id]}
@@ -108,3 +115,5 @@
   (let [port (Integer/parseInt (System/getenv "PORT"))]
     (server/start port)))
 
+(defn dev-main []
+  (server/start 5000))
