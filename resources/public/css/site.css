@@ -30,8 +30,8 @@ p {
     background: url("/img/ub.jpeg") no-repeat;
     background-position: -121px 7px;
     background-size: 350px;
-    padding: 1em 0 .8em 121px;
- }
+    padding: 15px 0 10px 121px;
+}
 #header h1 {
     display: inline;
 }
