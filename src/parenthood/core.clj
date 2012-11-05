@@ -83,21 +83,19 @@
        ;[:button#signin "Sign In"]
        [:div#nav
         [:ul
-         [:li (link-to "#" "Home")]
-         [:li (link-to "#" "Particpants")]
-         [:li (link-to "#" "Technology")]
-         [:li (link-to "#" "Contact Us")]]]]
+         [:li (link-to "" "Home")]
+         [:li (link-to "#contact" "Contact Us")]]]]
       [:div#main
        [:div#hero.border-shadow
         [:div.border-shadow.no-top
          [:h2 "Expecting your first child?"]
          [:p "Couples needed for a UB study of how couples adjust to parenthood."]
-         [:button "Contact Us"]]]
+         [:input {:type "button" :value "Contact Us" :onclick "javascript:location.hash='contact'"}]]]
        [:h2 "The Study"]
        [:p "Participation requires two visits to our lab at UB’s North Campus, completing a short survey at home for 14 days, and follow-up surveys every other month."]
        [:p "Activities will take place before and after the birth of your baby."]
        [:p "Each member of the couple will be paid up to $275."]
-       [:h2 "Contact Us"]
+       [:h2#contact "Contact Us"]
        [:p "Telephone: " (link-to "tel:+17166450246" "(716) 645-0246")]
        [:p "Email: " (link-to "mailto:ubparenthoodstudy@gmail.com" "ubparenthoodstudy@gmail.com")]]
       [:div#footer]]])))
