@@ -24,7 +24,8 @@
 (defn add-response [id user-agent ip]
   (let [unique (str (redis/incr db "responses"))
         key (response-key id)
-        body {:user-agent user-agent :ip ip}]
+        date (. (java.util.Date.) toString)
+        body {:user-agent user-agent :ip ip :timestamp date}]
     (do
       (redis/hset db key unique (json/json-str body))
       unique)))
