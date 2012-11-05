@@ -80,7 +80,7 @@
      [:div#container
       [:div#header
        [:h1 "Transition to Parenthood"]
-       [:button#signin "Sign In"]
+       ;[:button#signin "Sign In"]
        [:div#nav
         [:ul
          [:li (link-to "#" "Home")]
@@ -94,8 +94,12 @@
          [:p "Couples needed for a UB study of how couples adjust to parenthood."]
          [:button "Contact Us"]]]
        [:h2 "The Study"]
-       [:h2 "The Measure"]
-       [:h2 "The Lab "]]
+       [:p "Participation requires two visits to our lab at UB’s North Campus, completing a short survey at home for 14 days, and follow-up surveys every other month."]
+       [:p "Activities will take place before and after the birth of your baby."]
+       [:p "Each member of the couple will be paid up to $275."]
+       [:h2 "Contact Us"]
+       [:p "Telephone: " (link-to "tel:+17166450246" "(716) 645-0246")]
+       [:p "Email: " (link-to "mailto:ubparenthoodstudy@gmail.com" "ubparenthoodstudy@gmail.com")]]
       [:div#footer]]])))
 
 (defpage "/partner-iat.html" {:keys [id]}

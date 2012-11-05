@@ -9,11 +9,16 @@ h1 {
     line-height: 40px;
 }
 h2 {
+    color: #041A9B;
     font-size: 1.6em;
 }
 h1, h2 {
     font-family: Marcellus;
     font-weight: normal;
+}
+p {
+    color: #777;
+    font-size: 1.1em;
 }
 
 #container {
@@ -70,10 +75,6 @@ h1, h2 {
 }
 #hero div h2 {
     color: #041A9B;
-}
-#hero div p {
-    color: #777;
-    font-size: 1.1em;
 }
 #hero div button {
     margin-bottom: .83em;
