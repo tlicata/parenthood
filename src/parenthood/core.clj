@@ -42,10 +42,16 @@
         user-agent (get-in request [:headers "user-agent"])
         unique (db/add-response id user-agent ip)
         page (if live (live-iat unique) (test-iat unique))]
-    (html
-     (html5
-      [:head (:head page)]
-      [:body (:body page)]))))
+    (do
+      (try
+        (let [subject (str "user " id " started")
+              body (str ip " : " user-agent)]
+          (email/send-email subject body))
+        (catch Exception e nil))
+      (html
+       (html5
+        [:head (:head page)]
+        [:body (:body page)])))))
 
 (defn store-results
   [id results unique]
