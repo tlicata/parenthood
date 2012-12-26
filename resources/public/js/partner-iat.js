@@ -419,7 +419,7 @@ window.parenthood = (function ($, _) {
                 fontSize: "1.4em",
                 position: "absolute",
                 textAlign: "center",
-                top: "200px",
+                top: "175px",
                 width: "100%"
             }).append(colorWord(screen.word));
         };
@@ -554,7 +554,7 @@ window.parenthood = (function ($, _) {
         // Some elements are absolutely positioned, and when being
         // run on the tests page they don't "bump" the testing UI
         // down, so they overlap. Fix that by setting a height;
-        var SPACE_FOR_TESTS = 275;
+        var SPACE_FOR_TESTS = 315;
 
         var container = null;
 
@@ -704,9 +704,10 @@ window.parenthood = (function ($, _) {
             var rightElem = rightCategoryDOM(screen);
             var errorElem = $("<div/>").attr("id", "errorDisplay").css({
                 color: "red",
-                fontSize: "2em",
+                fontSize: "3em",
+                fontWeight: "bold",
                 position: "absolute",
-                top: "115px",
+                top: "250px",
                 textAlign: "center",
                 width: "100%"
             });
