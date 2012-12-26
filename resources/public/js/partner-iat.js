@@ -88,7 +88,7 @@ window.parenthood = (function ($, _) {
         return _.shuffle(pleasant.concat(partner));
     };
 
-    var BLOCKS = [{
+    var INPUT_BLOCKS = [{
         instructions: [
             "You are about to begin a timed sorting task. You will be shown ",
             "words one at a time in the middle of the computer screen. Your ",
@@ -236,7 +236,9 @@ window.parenthood = (function ($, _) {
         leftWord: UNPLEASANT_CATEGORY,
         rightWord: PLEASANT_CATEGORY,
         trials: makePleasantTrials(20)
-    }, {
+    }];
+
+    var COMPATIBLE_BLOCKS = [{
         blockname: "partnerleftpractice",
         instructions: ["Notice above that the categories have changed. You will ",
                        "now classify the items you provided earlier into the ",
@@ -274,7 +276,9 @@ window.parenthood = (function ($, _) {
         leftWord: [PLEASANT_CATEGORY, PARTNER_CATEGORY],
         rightWord: [UNPLEASANT_CATEGORY, NOT_PARTNER_CATEGORY],
         trials: makeMixedTrials(40)
-    }, {
+    }];
+
+    var INCOMPATIBLE_BLOCKS = [{
         blockname: "partnerrightpractice",
         instructions: [
             "Notice above that there are only two categories and they have switched ",
@@ -311,6 +315,14 @@ window.parenthood = (function ($, _) {
         rightWord: [PARTNER_CATEGORY, UNPLEASANT_CATEGORY],
         trials: makeMixedTrials(40)
     }];
+
+    var BLOCKS = (function () {
+        var compatibleFirst = _.random(0, 999) % 2 === 0;
+        var combined = compatibleFirst ?
+            COMPATIBLE_BLOCKS.concat(INCOMPATIBLE_BLOCKS) :
+            INCOMPATIBLE_BLOCKS.concat(COMPATIBLE_BLOCKS);
+        return INPUT_BLOCKS.concat(combined);
+    })();
 
     // After answering a trial, how many milliseconds until
     // the next trial is displayed (and input is accepted).
