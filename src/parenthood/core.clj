@@ -16,7 +16,7 @@
           "/js/lib/jquery-1.7.2.min.js"
           "/js/lib/json2.js"
           "/js/lib/underscore-min.js?1"
-          "/js/partner-iat.js?9")
+          "/js/partner-iat.js?10")
    :body (list [:script {:type "text/javascript"}
                 (str "$(function(){window.parenthood.init(" unique ")}());")])})
 
