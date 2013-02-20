@@ -1,13 +1,16 @@
 (ns parenthood.core
-  (:use [noir.core :only [defpage]]
+  (:use [compojure.core :only [defroutes GET POST]]
         [hiccup.core :only [html]]
-        [hiccup.page-helpers :only [html5 include-css include-js]])
+        [hiccup.page :only [html5 include-css include-js]]
+        [ring.middleware.file :only [wrap-file]]
+        [ring.middleware.file-info :only [wrap-file-info]]
+        [ring.middleware.params :only [wrap-params]])
   (:require [noir.response :as response]
             [noir.request :as request]
-            [noir.server :as server]
             [parenthood.data :as data]
             [parenthood.db :as db]
-            [parenthood.email :as email]))
+            [parenthood.email :as email]
+            [ring.adapter.jetty :as jetty]))
 
 (def test-id "test-abc-124")
 
@@ -36,9 +39,8 @@
                      [:div#qunit-fixture]]}]
     (merge-with concat live test)))
 
-(defn iat-page [id live]
-  (let [request (request/ring-request)
-        ip (get-in request [:headers "x-forwarded-for"])
+(defn iat-page [id live request]
+  (let [ip (get-in request [:headers "x-forwarded-for"])
         user-agent (get-in request [:headers "user-agent"])
         unique (db/add-response id user-agent ip)
         page (if live (live-iat unique) (test-iat unique))]
@@ -54,9 +56,8 @@
         [:body (:body page)])))))
 
 (defn store-results
-  [id results unique]
-  (let [request (request/ring-request)
-        user-agent (get-in request [:headers "user-agent"])
+  [id results unique request]
+  (let [user-agent (get-in request [:headers "user-agent"])
         fresh (db/update-response id unique user-agent results)]
     (do
       (try
@@ -70,22 +71,25 @@
           (println (str "successful post to " id ":" unique))
           (response/json fresh))))))
 
-(defpage "/" [] "Hello World!")
+(defroutes routes
+  (GET "/" [] "Hello World!")
+  (GET "/partner-iat.html" [id :as request]
+       (iat-page id true request))
+  (GET "/integration-tests.html" [:as request]
+       (iat-page test-id false request))
+  (GET "/test-data" [unique]
+       (response/json (db/get-response test-id unique)))
+  (POST "/partner-iat.html" [id results unique :as request]
+        (store-results id results unique request))
+  (POST "/integration-tests.html" [results unique :as request]
+        (store-results test-id results unique request)))
 
-(defpage "/partner-iat.html" {:keys [id]}
-  (iat-page id true))
-(defpage "/integration-tests.html" []
-  (iat-page test-id false))
-
-(defpage [:post "/partner-iat.html"] {:keys [id results unique]}
-  (store-results id results unique))
-(defpage [:post "/integration-tests.html"] {:keys [results unique]}
-  (store-results test-id results unique))
-
-(defpage "/test-data" {:keys [unique]}
-  (response/json (db/get-response test-id unique)))
+(def app
+  (-> #'routes
+      wrap-params
+      (wrap-file "resources/public")
+      wrap-file-info))
 
 (defn -main []
   (let [port (Integer/parseInt (System/getenv "PORT"))]
-    (server/start port)))
-
+    (jetty/run-jetty app {:port port})))
