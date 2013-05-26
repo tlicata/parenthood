@@ -50,10 +50,9 @@
               body (str ip " : " user-agent)]
           (email/send-email subject body))
         (catch Exception e nil))
-      (html
-       (html5
-        [:head (:head page)]
-        [:body (:body page)])))))
+      (html5
+       [:head (:head page)]
+       [:body (:body page)]))))
 
 (defn store-results
   [id results unique request]
