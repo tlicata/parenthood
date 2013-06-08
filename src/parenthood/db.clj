@@ -77,3 +77,11 @@
      (let [all (get-response id)
            done (filter has-response-data? all)]
        (map thaw done))))
+(defn only-responses-ids []
+  (let [ids (get-response)]
+    (filter #(> (count (only-responses %)) 0) ids)))
+(defn only-responses-ids-and-counts []
+  (map (fn [id]
+         (let [responses (only-responses id)]
+           (hash-map :id id :count (count responses))))
+       (only-responses-ids)))
