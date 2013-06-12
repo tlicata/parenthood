@@ -21,6 +21,15 @@
 (defn response-key [id] (str "response:" id))
 (defn response-fix [key]
   (second (string/split key #"response:")))
+
+
+(defn get-id [id]
+  (redis/hgetall db (response-key id)))
+(defn get-uniques [id]
+  (redis/hkeys db (response-key id)))
+(defn get-iat [id unique]
+  (redis/hget db (response-key id) unique))
+
 (defn add-response [id user-agent ip]
   (let [unique (str (redis/incr db "responses"))
         key (response-key id)
@@ -33,13 +42,9 @@
   ([]
      (map response-fix (get-keys (response-key "*"))))
   ([id]
-     (let [uniques (get-response id nil)]
-       (map #(get-response id %) uniques)))
+     (map #(get-response id %) (get-uniques id)))
   ([id unique]
-     (let [key (response-key id)]
-       (if (nil? unique)
-         (into #{} (redis/hkeys db key))
-         (json/read-json (redis/hget db key unique))))))
+     (json/read-json (get-iat id unique))))
 (defn update-response [id unique user-agent results]
   (let [key (response-key id)
         stale (get-response id unique)
