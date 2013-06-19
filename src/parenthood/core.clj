@@ -70,6 +70,19 @@
           (println (str "successful post to " id ":" unique))
           (response/json fresh))))))
 
+(defn view-results [format]
+  (let [data (doall (parenthood.db/only-responses-memo))]
+    (if (= format "json")
+      (response/json data)
+      (html5
+       [:head (include-css "/css/view-results.css")]
+       [:body
+        [:table
+         [:tr [:th "ID"] [:th "Date"]]
+         (map (fn [x]
+                [:tr [:td (:id x)] [:td (:timestamp x)]])
+              data)]]))))
+
 (defroutes routes
   (GET "/" [] "Hello World!")
   (GET "/partner-iat.html" [id :as request]
@@ -78,6 +91,8 @@
        (iat-page test-id false request))
   (GET "/test-data" [unique]
        (response/json (db/get-response test-id unique)))
+  (GET "/view-results.html" [format]
+       (view-results format))
   (POST "/partner-iat.html" [id results unique :as request]
         (store-results id results unique request))
   (POST "/integration-tests.html" [results unique :as request]
