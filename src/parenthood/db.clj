@@ -81,7 +81,7 @@
   ([id]
      (let [all (get-response id)
            done (filter has-response-data? all)]
-       (map thaw done))))
+       (map #(assoc (thaw %) :id id) done))))
 (defn only-responses-ids []
   (let [ids (get-response)]
     (filter #(> (count (only-responses %)) 0) ids)))
