@@ -112,7 +112,7 @@
 (defn generate-iat
   ([]
      (let [ids (db/get-response)]
-       (map generate-iat ids)))
+       (flatten (map generate-iat ids))))
   ([id]
      (flatten
       (map #(let [trials (get-scoreable-trials %)
