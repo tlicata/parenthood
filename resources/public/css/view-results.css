@@ -1,0 +1,10 @@
+body {
+    font-family: monospace;
+}
+table {
+    border-collapse: collapse;
+}
+table, th, td {
+    border: solid black .1em;
+    padding: 1em;
+}
