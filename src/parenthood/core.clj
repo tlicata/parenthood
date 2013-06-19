@@ -75,17 +75,23 @@
     (if (= format "json")
       (response/json data)
       (html5
-       [:head (include-css "/css/view-results.css")]
+       [:head
+        (include-css "/css/view-results.css")
+        (include-js "/js/lib/jquery-1.7.2.min.js"
+                    "/js/lib/jquery.dataTables.min.js"
+                    "/js/view-results.js")]
        [:body
-        [:table
-         [:tr
-          [:th "ID"]
-          [:th "Total Incorrect"]
-          [:th "Flat 300 Percent"]
-          [:th "IAT All"]
-          [:th "IAT 300 Recode"]
-          [:th "IAT 300 Remove"]
-          [:th "IAT 10 Trials"]]
+        [:table#results
+         [:thead
+          [:tr
+           [:th "ID"]
+           [:th "Total Incorrect"]
+           [:th "Flat 300 Percent"]
+           [:th "IAT All"]
+           [:th "IAT 300 Recode"]
+           [:th "IAT 300 Remove"]
+           [:th "IAT 10 Trials"]]]
+         [:tbody
           (map (fn [x]
                  [:tr
                   [:td (:subjectId x)]
@@ -95,7 +101,7 @@
                   [:td (:iat300recode x)]
                   [:td (:iat300remove x)]
                   [:td (:iat10trials x)]])
-               data)]]))))
+               data)]]]))))
 
 (defroutes routes
   (GET "/" [] "Hello World!")
