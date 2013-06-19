@@ -71,17 +71,31 @@
           (response/json fresh))))))
 
 (defn view-results [format]
-  (let [data (doall (parenthood.db/only-responses-memo))]
+  (let [data (doall (parenthood.data/generate-iat))]
     (if (= format "json")
       (response/json data)
       (html5
        [:head (include-css "/css/view-results.css")]
        [:body
         [:table
-         [:tr [:th "ID"] [:th "Date"]]
-         (map (fn [x]
-                [:tr [:td (:id x)] [:td (:timestamp x)]])
-              data)]]))))
+         [:tr
+          [:th "ID"]
+          [:th "Total Incorrect"]
+          [:th "Flat 300 Percent"]
+          [:th "IAT All"]
+          [:th "IAT 300 Recode"]
+          [:th "IAT 300 Remove"]
+          [:th "IAT 10 Trials"]]
+          (map (fn [x]
+                 [:tr
+                  [:td (:subjectId x)]
+                  [:td (:total_incorrect x)]
+                  [:td (Math/ceil (* 100 (:flat_300_percent x)))]
+                  [:td (:iatall x)]
+                  [:td (:iat300recode x)]
+                  [:td (:iat300remove x)]
+                  [:td (:iat10trials x)]])
+               data)]]))))
 
 (defroutes routes
   (GET "/" [] "Hello World!")
