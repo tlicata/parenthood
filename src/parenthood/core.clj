@@ -76,12 +76,14 @@
       (response/json data)
       (html5
        [:head
-        (include-css "/css/view-results.css")
+        (include-css "/css/lib/bootstrap.min.css"
+                     "/css/view-results.css")
         (include-js "/js/lib/jquery-1.7.2.min.js"
                     "/js/lib/jquery.dataTables.min.js"
+                    "/js/lib/bootstrap.min.js"
                     "/js/view-results.js")]
        [:body
-        [:table#results
+        [:table#results.table.table-striped.table-bordered.table-hover
          [:thead
           [:tr
            [:th "ID"]

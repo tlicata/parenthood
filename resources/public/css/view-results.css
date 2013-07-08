@@ -1,14 +1,6 @@
 body {
-    font-family: monospace;
-}
-table {
-    border-collapse: collapse;
-}
-table, th, td {
-    border: solid black .1em;
     padding: 1em;
 }
-
 /* datatables overrides */
 .paginate_disabled_previous, .paginate_disabled_next {
     display: none;
