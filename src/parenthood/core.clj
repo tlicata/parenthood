@@ -99,10 +99,10 @@
                   [:td (:subjectId x)]
                   [:td (:total_incorrect x)]
                   [:td (Math/ceil (* 100 (:flat_300_percent x)))]
-                  [:td (:iatall x)]
-                  [:td (:iat300recode x)]
-                  [:td (:iat300remove x)]
-                  [:td (:iat10trials x)]])
+                  [:td (format "%.5f" (:iatall x))]
+                  [:td (format "%.5f" (:iat300recode x))]
+                  [:td (format "%.5f" (:iat300remove x))]
+                  [:td (format "%.5f" (:iat10trials x))]])
                data)]]]))))
 
 (defroutes routes
