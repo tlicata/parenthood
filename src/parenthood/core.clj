@@ -70,9 +70,9 @@
           (println (str "successful post to " id ":" unique))
           (response/json fresh))))))
 
-(defn view-results [format]
+(defn view-results [data-format]
   (let [data (doall (parenthood.data/generate-iat))]
-    (if (= format "json")
+    (if (= data-format "json")
       (response/json data)
       (html5
        [:head
