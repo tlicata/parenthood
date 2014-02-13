@@ -103,11 +103,13 @@
         mean-difference (- (avg incomp-times) (avg comp-times))]
     (score-lab-version incomp-times comp-times  mean-difference)))
 (defn score-iat [screens]
-  (let [pract (score (get-trials incomp-pract screens)
-                     (get-trials comp-pract screens))
-        test (score (get-trials incomp-test screens)
-                    (get-trials comp-test screens))]
-    (float (avg [pract test]))))
+  (try
+    (let [pract (score (get-trials incomp-pract screens)
+                       (get-trials comp-pract screens))
+          test (score (get-trials incomp-test screens)
+                      (get-trials comp-test screens))]
+      (float (avg [pract test])))
+    (catch Exception e Double/NaN)))
 
 (defn generate-iat
   ([]
