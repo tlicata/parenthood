@@ -3,7 +3,7 @@
             [clojure.data.json :as json]
             [clojure.string :as string]))
 
-(def db-url (System/getenv "REDISTOGO_URL"))
+(def db-url (System/getenv "REDISCLOUD_URL"))
 (def db (redis/init {:url (if (nil? db-url)
                              "http://localhost:6379"
                              db-url)}))
