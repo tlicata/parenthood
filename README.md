@@ -6,8 +6,8 @@ A partner IAT for the "Transitioning and Adjusting to Parenthood" study.
 
 ### Dependencies
 
-Install leiningen
-Install heroku-toolbelt
+- leiningen
+- heroku-toolbelt
 
 ### Local Development
 
