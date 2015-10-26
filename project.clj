@@ -6,6 +6,6 @@
                  [com.draines/postal "1.8.0"]
                  [hiccup "1.0.2"]
                  [lib-noir "0.3.8"]
-                 [org.clojure/clojure "1.3.0"]
+                 [org.clojure/clojure "1.7.0"]
                  [org.clojure/data.json "0.1.2"]
                  [org.clojure/math.numeric-tower "0.0.1"]])
