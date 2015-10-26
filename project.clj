@@ -8,5 +8,4 @@
                  [lib-noir "0.3.8"]
                  [org.clojure/clojure "1.3.0"]
                  [org.clojure/data.json "0.1.2"]
-                 [org.clojure/math.numeric-tower "0.0.1"]]
-  :plugins [[lein-swank "1.4.3"]])
+                 [org.clojure/math.numeric-tower "0.0.1"]])
