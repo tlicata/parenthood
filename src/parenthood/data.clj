@@ -127,26 +127,3 @@
                :iat300remove (score-iat (remove under-300? %))
                :iat10trials (score-iat (remove over-10000? %))})
            (make-readable (db/only-responses id))))))
-
-(defn chart []
-  (let [ids (db/get-response)
-        get-info (fn [id]
-                   (let [all (db/get-response id)]
-                     {:id id
-                      :ip (string/join "," (set (remove nil? (map :ip all))))
-                      :user-agent (:user-agent (first all))}))]
-    (filter #(not= (:ip %) "") (map get-info ids))))
-
-(defn chart-csv []
-  (let [col-names ["Subject ID", "IP Address", "User-Agent"]
-        nil-safe (fn [out] (if (nil? out) "" out))
-        data (map (fn [%]
-                    [(nil-safe (:id %))
-                     (nil-safe (:ip %))
-                     (nil-safe (:user-agent %))])
-                  (chart))]
-    (csv/write-csv (concat [col-names] data) :delimiter "|")))
-
-(defn only-ips []
-  (map :ip (chart)))
-
