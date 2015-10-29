@@ -101,7 +101,7 @@
   (let [incomp-times (pluck-times incomp)
         comp-times (pluck-times comp)
         mean-difference (- (avg incomp-times) (avg comp-times))]
-    (score-lab-version incomp-times comp-times  mean-difference)))
+    (score-lab-version incomp-times comp-times mean-difference)))
 (defn score-iat [screens]
   (try
     (let [pract (score (get-trials incomp-pract screens)
