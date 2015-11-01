@@ -72,7 +72,7 @@
 
 (defn view-results [id format]
   (let [data (doall (if (nil? id)
-                      (parenthood.data/generate-iat)
+                      (parenthood.data/generate-iat-memo)
                       (parenthood.data/generate-iat id)))]
     (if (= format "json")
       (response/json data)

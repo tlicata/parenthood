@@ -127,3 +127,4 @@
                :iat300remove (score-iat (remove under-300? %))
                :iat10trials (score-iat (remove over-10000? %))})
            (make-readable (db/only-responses id))))))
+(def generate-iat-memo (memoize generate-iat))
