@@ -83,11 +83,11 @@
            done (filter has-response-data? all)]
        (map #(assoc (thaw %) :id id) done))))
 (def only-responses-memo (memoize only-responses))
-(defn only-responses-ids []
-  (let [ids (get-response)]
-    (filter #(> (count (only-responses %)) 0) ids)))
-(defn only-responses-ids-and-counts []
-  (map (fn [id]
-         (let [responses (only-responses id)]
-           (hash-map :id id :count (count responses))))
-       (only-responses-ids)))
+;; (defn only-responses-ids []
+;;   (let [ids (get-response)]
+;;     (filter #(> (count (only-responses %)) 0) ids)))
+;; (defn only-responses-ids-and-counts []
+;;   (map (fn [id]
+;;          (let [responses (only-responses id)]
+;;            (hash-map :id id :count (count responses))))
+;;        (only-responses-ids)))
