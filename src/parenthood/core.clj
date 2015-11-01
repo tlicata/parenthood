@@ -1,7 +1,6 @@
 (ns parenthood.core
   (:use [compojure.core :only [defroutes GET POST]]
         [hiccup.core :only [html]]
-        [hiccup.element :only [link-to]]
         [hiccup.page :only [html5 include-css include-js]]
         [ring.middleware.file :only [wrap-file]]
         [ring.middleware.file-info :only [wrap-file-info]]
@@ -97,10 +96,7 @@
          [:tbody
           (map (fn [x]
                  [:tr
-                  [:td (let [subject-id (get x :subjectId "")]
-                         (if (and subject-id (nil? id))
-                           [:a {:href (str "?id=" subject-id)} subject-id]
-                           subject-id))]
+                  [:td (:subjectId x)]
                   [:td (:total_incorrect x)]
                   [:td (Math/ceil (* 100 (:flat_300_percent x)))]
                   [:td (:iatall x)]
