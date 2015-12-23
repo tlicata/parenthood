@@ -129,5 +129,5 @@
       wrap-file-info))
 
 (defn -main []
-  (let [port (Integer/parseInt (System/getenv "PORT"))]
+  (let [port (Integer/parseInt (or (System/getenv "PORT") "5000"))]
     (jetty/run-jetty app {:port port})))
