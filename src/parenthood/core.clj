@@ -87,6 +87,7 @@
          [:thead
           [:tr
            [:th "ID"]
+           [:th "Date"]
            [:th "Total Incorrect"]
            [:th "Flat 300 Percent"]
            [:th "IAT All"]
@@ -97,6 +98,7 @@
           (map (fn [x]
                  [:tr
                   [:td (:subjectId x)]
+                  [:td (:date x)]
                   [:td (:total_incorrect x)]
                   [:td (Math/ceil (* 100 (:flat_300_percent x)))]
                   [:td (:iatall x)]
