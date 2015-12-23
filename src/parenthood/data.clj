@@ -19,6 +19,13 @@
           (Math/sqrt
            (/ (reduce + intermediate) (- n 1))))))))
 
+;; date
+(def date-format (java.text.SimpleDateFormat. "yyyy-MM-dd HH:mm"))
+(defn print-date [timestamp]
+  (try
+    (.format date-format (java.util.Date. timestamp))
+    (catch Exception _ "Invalid Date")))
+
 ;; functions for branching on screen type
 (defn screen-type [screen]
   (if (contains? screen :id)
@@ -58,7 +65,7 @@
      :done (- (:time (last responses)) start)
      :correct (== 1 (count responses))}))
 (defn make-readable [raw]
-  (map #(map shrink (:results %)) raw))
+  (map shrink (:results raw)))
 
 ;; extract a single block (or only its trials) from a user's test
 (defn get-block [blockname screens]
@@ -119,14 +126,17 @@
        (flatten (map generate-iat ids))))
   ([id]
      (flatten
-      (map #(let [trials (get-scoreable-trials %)
-                  total (count trials)]
-              {:subjectId id
-               :total_incorrect (count (remove :correct trials))
-               :flat_300_percent (float (/ (count (filter under-300? trials)) total))
-               :iatall (score-iat %)
-               :iat300recode (score-iat (map set-less-than-300-to-300 %))
-               :iat300remove (score-iat (remove under-300? %))
-               :iat10trials (score-iat (remove over-10000? %))})
-           (make-readable (db/only-responses id))))))
+      (map (fn [raw]
+             (let [data (make-readable raw)
+                   trials (get-scoreable-trials data)
+                   total (count trials)]
+               {:subjectId id
+                :date (print-date (:timestamp raw))
+                :total_incorrect (count (remove :correct trials))
+                :flat_300_percent (float (/ (count (filter under-300? trials)) total))
+                :iatall (score-iat data)
+                :iat300recode (score-iat (map set-less-than-300-to-300 data))
+                :iat300remove (score-iat (remove under-300? data))
+                :iat10trials (score-iat (remove over-10000? data))}))
+           (db/only-responses id)))))
 (def generate-iat-memo (memoize generate-iat))

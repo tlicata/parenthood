@@ -91,7 +91,7 @@
     :user-agent ""}])
 
 (deftest test-make-readable
-  (let [pruned (first (make-readable fake-data))]
+  (let [pruned (first (map make-readable fake-data))]
     (is (= (:blockname (first pruned)) ""))
     (is (= (:blockname (second pruned)) ""))
     (is (= (:blockname (nth pruned 2)) "getTargetItems"))

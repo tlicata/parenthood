@@ -56,7 +56,7 @@
               with-dates (append-day-and-time all)
               with-ids (append-id id with-dates)]
           (make-csv (remove data/instructions? with-ids))))
-      (data/make-readable (db/only-responses id)))))
+      (map data/make-readable (db/only-responses id)))))
 
 (defn write-to-file []
   (with-open [w (clojure.java.io/writer "all.csv")]
