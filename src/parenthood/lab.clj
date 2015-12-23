@@ -45,10 +45,13 @@
                   (if (:correct %) "1" "0") (str (:done %))])]
     (write-csv (concat [csv-head] (map to-csv results)) :end-of-line "\r\n")))
 
+(defn valid-id? [id]
+  (and (not (nil? id)) (re-matches #".*0[1,2]?.*" id)))
+
 (defn output-lab-iat-format
   ([]
-     (let [ids (db/get-response)]
-       (map output-lab-iat-format ids)))
+     (let [ids (filter valid-id? (db/get-response))]
+       (mapcat output-lab-iat-format ids)))
   ([id]
      (map
       (fn [results]
@@ -58,8 +61,7 @@
           (make-csv (remove data/instructions? with-ids))))
       (data/make-readable (db/only-responses id)))))
 
-(defn write-to-file [id]
-  (let [data (output-lab-iat-format id)]
-    (with-open [w (clojure.java.io/writer (str id ".csv"))]
-      (doseq [line data]
-        (.write w line)))))
+(defn write-to-file []
+  (with-open [w (clojure.java.io/writer "all.csv")]
+    (doseq [line (output-lab-iat-format)]
+      (.write w line))))
