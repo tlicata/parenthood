@@ -122,7 +122,7 @@
 
 (defn generate-iat
   ([]
-     (let [ids (db/get-response)]
+   (let [ids (filter valid-id? (db/get-response))]
        (flatten (map generate-iat ids))))
   ([id]
      (flatten
