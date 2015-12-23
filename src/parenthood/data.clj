@@ -72,6 +72,8 @@
     (filter trial? block)))
 
 ;; helper functions
+(defn valid-id? [id]
+  (and (not (nil? id)) (re-matches #".*0[1,2]?.*" id)))
 (defn pluck-times [trials]
   (map :done trials))
 (defn set-less-than-300-to-300 [trial]

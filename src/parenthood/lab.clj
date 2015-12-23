@@ -45,12 +45,9 @@
                   (if (:correct %) "1" "0") (str (:done %))])]
     (write-csv (concat [csv-head] (map to-csv results)) :end-of-line "\r\n")))
 
-(defn valid-id? [id]
-  (and (not (nil? id)) (re-matches #".*0[1,2]?.*" id)))
-
 (defn output-lab-iat-format
   ([]
-     (let [ids (filter valid-id? (db/get-response))]
+     (let [ids (filter data/valid-id? (db/get-response))]
        (mapcat output-lab-iat-format ids)))
   ([id]
      (map
