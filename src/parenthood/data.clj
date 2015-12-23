@@ -157,3 +157,6 @@
 (defn write-to-file-iat [n]
   (with-open [w (clojure.java.io/writer (str "iat" (+ n 1) ".csv"))]
     (.write w (make-csv (generate-nth-iat n)))))
+(defn write-to-file-all []
+  (with-open [w (clojure.java.io/writer "iat.csv")]
+    (.write w (make-csv (generate-iat)))))
