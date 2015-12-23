@@ -143,6 +143,11 @@
                :iat300remove (score-iat (remove under-300? data))
                :iat10trials (score-iat (remove over-10000? data))}))
           (db/only-responses id))))))
+(defn generate-nth-iat [n]
+  (let [ids (filter valid-id? (db/get-response))
+        iats-by-user (map generate-iat ids)
+        the-nth #(nth % n nil)]
+    (remove nil? (map the-nth iats-by-user))))
 (def generate-iat-memo (memoize generate-iat))
 
 (defn make-csv [results]
@@ -150,8 +155,5 @@
     (csv/write-csv (concat [csv-head] (map #(map str (vals %)) results)) :end-of-line "\r\n")))
 
 (defn write-to-file-iat [n]
-  (let [ids (filter valid-id? (db/get-response))
-        trials-by-user (map generate-iat ids)
-        nth-trial-by-user (remove nil? (map #(nth % n nil) trials-by-user))]
-    (with-open [w (clojure.java.io/writer (str "iat" (+ n 1) ".csv"))]
-      (.write w (make-csv nth-trial-by-user)))))
+  (with-open [w (clojure.java.io/writer (str "iat" (+ n 1) ".csv"))]
+    (.write w (make-csv (generate-nth-iat n)))))
