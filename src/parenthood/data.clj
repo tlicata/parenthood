@@ -25,6 +25,9 @@
   (try
     (.format date-format (java.util.Date. timestamp))
     (catch Exception _ "Invalid Date")))
+(defn sort-by-date [things-with-dates]
+  {:pre [(every? :date things-with-dates)]}
+  (sort-by :date things-with-dates))
 
 ;; functions for branching on screen type
 (defn screen-type [screen]
@@ -125,18 +128,19 @@
    (let [ids (filter valid-id? (db/get-response))]
        (flatten (map generate-iat ids))))
   ([id]
-     (flatten
-      (map (fn [raw]
-             (let [data (make-readable raw)
-                   trials (get-scoreable-trials data)
-                   total (count trials)]
-               {:subjectId id
-                :date (print-date (:timestamp raw))
-                :total_incorrect (count (remove :correct trials))
-                :flat_300_percent (float (/ (count (filter under-300? trials)) total))
-                :iatall (score-iat data)
-                :iat300recode (score-iat (map set-less-than-300-to-300 data))
-                :iat300remove (score-iat (remove under-300? data))
-                :iat10trials (score-iat (remove over-10000? data))}))
-           (db/only-responses id)))))
+   (sort-by-date
+    (flatten
+     (map (fn [raw]
+            (let [data (make-readable raw)
+                  trials (get-scoreable-trials data)
+                  total (count trials)]
+              {:subjectId id
+               :date (print-date (:timestamp raw))
+               :total_incorrect (count (remove :correct trials))
+               :flat_300_percent (float (/ (count (filter under-300? trials)) total))
+               :iatall (score-iat data)
+               :iat300recode (score-iat (map set-less-than-300-to-300 data))
+               :iat300remove (score-iat (remove under-300? data))
+               :iat10trials (score-iat (remove over-10000? data))}))
+          (db/only-responses id))))))
 (def generate-iat-memo (memoize generate-iat))
