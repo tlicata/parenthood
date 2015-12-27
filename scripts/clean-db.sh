@@ -59,3 +59,5 @@ redis-cli HDEL "response:9002" "1117"
 redis-cli HDEL "response:12401" "1416"
 
 redis-cli HDEL "response:21901" "2857"
+
+redis-cli HDEL "response:18701" "2283"
