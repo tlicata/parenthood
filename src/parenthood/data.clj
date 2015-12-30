@@ -162,3 +162,9 @@
 (defn write-to-file-all []
   (with-open [w (clojure.java.io/writer "iat.csv")]
     (.write w (make-csv (generate-iat)))))
+(defn write-to-file-counts []
+  (let [iat (generate-iat)
+        groups (group-by :subjectId iat)
+        counts (zipmap (keys groups) (map (comp str count) (vals groups)))]
+    (with-open [w (clojure.java.io/writer "counts.csv")]
+      (.write w (csv/write-csv (concat [["id" "iats"]] (sort counts)))))))
