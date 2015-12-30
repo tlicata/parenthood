@@ -70,10 +70,19 @@
           (println (str "successful post to " id ":" unique))
           (response/json fresh))))))
 
-(defn view-results [id format]
-  (let [data (doall (if (nil? id)
-                      (parenthood.data/generate-iat-memo)
-                      (parenthood.data/generate-iat id)))]
+(defn convert-str-to-int [str]
+  (try
+    (Integer/parseInt str)
+    (catch NumberFormatException _ nil)))
+
+(defn view-results [id iat format]
+  (let [data (doall (if-let [iat-num (convert-str-to-int iat)]
+                      (if id
+                        (parenthood.data/generate-nth-iat iat-num [id])
+                        (parenthood.data/generate-nth-iat-memo iat-num))
+                      (if id
+                        (parenthood.data/generate-iat id)
+                        (parenthood.data/generate-iat-memo))))]
     (if (= format "json")
       (response/json data)
       (html5
@@ -115,8 +124,8 @@
        (iat-page test-id false request))
   (GET "/test-data" [unique]
        (response/json (db/get-response test-id unique)))
-  (GET "/view-results.html" [id format]
-       (view-results id format))
+  (GET "/view-results.html" [id iat format]
+       (view-results id iat format))
   (POST "/partner-iat.html" [id results unique :as request]
         (store-results id results unique request))
   (POST "/integration-tests.html" [results unique :as request]

@@ -143,12 +143,14 @@
                :iat300remove (score-iat (remove under-300? data))
                :iat10trials (score-iat (remove over-10000? data))}))
           (db/only-responses id))))))
-(defn generate-nth-iat [n]
-  (let [ids (filter valid-id? (db/get-response))
-        iats-by-user (map generate-iat ids)
-        the-nth #(nth % n nil)]
-    (remove nil? (map the-nth iats-by-user))))
+
+(defn generate-nth-iat
+  ([n]
+   (generate-nth-iat n (filter valid-id? (db/get-response))))
+  ([n ids]
+   (remove nil? (map #(nth % n nil) (map generate-iat ids)))))
 (def generate-iat-memo (memoize generate-iat))
+(def generate-nth-iat-memo (memoize generate-nth-iat))
 
 (defn make-csv [results]
   (let [csv-head (map name (keys (first results)))]
