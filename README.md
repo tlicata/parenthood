@@ -6,12 +6,12 @@ A partner IAT for the "Transitioning and Adjusting to Parenthood" study.
 
 ### Dependencies
 
-- leiningen
-- heroku-toolbelt
+- [Leiningen](http://leiningen.org/)
+- [Heroku Local](https://devcenter.heroku.com/articles/heroku-local)
 
 ### Local Development
 
-    foreman start
+    heroku local
 
 ### Deploy to Heroku
 
